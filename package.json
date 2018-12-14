@@ -1,7 +1,7 @@
 {
-    "name": "api.mcloudhub.com",
+    "name": "rap.mcloudhub.com",
     "version": "1.0.0",
-    "description": "this is a api.mcloudhub.com",
+    "description": "this is a rap.mcloudhub.com",
     "main": "index.js",
     "dependencies": {
         "bluebird": "^3.5.2",
@@ -47,7 +47,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/bluelifeleer/api.mcloudhub.com.git"
+        "url": "git@github.com:bluelifeleer/rap.mcloudhub.com.git"
     },
     "keywords": [
         "tools"
