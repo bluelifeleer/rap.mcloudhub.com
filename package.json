@@ -1,0 +1,57 @@
+{
+    "name": "api.mcloudhub.com",
+    "version": "1.0.0",
+    "description": "this is a api.mcloudhub.com",
+    "main": "index.js",
+    "dependencies": {
+        "bluebird": "^3.5.2",
+        "body-parser": "^1.18.3",
+        "connect-mongodb-session": "^2.0.6",
+        "cookie": "^0.3.1",
+        "cookie-parser": "^1.4.3",
+        "cors": "^2.8.5",
+        "csurf": "^1.9.0",
+        "debug": "^3.2.5",
+        "express": "^4.16.3",
+        "express-curl": "^1.0.0",
+        "express-request-id": "^1.4.1",
+        "express-session": "^1.15.6",
+        "express-simple-cdn": "^1.0.1",
+        "http-concat": "^0.1.1",
+        "image-size": "^0.6.3",
+        "md5": "^2.2.1",
+        "mongodb": "^3.1.6",
+        "mongoose": "^5.3.16",
+        "morgan": "^1.9.1",
+        "multer": "^1.4.0",
+        "pm2": "^3.2.3",
+        "qrcode": "^1.3.0",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.2",
+        "rotating-file-stream": "^1.3.9",
+        "serve-favicon": "^2.5.0",
+        "silly-datetime": "^0.1.2",
+        "socket.io": "^2.1.1",
+        "spdy": "^4.0.0",
+        "supports-color": "^5.5.0",
+        "svg-captcha": "^1.3.12",
+        "swig": "^1.4.2",
+        "uuid": "^3.3.2",
+        "vhost": "^3.0.2"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "npm run test",
+        "start": "node index.js",
+        "debug": "set DEBUG=myapp & npm start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bluelifeleer/api.mcloudhub.com.git"
+    },
+    "keywords": [
+        "tools"
+    ],
+    "author": "thebulelife@163.com",
+    "license": "ISC"
+}

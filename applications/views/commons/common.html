@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ title }}</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/static/css/public.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+        {% block link %}
+        {% endblock%}
+        <script type="text/javascript" src="/static/js/libs/es6-promise.auto.js"></script>
+        <script type="text/javascript" src="/static/js/libs/vue.js"></script>
+        <script type="text/javascript" src="/static/js/libs/vuex.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/element-ui/lib/index.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            {% if page != 'login' %}
+                <div class="header">
+                    <div class="header-links">
+                        <a href="/" class="nav-link"><i class="icon iconfont">&#xe77e;</i>首页</a>
+                        <a href="/" class="nav-link"><i class="icon iconfont">&#xe6ea;</i>仓库</a>
+                        <a href="/" class="nav-link"><i class="icon iconfont">&#xe68a;</i>团队</a>
+                        <a href="/" class="nav-link"><i class="icon iconfont">&#xe653;</i>接口</a>
+                        <a href="/" class="nav-link"><i class="icon iconfont">&#xe60d;</i>状态</a>
+                    </div>
+                    <div class="header-user-info"></div>
+                </div>
+            {% endif %}
+            <div class="section">
+                {% block section %}
+                {% endblock %}
+            </div>
+            {% if page != 'login' %}
+            <div class="footer">
+                CopyRight&nbsp;&nbsp;&copy;&nbsp;&nbsp;rap.mcloudhub.com&nbsp;&nbsp;2018-12-15&nbsp;&nbsp;晋ICP备13007655号
+            </div>
+            {% endif %}
+        </div>
+        {% block script %}
+        {% endblock %}
+    </body>
+</html>

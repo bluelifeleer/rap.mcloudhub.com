@@ -1,0 +1,157 @@
+.login-form-container{
+    width:100%;
+    height:840px;
+    background:url("/static/images/bg_03.jpg") no-repeat 0 0;
+    background-size:100% 100%;
+    position: relative;
+}
+
+.login-form{
+    width:340px;
+    height:auto;
+    background:#FFF;
+    padding:20px;
+    border-radius:4px;
+    position: absolute;
+    top:200px;
+    right:200px;
+}
+
+.login-form-head{
+    width:100%;
+    height:50px;
+    line-height: 50px;
+    text-align:center;
+    border-bottom: 1px solid #c1c1c1;
+    margin:0 0 20px 0;
+}
+
+.login-form-body{
+    width:100%;
+    height:auto;
+}
+
+.login-form-item{
+    width:100%;
+    height:40px;
+    margin:0 0 20px 0;
+}
+
+.login-form-item label{
+    display:block;
+    float:left;
+    width:80px;
+    height:40px;
+    line-height: 40px;
+    text-align:right;
+}
+
+.login-form-item input{
+    display:block;
+    float:left;
+    width:240px;
+    height:38px;
+    line-height: 38px;
+    text-align:left;
+    padding:0 0 0 10px;
+    border:1px solid #c1c1c1;
+    border-radius:3px;
+}
+
+#verify-code-input{
+    width:120px !important;
+}
+
+.verify-img{
+    display:block;
+    float:left;
+    width:120px;
+    height:40px;
+}
+
+.verify-img:hover{
+    cursor: pointer;
+}
+
+.auto-login-checkbox{
+    display:block;
+    float:left;
+    width:auto;
+    height:20px;
+    line-height: 20px;
+    color:#2e2e2e;
+    margin:10px 0 0 0;
+}
+
+.iconfont-checkbox{
+    color:#409eff;
+}
+
+.register-link{
+    display:block;
+    float:right;
+    width:auto;
+    height:20px;
+    line-height: 20px;
+    color:#2e2e2e;
+    margin:10px 10px 0 0;
+}
+
+.login-form-submit{
+    display:block;
+    width:100%;
+    height:38px;
+    line-height: 38px;
+    text-align:center;
+    background:#28a745;
+    border:1px solid #28a745;
+    border-radius:4px;
+    color:#fff;
+}
+
+.other-login{
+    width:100%;
+    height:auto;
+    margin:90px 0 20px 0;
+    position: relative;
+}
+
+.other-login::before{
+    display:block;
+    width:100%;
+    height:1px;
+    content:'';
+    background:#ccc;
+    position: absolute;
+    left:0;
+    top:-25px;
+}
+
+.other-login::after{
+    display:block;
+    width:30%;
+    height:30px;
+    line-height: 30px;
+    text-align: center;
+    content:'其他帐号登录';
+    background: #FFF;
+    color:#2e2e2e;
+    position: absolute;
+    left:110px;
+    top:-40px;
+}
+
+.github-login{
+    display:block;
+    width:50px;
+    height:50px;
+    margin:0 auto;
+}
+
+.iconfont-github{
+    display:block;
+    width:50px;
+    height:50px;
+    font-size:40px;
+    color:#000;
+}
