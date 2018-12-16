@@ -35,7 +35,7 @@
                     <a href="javascript:void(0);" class="user-name" @click="userInfoToggle" :data-user-id="user.id">${user.name}<i class="icon iconfont">&#xe627;</i></a>
                     <transition name="user-info">
                         <div class="user-info" ref="userInfo" v-show="userInfo">
-                            <div class="user-info-item"><a href="javascript:void(0);" class="loginout">退出</a></div>
+                            <div class="user-info-item"><a href="javascript:void(0);" class="loginout" @click="loginout">退出</a></div>
                         </div>
                     </transition>
                 </div>

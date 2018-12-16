@@ -23,6 +23,20 @@ const VUE = new Vue({
         },
         loginFormSubmit:function(){
             // console.log(this.form)
+            if(!this.form.name){
+                this.messageAlert('帐号不能为空', 'error')
+                return false;
+            }
+            
+            if(!this.form.password){
+                this.messageAlert('密码不能为空', 'error')
+                return false;
+            }
+
+            if(!this.form.verify){
+                this.messageAlert('验证码不能为空', 'error')
+                return false;
+            }
             axios({
                 url: '/user/login',
                 method: 'POST',

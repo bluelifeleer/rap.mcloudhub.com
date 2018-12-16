@@ -28,7 +28,7 @@ router.use(function(req, res, next) {
 
 router.get('/verify', (req, res, next)=>{
 	let captcha = svgCaptcha.create();
-	req.session.captcha = captcha.text;
+	req.session.verify = captcha.text;
     res.type('svg');
     res.status(200).send(captcha.data);
 });
@@ -38,8 +38,19 @@ router.post('/user/login', (req, res, next)=>{
     let name = req.body.name;
     let password = req.body.password;
     let verify = req.body.verify;
+    
+    // if(verify != req.session.verify.toLowerCase()){
+    //     output = {
+    //         code: 0,
+    //         msg: '验证码输入错误',
+    //         ok: false,
+    //         data: null
+    //     };
+    //     res.json(output);
+    //     return false;
+    // }
+
     User.findOne({ name: name }).then(user=>{
-        // console.log(user)
         if(user){
             if(md5(password+user.salt) == user.password){
                 if(checked){
@@ -80,6 +91,22 @@ router.post('/user/login', (req, res, next)=>{
         return false;
     })
 });
+
+router.post('/user/loginout', (req, res, next)=>{
+    let user = req.body.user;
+    res.clearCookie('uid'); // 清除cookie中的uid
+    req.session.destroy(() => { // 销毁session中的uid
+        // res.redirect(302, '/login');
+        output = {
+            code: 1,
+            msg: '',
+            ok: true,
+            data: null
+        };
+        res.json(output);
+        return false;
+    });
+})
 
 router.post('/user/register', (req, res, next)=>{
     // console.log(req.body)

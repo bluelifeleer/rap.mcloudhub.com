@@ -176,7 +176,6 @@ const VUE = new Vue({
         }
     },
     created() {
-        this.uid = utils.getCookie('uid');
     },
     methods: {
         init: function(){
@@ -241,7 +240,7 @@ const VUE = new Vue({
                 method: 'POST',
                 baseURL: 'https://rap.mcloudhub.com/api',
                 data: {
-                    uid: this.uid,
+                    uid: this.user.id,
                     item_id: this.modelForm.item_id,
                     name:this.modelForm.name,
                     remark: this.modelForm.remark
@@ -269,7 +268,7 @@ const VUE = new Vue({
             const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterface,'width');
             this.$refs.rapDialogAddInterface.style.left = parseInt((windowW-dialogWidth)/2)+'px';
             this.rapDialogAddInterface = !this.rapDialogAddInterface;
-            this.interfaceForm.uid = this.uid;
+            this.interfaceForm.uid = this.user.id;
             this.interfaceForm.item_id = item_id;
             this.interfaceForm.model_id = model_id;
             console.log(this.interfaceForm)
@@ -293,7 +292,7 @@ const VUE = new Vue({
                 method: 'POST',
                 baseURL: 'https://rap.mcloudhub.com/api',
                 data: {
-                    uid: this.uid,
+                    uid: this.user.id,
                     item_id: this.interfaceForm.item_id,
                     model_id: this.interfaceForm.model_id,
                     name:this.interfaceForm.name,
@@ -546,6 +545,24 @@ const VUE = new Vue({
                 this.messageAlert('请输入正确的JSON格式', 'error');
                 return false;
             }
+        },
+        loginout: function(){
+            axios({
+                url: '/user/loginout',
+                method: 'POST',
+                baseURL: 'https://rap.mcloudhub.com/api',
+                data: {
+                    user: {
+                        id: this.user.id
+                    }
+                }
+            }).then(res=>{
+                if(res.data.code && res.data.ok){
+                    window.location.href = '/login'
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         getStyle: function(el,attr){
             let style = null;

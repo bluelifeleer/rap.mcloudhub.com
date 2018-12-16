@@ -23,7 +23,6 @@ const VUE = new Vue({
         }
     },
     created() {
-        this.uid = utils.getCookie('uid');
     },
     methods: {
         init: function(){
@@ -38,7 +37,7 @@ const VUE = new Vue({
                 url:'/item/lists',
                 method: 'GET',
                 params: {
-                    uid: this.uid
+                    uid: this.user.uid
                 },
                 baseURL: 'https://rap.mcloudhub.com/api'
             }).then(res=>{
@@ -138,6 +137,24 @@ const VUE = new Vue({
         },
         repositoryDelete: function(e, id){
             console.log(id);
+        },
+        loginout: function(){
+            axios({
+                url: '/user/loginout',
+                method: 'POST',
+                baseURL: 'https://rap.mcloudhub.com/api',
+                data: {
+                    user: {
+                        id: this.user.id
+                    }
+                }
+            }).then(res=>{
+                if(res.data.code && res.data.ok){
+                    window.location.href = '/login'
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         /**
          * 显示警告信息
