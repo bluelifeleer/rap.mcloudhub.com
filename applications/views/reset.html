@@ -1,0 +1,23 @@
+{% extends "./commons/common.html" %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/reset.css" />
+{% endblock%}
+{% block section %}
+<div class="reset-form-container">
+    <div class="reset-form">
+        <div class="reset-form-head">
+                重置密码
+        </div>
+        <div class="reset-form-body">
+            <div class="reset-form-item">
+                <label for="email">邮箱：</label>
+                <input type="text" name="email" id="email" placeholder="邮箱" v-model="form.email" />
+                <a href="javascript:void(0);" class="reset-form-submit" @click="resetFormSubmit">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="/static/js/reset.js"></script>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "./commons/common.html" %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/repository.css" />
+{% endblock%}
+{% block section %}
+<div class="repository-container">
+    <div class="repository-container-content" v-if="repositorys.length">
+        <div class="repository-container-header">
+            <select name="repository" id="repositorys-types">
+                <option value="1">我创建的仓库</option>
+                <option value="2">我加入的仓库</option>
+            </select>
+            <input type="texIDt" placeholder="搜索仓库：仓库名或仓库ID" name="search-repository" id="search-repository" />
+            <a href="javascript:void(0);" class="repository-header-create" @click="createRepository">创建仓库</a>
+        </div>
+        <div class="repository-container-body">
+            <div class="repository-container-list-groups">
+                <div class="repository-container-list-item" v-for="(repository, $index) in repositorys" :ke="$index" :data-id="repository._id" :data-uid="repository.uid">
+                    <div class="repository-list-item-head">
+                        <span class="repository-name"><a :href="repository.link" class="repository-item-link">${repository.name}</a></span>
+                        <span class="repository-operation-buts">
+                            <a href="javascript:void(0);" class="repository-editor"><i class="icon iconfont" @click="repositoryEditor($event, repository)">&#xe635;</i></a>
+                            <a href="javascript:void(0);" class="repository-delete"><i class="icon iconfont" @click="repositoryDelete($event, repository._id)">&#xe61c;</i></a>
+                        </span>
+                    </div>
+                    <div class="repository-list-item-body">${repository.remark}</div>
+                    <div class="repository-list-item-footer">
+                        <span class="repository-create-author">${repository.own.name}</span>
+                        <span class="repository-create-date">${repository.create}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="repository-container-content" v-else>
+        <a href="javascript:void(0);" class="create-repository" @click="createRepository">创建仓库</a></a>
+    </div>
+
+
+    <!-- 创建仓库dialog -->
+    <transition name="rap-dialog-popup">
+        <div class="rap-dialog-box" v-show="createRepositoryDialog">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref="rapDialog">
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-head-content">
+                        <div class="rap-dialog-head-title">创建仓库：</div>
+                        <div class="rap-dialog-head-close">
+                            <a href="javascript:void(0);" class="rap-dialog-close" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="rap-form-box">
+                        <div class="rap-form-item" style="display:none;">
+                            <label for="name" class="indispensable">ID：</label>
+                            <input type="hidden" name="name" id="" placeholder="id" v-model="form.id" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="name" class="indispensable">仓库名称：</label>
+                            <input type="text" name="name" id="" placeholder="仓库名称" v-model="form.name" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="icon">logo：</label>
+                            <input type="text" name="icon" id="" placeholder="https://|http://" v-model="form.icon" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="repository">仓库地址：</label>
+                            <input type="text" name="repository" id="" placeholder="https://|http://" v-model="form.repository" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="url" class="indispensable">url：</label>
+                            <input type="text" name="url" id="" placeholder="https://|http://" v-model="form.url" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="permissions">权限：</label>
+                            <select name="permissions" id="permissions" v-model="form.permissions">
+                                <option value="public">公开</option>
+                                <option value="private">私有</option>
+                            </select>
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="remark">描述：</label>
+                            <textarea name="remark" id="" rows="4" v-model="form.remark">仓库描述信息</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-footer">
+                    <a href="javascript:void(0);" class="create-repository-form-cancle" @click="createRepositoryFormCancle">取消</a>
+                    <a href="javascript:void(0);" class="create-repository-form-submit" @click="createRepositoryFormSubmit">${butText}</a>
+                </div>
+            </div>
+        </div>
+    </transition>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="/static/js/repository.js"></script>
+{% endblock %}

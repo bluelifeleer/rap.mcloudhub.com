@@ -1,12 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>注册</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
-    </head>
-    <body>
-        <div id="app"></div>
-    </body>
-</html>
+{% extends "./commons/common.html" %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/register.css" />
+{% endblock%}
+{% block section %}
+<div class="register-form-container">
+    <div class="register-form">
+        <div class="register-form-head">
+            <div class="login-form-head">
+                <a href="/login" class="element-link">登录</a>
+                <span class="element-link-space">|</span>
+                <a href="/register" class="element-link">注册</a>
+            </div>
+        </div>
+        <div class="register-form-body">
+            <div class="register-fotm-item">
+                <label for="name">用户名：</label>
+                <input type="text" id="name" name="name" v-model="form.name" />
+            </div>
+            <div class="register-fotm-item">
+                <label for="email">邮箱：</label>
+                <input type="text" id="email" name="email" v-model="form.email" />
+            </div>
+            <div class="register-fotm-item">
+                <label for="password">密码：</label>
+                <input type="password" id="password" name="password" v-model="form.password" />
+            </div>
+            <div class="register-fotm-item">
+                <label for="confirm_password">确认密码：</label>
+                <input type="password" id="confirm-password" name="confirm_password" v-model="form.confirm_password" />
+            </div>
+            <div class="register-fotm-item">
+                <a href="javascript:void(0);" class="register-form-submit" @click="registerFormSubmit">注册</a>
+            </div>
+            <div class="register-fotm-item">
+                <a href="/login" class="register-login-link">已有帐号，登录</a>
+                <a href="/reset" class="forget-password">忘记密码</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="/static/js/register.js"></script>
+{% endblock %}

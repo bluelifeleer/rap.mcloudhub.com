@@ -1,0 +1,376 @@
+{% extends "../commons/common.html" %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/repository/editor.css" />
+{% endblock%}
+{% block section %}
+<div class="repository-editor-container">
+    <div class="repository-editor-header">
+        <div class="repository-bread-crumb">
+            <span class="repository-bread-crumb-item"><a href="/">${repository.own.name}</a></span>
+            <span class="repository-bread-crumb-item bread-crumb-item-last"><a href="/">${repository.name}</a></span>
+        </div>
+    </div>
+    <div class="repository-editor-body">
+        <div class="rap-tabs">
+            <div class="rap-tabs-header">
+                <div class="rap-tabs-items-box">
+                    <a class="rap-tabs-items rap-tabs-item-active" v-if="repository.models.length" v-for="(model, $index) in repository.models" :key="$index" :data-id="model._id" @click="modelToggle(model)">${model.name}</a>
+                </div>
+                <div class="rap-tabs-add-but-box">
+                    <a href="javascript:void(0);" class="add-model-but" @click="addModel">添加模块</a>
+                </div>
+            </div>
+            <div class="rap-tabs-body">
+                <div class="rap-tabs-body-item">
+                    <div class="rap-tabs-interface-menus">
+                        <div class="interface-menus-item" v-if="repository.models[0].interfaces.length" v-for="(interface, $index) in repository.models[0].interfaces" :key="$index" :data-id="interface._id">
+                            <a href="javascript:void(0);" class="interface-item">${interface.name}</a>
+                        </div>
+                        <div class="add-interface">
+                            <a href="javascript:void(0);" class="add-interface-but" @click="addInterface($event, repository._id, repository.models[0]._id)">添加接口</a>
+                        </div>
+                    </div>
+                    <div class="rap-tabs-interface-contents">
+                        <div class="interface-info">
+                            <div class="interface-info-item">
+                                <span class="interface-info-name">${repository.models[0].interfaces[0].name}</span>
+                            </div>
+                            <div class="interface-info-item">
+                                <span class="interface-info-url-title">地址：</span>
+                                <span class="interface-info-url-value">${repository.models[0].interfaces[0].request.url}</span>
+                            </div>
+                            <div class="interface-info-item">
+                                <span class="interface-info-url-title">类型：</span>
+                                <span class="interface-info-url-value">${repository.models[0].interfaces[0].request.type}</span>
+                            </div>
+                            <div class="interface-info-item">
+                                <span class="interface-info-url-title">状态码：</span>
+                                <span class="interface-info-url-value">${repository.models[0].interfaces[0].request.code}</span>
+                            </div>
+                        </div>
+                        <div class="interface-request">
+                            <div class="interface-request-title">
+                                <div class="interface-respones-title-text">请求参数</div>
+                                <div class="interface-respones-title-buts">
+                                    <a href="javascript:void(0);" class="preview" >预览</a>
+                                    <a href="javascript:void(0);" class="export" @click="exportInterfaceRequest($event, repository.models[0].interfaces[0]._id)">导入</a>
+                                    <a href="javascript:void(0);" class="add" @click="addInterfaceRequest($event, repository.models[0].interfaces[0]._id)">添加</a>
+                                </div>
+                            </div>
+                            <div class="interface-data-table">
+                                <div class="interface-data-table-header">
+                                    <div class="interface-data-table-cole">名称</div>
+                                    <div class="interface-data-table-cole">必选</div>
+                                    <div class="interface-data-table-cole">类型</div>
+                                    <div class="interface-data-table-cole">默认值</div>
+                                    <div class="interface-data-table-cole">备注</div>
+                                </div>
+                                <div class="interface-data-table-body">
+                                    <div class="interface-data-table-rows" v-if="repository.models[0].interfaces[0].fields.length" v-for="(field,$index) in repository.models[0].interfaces[0].fields" :key="$index">
+                                        <div class="interface-data-table-cole">${field.name}</div>
+                                        <div class="interface-data-table-cole">
+                                            <span v-if="field.indispensable">是</span>
+                                            <span v-else>否</span>
+                                        </div>
+                                        <div class="interface-data-table-cole">${field.type}</div>
+                                        <div class="interface-data-table-cole">${field.default}</div>
+                                        <div class="interface-data-table-cole">${field.remark}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interface-respones">
+                            <div class="interface-respones-title">
+                                <div class="interface-respones-title-text">响应内容</div>
+                                <div class="interface-respones-title-buts">
+                                    <a href="javascript:void(0);" class="preview">预览</a>
+                                    <a href="javascript:void(0);" class="export" @click="exportInterfaceResponse($event, repository.models[0].interfaces[0]._id)">导入</a>
+                                    <a href="javascript:void(0);" class="add" @click="addInterfaceResponse($event, repository.models[0].interfaces[0]._id)">添加</a>
+                                </div>
+                            </div>
+                            <div class="interface-data-table">
+                                    <div class="interface-data-table-header">
+                                        <div class="interface-data-table-cole">名称</div>
+                                        <div class="interface-data-table-cole">必选</div>
+                                        <div class="interface-data-table-cole">类型</div>
+                                        <div class="interface-data-table-cole">默认值</div>
+                                        <div class="interface-data-table-cole">备注</div>
+                                    </div>
+                                    <div class="interface-data-table-body">
+                                        <div class="interface-data-table-rows" v-if="repository.models[0].interfaces[0].response.length" v-for="(response, $index) in repository.models[0].interfaces[0].response" :key="$index">
+                                            <div class="interface-data-table-cole">${response.name}</div>
+                                            <div class="interface-data-table-cole">
+                                                <span v-if="response.indispensable">是</span>
+                                                <span v-else>否</span>
+                                            </div>
+                                            <div class="interface-data-table-cole">${response.type}</div>
+                                            <div class="interface-data-table-cole">${response.default}</div>
+                                            <div class="interface-data-table-cole">${response.remark}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加模块 dialog -->
+    <transition name="rap-dialog">
+        <div class="rap-dialog add-model" v-show="rapDialogAddModel">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref='rapDialogAddMOdel'>
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-title">添加模块</div>
+                    <div class="rap-dialog-close">
+                            <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="add-model-form">
+                        <div class="add-model-form-items" style="display: none;">
+                            <label for="item_id">ID：</label>
+                            <input type="hidden" name="item_id" placeholder="id" v-model="modelForm.item_id" />
+                        </div>
+                        <div class="add-model-form-items" style="display: none;">
+                            <label for="id">ID：</label>
+                            <input type="hidden" name="id" placeholder="id" v-model="modelForm.id" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">名称：</label>
+                            <input type="text" name="name" placeholder="模块名称" v-model="modelForm.name" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="remark">描述：</label>
+                            <textarea name="remark" id="remark" cols="30" rows="10" v-model="modelForm.remark">描述</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-footer">
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addModelFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-cancle" @click="addModelFormCancle">取消</a>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <!-- 添加接口 dialog -->
+    <transition name="rap-dialog">
+            <div class="rap-dialog add-model" v-show="rapDialogAddInterface">
+                <div class="rap-dialog-marker"></div>
+                <div class="rap-dialog-popup" ref='rapDialogAddInterface'>
+                    <div class="rap-dialog-header">
+                        <div class="rap-dialog-title">添加接口</div>
+                        <div class="rap-dialog-close">
+                            <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                        </div>
+                    </div>
+                    <div class="rap-dialog-body">
+                        <div class="add-model-form">
+                            <div class="add-model-form-items" style="display: none;">
+                                <label for="uid">UID：</label>
+                                <input type="hidden" name="uid" placeholder="uid" v-model="interfaceForm.uid" />
+                            </div>
+                            <div class="add-model-form-items" style="display: none;">
+                                <label for="item_id">ID：</label>
+                                <input type="hidden" name="item_id" placeholder="item-id" v-model="interfaceForm.item_id" />
+                            </div>
+                            <div class="add-model-form-items" style="display: none;">
+                                    <label for="model_id">模块ID：</label>
+                                    <input type="hidden" name="model_id" placeholder="model-id" v-model="interfaceForm.model_id" />
+                                </div>
+                            <div class="add-model-form-items" style="display: none;">
+                                <label for="id">ID：</label>
+                                <input type="hidden" name="id" placeholder="id" v-model="interfaceForm.id" />
+                            </div>
+                            <div class="add-model-form-items">
+                                <label for="name" class="indispensable">名称：</label>
+                                <input type="text" name="name" placeholder="接口名称" v-model="interfaceForm.name" />
+                            </div>
+                            <div class="add-model-form-items">
+                                <label for="name" class="indispensable">地址：</label>
+                                <input type="text" name="name" placeholder="请求地址" v-model="interfaceForm.request.url" />
+                            </div>
+                            <div class="add-model-form-items">
+                                <label for="type" class="indispensable">类型：</label>
+                                <select name="type" id="type" v-model="interfaceForm.request.type">
+                                    <option :value="type.value" v-for="(type, $index) in interfaceForm.types" :key="$index">${type.label}</option>
+                                </select>
+                            </div>
+                            <div class="add-model-form-items">
+                                <label for="code" class="indispensable">状态码：</label>
+                                <select name="code" id="code" v-model="interfaceForm.request.code">
+                                    <option :value="code.value" v-for="(code, $index) in interfaceForm.codes" :key="$index">${code.label}</option>
+                                </select>
+                                <!-- <input type="text" name="code" placeholder="模块名称" v-model="interfaceForm.request.url" /> -->
+                            </div>
+                            <div class="add-model-form-items">
+                                <label for="remark">描述：</label>
+                                <textarea name="remark" id="remark" cols="30" rows="10" v-model="interfaceForm.remark">描述</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rap-dialog-footer">
+                        <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceFormSubmit">提交</a>
+                        <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceFormCancle">取消</a>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+    <!-- 添加接口请求 dialog -->
+    <transition name="rap-dialog">
+        <div class="rap-dialog add-model" v-show="rapDialogAddInterfaceRequest">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref='rapDialogAddInterfaceRequest'>
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-title">添加请求属性</div>
+                    <div class="rap-dialog-close">
+                        <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="add-model-form">
+                        <div class="add-model-form-items" style="display:none;">
+                            <label for="id" class="indispensable">ID：</label>
+                            <input type="hidden" name="id" placeholder="属性ID" v-model="interfaceRequestForm.id" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">名称：</label>
+                            <input type="text" name="name" placeholder="属性名称" v-model="interfaceRequestForm.name" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">类型：</label>
+                            <select name="code" id="code" v-model="interfaceRequestForm.type">
+                                <option :value="type.value" v-for="(type, $index) in interfaceRequestForm.types" :key="$index">${type.label}</option>
+                            </select>
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">是否要：</label>
+                            <select name="code" id="code" v-model="interfaceRequestForm.indispensable">
+                                <option :value="indispensable.value" v-for="(indispensable, $index) in interfaceRequestForm.indispensables" :key="$index">${indispensable.label}</option>
+                            </select>
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">默认值：</label>
+                            <input type="text" name="name" placeholder="默认值" v-model="interfaceRequestForm.default" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">描述：</label>
+                            <textarea name="remark" id="remark" cols="30" rows="10" v-model="interfaceRequestForm.remark">描述</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-footer">
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceRequestFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceRequestFormCancle">取消</a>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <!-- 添加接口响应 dialog -->
+    <transition name="rap-dialog">
+        <div class="rap-dialog add-model" v-show="rapDialogAddInterfaceResponse">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref='rapDialogAddInterfaceResponse'>
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-title">添加响应属性</div>
+                    <div class="rap-dialog-close">
+                        <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="add-model-form">
+                        <div class="add-model-form-items" style="display:none;">
+                            <label for="id" class="indispensable">ID：</label>
+                            <input type="hidden" name="id" placeholder="属性ID" v-model="interfaceResponseForm.id" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">名称：</label>
+                            <input type="text" name="name" placeholder="属性名称" v-model="interfaceResponseForm.name" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">类型：</label>
+                            <select name="code" id="code" v-model="interfaceResponseForm.type">
+                                <option :value="type.value" v-for="(type, $index) in interfaceResponseForm.types" :key="$index">${type.label}</option>
+                            </select>
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">是否要：</label>
+                            <select name="code" id="code" v-model="interfaceResponseForm.indispensable">
+                                <option :value="indispensable.value" v-for="(indispensable, $index) in interfaceResponseForm.indispensables" :key="$index">${indispensable.label}</option>
+                            </select>
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">默认值：</label>
+                            <input type="text" name="name" placeholder="默认值" v-model="interfaceResponseForm.default" />
+                        </div>
+                        <div class="add-model-form-items">
+                            <label for="name" class="indispensable">描述：</label>
+                            <textarea name="remark" id="remark" cols="30" rows="10" v-model="interfaceResponseForm.remark">描述</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-footer">
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceResponseFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceResponseFormCancle">取消</a>
+                </div>
+            </div>
+        </div>
+    </transition>
+    
+    <!-- 导入接口请求参数 dialog -->
+    <transition name="rap-dialog">
+        <div class="rap-dialog add-model" v-show="rapDialogAddInterfaceRequestExport">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref='rapDialogAddInterfaceRequestExport'>
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-title">导入请求属性<a href="javascript:void(0);" class="formate-json-but">{}</a></div>
+                    <div class="rap-dialog-close">
+                        <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="requesr-json-editor">
+                        <textarea name="request-json" id="request-json" cols="30" rows="30" v-model="interfaceRequestForm.requestJson"></textarea>
+                    </div>
+                    <!-- <div id="jsoneditor" style="width: 400px; height: 400px;" ref="jsoneditor"></div> -->
+                </div>
+                <div class="rap-dialog-footer">
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="ExportInterfaceRequestFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceFormCancle">取消</a>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <!-- 导入接口响应参数 dialog -->
+    <transition name="rap-dialog">
+        <div class="rap-dialog add-model" v-show="rapDialogAddInterfaceResponseExport">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref='rapDialogAddInterfaceResponseExport'>
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-title">导入响应属性<a href="javascript:void(0);" class="formate-json-but">{}</a></div>
+                    <div class="rap-dialog-close">
+                        <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="response-json-editor">
+                        <textarea name="response-json" id="response-json" cols="30" rows="30" v-model="interfaceResponseForm.responseJson"></textarea>
+                    </div>
+                </div>
+                <div class="rap-dialog-footer">
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="exportInterfaceResponseFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceFormCancle">取消</a>
+                </div>
+            </div>
+        </div>
+    </transition>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="/static/js/repository/editor.js"></script>
+{% endblock %}
