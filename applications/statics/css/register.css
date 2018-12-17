@@ -40,7 +40,7 @@
 .register-fotm-item label{
     display:block;
     float:left;
-    width:80px;
+    width:110px;
     height:40px;
     line-height: 40px;
     text-align: right;
@@ -49,7 +49,7 @@
 .register-fotm-item input{
     display:block;
     float:left;
-    width:240px;
+    width:210px;
     height:38px;
     line-height: 38px;
     text-align:left;
