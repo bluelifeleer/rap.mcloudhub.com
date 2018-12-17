@@ -3,7 +3,14 @@ const VUE = new Vue({
     el: '#app',
     data: {
         userInfo: false,
-        repository: {},
+        repository: {
+            own: {
+                _id:'',
+                name: ''
+            },
+            name: '',
+            models: []
+        },
         rapDialogAddModel: false,
         rapDialogAddInterface: false,
         rapDialogAddInterfaceRequest: false,
@@ -196,8 +203,18 @@ const VUE = new Vue({
             ]
         },
         models: {},
-        interfaces: [],
-        interface: {}
+        interfaces: [{
+            mock_url: '',
+            request:{
+                url: ''
+            }
+        }],
+        interface: {
+            mock_url: '',
+            request:{
+                url: ''
+            }
+        }
     },
     created() {
     },
@@ -207,7 +224,7 @@ const VUE = new Vue({
             this.modelForm.item_id = id;
             this.user = {
                 name: utils.getCookie('name'),
-                id: utils.getCookie('uid')
+                id: utils.getCookie('uid').substr(7,parseInt(utils.getCookie('uid').length-10))
             }
             this.getRepository(id);
         },

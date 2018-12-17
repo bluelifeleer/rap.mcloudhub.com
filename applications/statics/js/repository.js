@@ -12,6 +12,7 @@ const VUE = new Vue({
             name: ''
         },
         form:{
+            uid: '',
             id: '',
             name:'',
             remark: '',
@@ -27,8 +28,9 @@ const VUE = new Vue({
         init: function(){
             this.user = {
                 name: utils.getCookie('name'),
-                id: utils.getCookie('uid')
+                id: utils.getCookie('uid').substr(7,parseInt(utils.getCookie('uid').length-10))
             }
+            this.form.uid = this.user.id;
             this.getRepositorys();
         },
         getRepositorys: function(){
@@ -36,7 +38,7 @@ const VUE = new Vue({
                 url:'/item/lists',
                 method: 'GET',
                 params: {
-                    uid: this.user.uid
+                    uid: this.user.id
                 },
                 baseURL: 'https://rap.mcloudhub.com/api'
             }).then(res=>{
@@ -94,7 +96,15 @@ const VUE = new Vue({
                 url: '/item/add',
                 method: 'POST',
                 baseURL: 'https://rap.mcloudhub.com/api',
-                data:this.form
+                data: {
+                    uid: this.form.uid,
+                    name: this.form.name,
+                    remark: this.form.remark,
+                    icon: this.form.icon,
+                    url: this.form.url,
+                    repository: this.form.repository,
+                    permissions: this.form.permissions
+                }
             }).then(res=>{
                 console.log(res)
                 if(res.data.code && res.data.ok){
@@ -111,6 +121,7 @@ const VUE = new Vue({
         createRepositoryFormCancle:function(){
             this.createRepositoryDialog = !this.createRepositoryDialog;
             this.form = {
+                uid: '',
                 id: '',
                 name: '',
                 remark: '',
@@ -126,6 +137,7 @@ const VUE = new Vue({
             this.$refs.rapDialog.style.left = parseInt((clientWidth-550)/2)+'px';
             this.type = false;
             this.butText = '修改',
+            this.form.uid = item.uid;
             this.form.id = item._id;
             this.form.name = item.name;
             this.form.remark = item.remark;

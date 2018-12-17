@@ -5,9 +5,12 @@
 {% block section %}
 <div class="repository-editor-container">
     <div class="repository-editor-header">
-        <div class="repository-bread-crumb">
+        <div class="repository-bread-crumb" v-if="repository.own.name">
             <span class="repository-bread-crumb-item"><a href="/repository">${repository.own.name}</a></span>
             <span class="repository-bread-crumb-item bread-crumb-item-last"><a href="/">${repository.name}</a></span>
+        </div>
+        <div class="repository-bread-crumb" v-else>
+            <span class="repository-bread-crumb-item"><a href="/repository">${user.name}</a></span>
         </div>
     </div>
     <div class="repository-editor-body">

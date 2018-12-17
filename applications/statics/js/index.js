@@ -14,7 +14,7 @@ const VUE = new Vue({
         init: function(){
             this.user = {
                 name: utils.getCookie('name'),
-                id: utils.getCookie('uid')
+                id: utils.getCookie('uid').substr(7,parseInt(utils.getCookie('uid').length-10))
             }
         },
         userInfoToggle: function(){

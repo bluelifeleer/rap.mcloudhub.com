@@ -11,11 +11,13 @@ const VUE = new Vue({
 
 	},
 	methods: {
-		this.user.id = utils.getCookie('uid');
-		this.user.name = utils.getCookie('name');
 		init: function() {
+			this.user = {
+				id: utils.getCookie('uid').substr(7,parseInt(utils.getCookie('uid').length-10)),
+				name: utils.getCookie('name')
+			};
 			this.getUsers(this.user.id)
-		}
+		},
 		getUsers: function(id) {
 			axios({
 				url: '/user/get',

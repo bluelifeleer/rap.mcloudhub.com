@@ -206,14 +206,15 @@ router.get('/user/get', (req, res, next) => {
 });
 
 router.post('/item/add', (req, res, next) => {
+	let uid = req.body.uid || req.session.uid;
 	let name = req.body.name || '';
 	let remark = req.body.remark || '';
 	let icon = req.body.icon || '';
 	let repository = req.body.repository || '';
 	let url = req.body.url || '';
-	let permissions = req.body.permissions || '';
+	let permissions = req.body.permissions || 'public';
 	User.findOne({
-		_id: '5c0fef108a2076086a4c4dce'
+		_id: uid
 	}).then(user => {
 		new Item({
 			uid: user._id,
@@ -230,18 +231,76 @@ router.post('/item/add', (req, res, next) => {
 			create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
 		}).save().then(item => {
 			if (item) {
-				output = {
-					code: 1,
-					msg: 'success',
-					ok: true,
-					data: {
-						item: {
-							id: item._id
-						}
+				new Model({
+					uid: user._id,
+					itemid: item._id,
+					name: 'test',
+					remark: 'test',
+					item: item,
+					interfaces: [],
+					delete: false,
+					sync: false,
+					create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
+				}).save().then(model=>{
+					if(model){
+						new Interface({
+							uid: user._id,
+							itemid: item._id,
+							modelid: model._id,
+							name: 'test',
+							remark: 'test',
+							item: item,
+							model: model,
+							request: {
+								url:'',
+								type: 'get',
+								code: 200
+							},
+							fields: [{
+								name: 'test',
+								indispensable: true,
+								type: 'string',
+								default: '',
+								remark: 'test'
+							}],
+							response: [{
+								name: 'code',
+								indispensable: true,
+								type: 'number',
+								default: 0,
+								remark: '返回状态码'
+							}],
+							delete: false,
+							sync: false,
+							create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
+						}).save().then(s=>{
+							console.log(s)
+							if(s){
+								model.interfaces.push(s);
+								model.save()
+								item.models.push(model);
+								item.save();
+								output = {
+									code: 1,
+									msg: 'success',
+									ok: true,
+									data: {
+										item: {
+											id: item._id
+										}
+									}
+								};
+								res.json(output);
+								return false;
+							}
+						}).catch(err=>{
+							console.log(err)
+						})
 					}
-				};
-				res.json(output);
-				return false;
+				}).catch(err=>{
+					console.log(err)
+				})
+				
 			} else {
 				output = {
 					code: 0,
