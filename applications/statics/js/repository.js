@@ -7,7 +7,6 @@ const VUE = new Vue({
         createRepositoryDialog: false,
         type: true,
         butText: '创建',
-        uid: '',
         user: {
             id: '',
             name: ''

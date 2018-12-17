@@ -147,6 +147,7 @@ app.use(favicon(path.join(__dirname, './', 'favicon.ico')));
 // 定义路由www
 app.use('/', require(path.join(__dirname, '/applications/routers/main')));
 app.use('/api', require(path.join(__dirname, '/applications/routers/api')));
+app.use('/mock', require(path.join(__dirname, '/applications/routers/mock')));
 
 // 处理404请求
 // app.get('*', (req, res) => {

@@ -41,8 +41,9 @@
     width:96%;
     height:auto;
     overflow: hidden;
-    padding:2%;
+    padding:2% 2% 0 2%;
     background:#fafbfc;
+    border-bottom:1px solid #EBEEF8;
 }
 
 .rap-tabs-items-box{
@@ -59,21 +60,17 @@
     line-height: 50px;
     text-align:center;
     position: relative;
-    border:1px solid #e1e4e8;
-    border-top:none;
-    border-radius:4px 4px 0 0;
+    border-top:4px solid #fafbfc;
+    border-right:1px solid #fafbfc;
+    border-bottom:1px solid #fafbfc;
+    border-left:1px solid #fafbfc;
+    border-bottom:none;
+    box-sizing: border-box;
+    color: #2e2e2e;
 }
 
-.rap-tabs-item-active::after{
-    display:block;
-    width:120px;
-    height:4px;
-    content: '';
-    background: #e36209;
-    border-radius:4px 4px 0 0;
-    position: absolute;
-    left:0;
-    top:0;
+.rap-tabs-items-selected{
+    border-top: 4px solid #e36209 !important;
 }
 
 .rap-tabs-add-but-box{
@@ -93,7 +90,7 @@
 .rap-dialog-marker{
     width:100%;
     height:100%;
-    position: absolute;
+    position: fixed;
     left:0;
     top:0;
     background: #000;
@@ -105,7 +102,7 @@
     width:540px;
     height:auto;
     border-radius:4px;
-    position: absolute;
+    position: fixed;
     left:0;
     top:150px;
     background: #FFF;
@@ -261,10 +258,25 @@
 }
 
 .interface-menus-item{
-    width:100%;
+    width:98%;
     height:40px;
-    border:1px solid #c1c1c1;
-    border-radius:4px;
+    border-top:1px solid #fff;
+    border-right:1px solid #fff;
+    border-bottom:1px solid #fff;
+    border-left:4px solid #fff;
+    /* border-radius:4px; */
+    margin:0 0 10px 0;
+    box-sizing: border-box;
+    padding:0 0 0 2%;
+}
+
+.interface-menus-item:hover{
+    background: #fafbfc;
+}
+
+.interface-menus-item-selected{
+    border-left: 4px solid #e36209 !important;
+    background: #fafbfc;
 }
 
 .interface-item{
@@ -308,6 +320,19 @@
     line-height: 30px;
     font-size:15px;
     font-weight: bold;
+}
+
+.interface-info-buts{
+    width:auto;
+    height:auto;
+}
+
+.interface-info-buts a{
+    display:inline-block;
+    width:60px;
+    height:30px;
+    line-height: 30px;
+    text-align:center;
 }
 
 .interface-info-url-title{
@@ -424,4 +449,17 @@
 
 .formate-json-but{
     margin:0 10px;
+}
+
+.radio-box a{
+    display:inline-block;
+    width:80px;
+    height:40px;
+    line-height: 40px;
+    text-align:center;
+    color:#606266;
+}
+
+.radio-selected{
+    color:#409eff;
 }

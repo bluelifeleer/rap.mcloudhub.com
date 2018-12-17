@@ -455,4 +455,48 @@ router.post('/interface/editor', (req, res, next) => {
 	});
 })
 
+router.post('/interface/move', (req, res, next) => {
+	let id = req.body.id;
+	let model_id = req.body.model_id;
+	let type = req.body.type;
+	console.log(id)
+	console.log(model_id)
+	console.log(type)
+	// 1：判断模块中是否有此接口
+	// 2：有则报错，没有则移动
+	// 3：判断是移动还是复制
+	// Model.findById(model_id).then(model=>{
+	// 	Interface.findById(id).then(int=>{
+	// 		if(type){	// 复制
+
+	// 		}else{	// 移动
+
+	// 		}
+	// 	})
+	// }).catch(err=>{
+	// 	console.log(err)
+	// })
+});
+
+router.get('/model/get', (req, res, next) => {
+	let id = req.query.id;
+	let select = req.query.select.join(' ') || '';
+	Model.find({
+		itemid: id
+	}, select).then(models=>{
+		if(models){
+			output = {
+				code: 1,
+				msg: 'success',
+				ok: true,
+				data: models
+			};
+			res.json(output);
+			return false;
+		}
+	}).catch(err=>{
+		console.log(err)
+	})
+})
+
 module.exports = router;

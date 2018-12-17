@@ -10,6 +10,7 @@ const VUE = new Vue({
         rapDialogAddInterfaceRequestExport: false,
         rapDialogAddInterfaceResponse: false,
         rapDialogAddInterfaceResponseExport: false,
+        rapDialogInterfaceMove: false,
         uid: '',
         user: {
             id: '',
@@ -173,7 +174,30 @@ const VUE = new Vue({
                 label: '是',
                 value: true
             }]
-        }
+        },
+        moveInterface:{
+            id: '',
+            model_id: '',
+            type: 0,
+            models: [],
+            radios:[
+                {
+                    icon: '&#xe628;',
+                    selected: true,
+                    label: '移动',
+                    value: '0'
+                },
+                {
+                    icon: '&#xe6f0;',
+                    selected: false,
+                    label: '复制',
+                    value: '1'
+                }
+            ]
+        },
+        models: {},
+        interfaces: [],
+        interface: {}
     },
     created() {
     },
@@ -196,22 +220,16 @@ const VUE = new Vue({
                     id :id
                 }
             }).then(res=>{
-                console.log(res)
                 if(res.data.code && res.data.ok){
                     let item = res.data.data.item;
-                    let models = item.models;
-                    // models.forEach(model=>{
-                    //     if(model.interfaces.length){
-                    //         model.interfaces.forEach(interface=>{
-                    //             interface.request = JSON.parse(interface.request);
-                    //             interface.fields = JSON.parse(interface.fields);
-                    //             interface.response = JSON.parse(interface.response);
-                    //         })
-                    //     }
-                        
-                    // })
+                    let interfaces = item.models[0].interfaces;
+                    interfaces.forEach((interface, index)=>{
+                        interface['mock_url'] = '/mock/test/data?id='+interface._id
+                    });
                     this.repository = item;
-                    console.log(this.repository)
+                    this.models = item.models[0];
+                    this.interfaces = this.models.interfaces;
+                    this.interface = this.interfaces[0];
                 }
             }).catch(err=>{
                 console.log(err)
@@ -220,14 +238,24 @@ const VUE = new Vue({
         userInfoToggle: function(){
             this.userInfo = !this.userInfo
         },
-        modelToggle: function(item){
-            
+        modelToggle: function(e, index, item){
+            let modelTabs = this.$refs.modelTabs.getElementsByClassName('rap-tabs-items');
+            for(let i=0;i<modelTabs.length; i++){
+                modelTabs[i].className = 'rap-tabs-items';
+                modelTabs[i].setAttribute('data-selected', false);
+            }
+            modelTabs[index].className = 'rap-tabs-items rap-tabs-items-selected';
+            modelTabs[index].setAttribute('data-selected', true);
+            this.models = item;
+            this.interfaces = item.interfaces;
+            console.log(this.interfaces)
         },
-        addModel: function(){
+        addModel: function(e, id){
             const windowW = document.body.clientWidth || document.documentElement.clientWidth;
             const dialogWidth = this.getStyle(this.$refs.rapDialogAddMOdel,'width');
             this.$refs.rapDialogAddMOdel.style.left = parseInt((windowW-dialogWidth)/2)+'px';
             this.rapDialogAddModel = !this.rapDialogAddModel;
+            this.modelForm.item_id = id;
         },
         addModelFormSubmit: function(){
             if(!this.modelForm.name){
@@ -264,6 +292,8 @@ const VUE = new Vue({
             };
         },
         addInterface: function(e, item_id, model_id){
+            alert(item_id)
+            alert(model_id)
             const windowW = document.body.clientWidth || document.documentElement.clientWidth;
             const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterface,'width');
             this.$refs.rapDialogAddInterface.style.left = parseInt((windowW-dialogWidth)/2)+'px';
@@ -316,6 +346,7 @@ const VUE = new Vue({
             this.rapDialogAddInterfaceRequestExport = false;
             this.rapDialogAddInterfaceResponse = false;
             this.rapDialogAddInterfaceResponseExport = false;
+            this.rapDialogInterfaceMove = false;
 
             this.modelForm = {
                 item_id:'',
@@ -363,6 +394,7 @@ const VUE = new Vue({
             this.rapDialogAddInterfaceRequestExport = false;
             this.rapDialogAddInterfaceResponse = false;
             this.rapDialogAddInterfaceResponseExport = false;
+            this.rapDialogInterfaceMove = false;
 
             this.modelForm = {
                 item_id:'',
@@ -545,6 +577,72 @@ const VUE = new Vue({
                 this.messageAlert('请输入正确的JSON格式', 'error');
                 return false;
             }
+        },
+        interfaceDelete: function(e, id){
+
+        },
+        interfaceMove: function(e, id, model_id, item_id){
+            const windowW = document.body.clientWidth || document.documentElement.clientWidth;
+            const dialogWidth = this.getStyle(this.$refs.rapDialogInterfaceMove,'width');
+            this.$refs.rapDialogInterfaceMove.style.left = parseInt((windowW-dialogWidth)/2)+'px';
+            this.rapDialogInterfaceMove = !this.rapDialogInterfaceMove;
+            this.moveInterface.id = id;
+            this.moveInterface.model_id = model_id;
+            this.getModels(item_id);
+        },
+        getModels: function(id){
+            axios({
+                url:'/model/get',
+                method: 'GET',
+                baseURL: 'https://rap.mcloudhub.com/api',
+                params: {
+                    id: id,
+                    select: ['name', '_id']
+                }
+            }).then(res=>{
+                console.log(res)
+                if(res.data.code && res.data.ok){
+                    this.moveInterface.models = res.data.data;
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        radioItem: function(e, value){
+            this.moveInterface.radios.forEach(radio=>{
+                radio.icon = '&#xe6f0;';
+                radio.selected = false
+            })
+            this.moveInterface.radios[value].icon = '&#xe628;';
+            this.moveInterface.radios[value].selected = true;
+            this.moveInterface.type = value;
+        },
+        interfaceMoveSubmit: function(){
+            axios({
+                url:'/interface/move',
+                method: 'POST',
+                baseURL: 'https://rap.mcloudhub.com/api',
+                data: {
+                    id: this.moveInterface.id,
+                    model_id: this.moveInterface.model_id,
+                    type: this.moveInterface.type
+                }
+            }).then(res=>{
+                console.log(res)
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        selectInterface: function(e, index, interface){
+            let interfaceMenuItems = this.$refs.interfaceMenus.getElementsByClassName('interface-menus-item');
+            for(let i=0;i<interfaceMenuItems.length;i++){
+                interfaceMenuItems[i].className = 'interface-menus-item';
+                interfaceMenuItems[i].setAttribute('data-selected', false);
+            }
+            interfaceMenuItems[index].className = 'interface-menus-item interface-menus-item-selected'
+            interfaceMenuItems[index].setAttribute('data-selected', true);
+            this.interface = interface;
+            console.log(interface)
         },
         loginout: function(){
             axios({
