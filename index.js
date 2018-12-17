@@ -170,12 +170,13 @@ mongoose.connect('mongodb://localhost:27017/rap', {
 		IO.on('connection', (socket) => {
 			console.log('socket client connected ....')
 			socket.on('bluetooths', (data) => {
+				console.log(typeof(data))
 				console.log(data)
 			})
 
-            socket.on('data', (data) => {
-                console.log(data)
-            })
+			socket.on('data', (data) => {
+				console.log(data)
+			})
 
 			socket.on('disconnect', () => {
 				console.log('socket client disconneted .....')
