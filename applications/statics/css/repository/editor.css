@@ -241,12 +241,6 @@
     transition: opacity .5s;
 }
 
-.indispensable::before{
-    content: '*';
-    color:#f56c6c;
-    margin:10px 5px 0 0;
-}
-
 .rap-tabs-body{
     width:96%;
     height:auto;

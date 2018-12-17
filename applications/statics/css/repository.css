@@ -301,9 +301,3 @@
     color:#606266;
     margin:20px 40px 20px 0;
 }
-
-.indispensable::before{
-    content: '*';
-    color:#f56c6c;
-    margin:10px 5px 0 0;
-}
