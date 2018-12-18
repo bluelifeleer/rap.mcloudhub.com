@@ -131,7 +131,8 @@ router.post('/user/register', (req, res, next) => {
 	User.findOne({
 		name: name
 	}).then(user => {
-		if (user._id) {
+		console.log(user)
+		if (user) {
 			output = {
 				code: 0,
 				msg: '此用户已注册',
@@ -149,37 +150,127 @@ router.post('/user/register', (req, res, next) => {
 				delete: false,
 				sync: false,
 				create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
-			}).save().then(reg => {
-				if (reg._id) {
+			}).save().then(user => {
+				if (user._id) {
 					// 添加默认仓库
 					new Item({
-						uid: reg._id,
+						uid: user._id,
 						name: 'example',
 						remark: 'example',
 						icon: '',
 						repository: '',
 						url: 'www.example.com',
-						own: reg,
+						own: user,
 						permissions: 'public',
-						members: [reg],
+						members: [user],
 						delete: false,
 						sync: false,
 						create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
 					}).save().then(item => {
+						// 添加默认模块
+						new Model({
+							uid: user._d,
+							itemid: item._id,
+							name: 'test',
+							remark: 'test',
+							item: item,
+							interfaces: [],
+							delete: false,
+							sync: false,
+							create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
+						}).save().then(model => {
+							if (model) {
+								// 添加默认接口
+								new Interface({
+									uid: user._id,
+									itemid: item._id,
+									modelid: model._id,
+									name: 'test',
+									remark: 'test',
+									item: item,
+									model: model,
+									request: {
+										type: 'get',
+										url: '',
+										code: 200
+									},
+									fields: [{
+										name: 'test',
+										indispensable: true,
+										type: 'string',
+										default: '',
+										remark: 'test'
+									}],
+									response: [{
+										name: 'test',
+										indispensable: true,
+										type: 'string',
+										default: '',
+										remark: 'test'
+									}],
+									delete: false,
+									sync: false,
+									create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
+								}).save().then(s => {
+									if (s) {
+										model.interfaces.push(s);
+										model.save();
+										item.models.push(model);
+										item.save();
+										output = {
+											code: 1,
+											msg: '注册成功',
+											ok: true,
+											data: null
+										};
+										res.json(output);
+										return false;
+									}
+								}).catch(err => {
+									console.log(err)
+									output = {
+										code: 1,
+										msg: '添加默认接口数据失败',
+										ok: true,
+										data: null
+									};
+									res.json(output);
+									return false;
+								})
+							}
+						}).catch(err => {
+							console.log(err)
+							output = {
+								code: 1,
+								msg: '添加默认模块数据失败',
+								ok: true,
+								data: null
+							};
+							res.json(output);
+							return false;
+						})
+					}).catch(err => {
+						console.log(err)
 						output = {
 							code: 1,
-							msg: '注册成功',
+							msg: '添加默认仓库数据失败',
 							ok: true,
 							data: null
 						};
 						res.json(output);
 						return false;
-					}).catch(err => {
-						console.log(err)
 					})
 				}
 			}).catch(err => {
 				console.log(err)
+				output = {
+					code: 1,
+					msg: '添加用户信息失败',
+					ok: true,
+					data: null
+				};
+				res.json(output);
+				return false;
 			})
 		}
 	}).catch(err => {
@@ -241,8 +332,8 @@ router.post('/item/add', (req, res, next) => {
 					delete: false,
 					sync: false,
 					create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
-				}).save().then(model=>{
-					if(model){
+				}).save().then(model => {
+					if (model) {
 						new Interface({
 							uid: user._id,
 							itemid: item._id,
@@ -252,7 +343,7 @@ router.post('/item/add', (req, res, next) => {
 							item: item,
 							model: model,
 							request: {
-								url:'',
+								url: '',
 								type: 'get',
 								code: 200
 							},
@@ -273,9 +364,9 @@ router.post('/item/add', (req, res, next) => {
 							delete: false,
 							sync: false,
 							create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
-						}).save().then(s=>{
+						}).save().then(s => {
 							console.log(s)
-							if(s){
+							if (s) {
 								model.interfaces.push(s);
 								model.save()
 								item.models.push(model);
@@ -293,14 +384,14 @@ router.post('/item/add', (req, res, next) => {
 								res.json(output);
 								return false;
 							}
-						}).catch(err=>{
+						}).catch(err => {
 							console.log(err)
 						})
 					}
-				}).catch(err=>{
+				}).catch(err => {
 					console.log(err)
 				})
-				
+
 			} else {
 				output = {
 					code: 0,
@@ -383,10 +474,11 @@ router.post('/model/add', (req, res, next) => {
 	let name = req.body.name;
 	let remark = req.body.remark;
 	Item.findById(item_id).then(item => {
-		return Promise.all([item]);
-	}).spread((item) => {
+		user = User.findById(uid)
+		return Promise.all([item, user]);
+	}).spread((item, user) => {
 		new Model({
-			uid: uid,
+			uid: user._id,
 			itemid: item._id,
 			name: name,
 			remark: remark,
@@ -395,18 +487,55 @@ router.post('/model/add', (req, res, next) => {
 			sync: false,
 			create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
 		}).save().then(model => {
-			item.models.push(model);
-			item.save();
-			output = {
-				code: 1,
-				msg: 'success',
-				ok: true,
-				data: {
-					model: model._id
-				}
-			};
-			res.json(output);
-			return false;
+			// 添加默认接口
+			new Interface({
+				uid: uid,
+				itemid: item._id,
+				modelid: model._id,
+				name: 'test',
+				remark: 'test',
+				item: item,
+				model: model,
+				request: {
+					type: 'get',
+					url: '',
+					code: 200
+				},
+				fields: [{
+					name: 'test',
+					indispensable: true,
+					type: 'string',
+					default: '',
+					remark: 'test'
+				}],
+				response: [{
+					name: 'test',
+					indispensable: true,
+					type: 'string',
+					default: '',
+					remark: 'test'
+				}],
+				delete: false,
+				sync: false,
+				create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
+			}).save().then(s => {
+				model.interfaces.push(s)
+				model.save();
+				item.models.push(model);
+				item.save();
+				output = {
+					code: 1,
+					msg: 'success',
+					ok: true,
+					data: {
+						model: model._id
+					}
+				};
+				res.json(output);
+				return false;
+			}).catch(err => {
+				console.log(err)
+			})
 		}).catch(err => {
 			console.log(err)
 		})
@@ -542,8 +671,8 @@ router.get('/model/get', (req, res, next) => {
 	let select = req.query.select.join(' ') || '';
 	Model.find({
 		itemid: id
-	}, select).then(models=>{
-		if(models){
+	}, select).then(models => {
+		if (models) {
 			output = {
 				code: 1,
 				msg: 'success',
@@ -553,7 +682,7 @@ router.get('/model/get', (req, res, next) => {
 			res.json(output);
 			return false;
 		}
-	}).catch(err=>{
+	}).catch(err => {
 		console.log(err)
 	})
 })
