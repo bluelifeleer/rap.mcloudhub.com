@@ -259,10 +259,18 @@ const VUE = new Vue({
 			}
 			modelTabs[index].className = 'rap-tabs-items rap-tabs-items-selected';
 			modelTabs[index].setAttribute('data-selected', true);
-			this.current.model.index = id;
+			this.current.model.index = index;
+			this.current.interface.index = 0;
 			this.models = item;
 			this.interfaces = item.interfaces;
-			console.log(this.interfaces)
+			this.interface = item.interfaces[this.current.interface.index];
+			let interfaceMenuItems = this.$refs.interfaceMenus.getElementsByClassName('interface-menus-item');
+			for (let j = 0; j < interfaceMenuItems.length; j++) {
+				interfaceMenuItems[j].className = 'interface-menus-item';
+				interfaceMenuItems[j].setAttribute('data-selected', false);
+			}
+			interfaceMenuItems[this.current.interface.index].className = 'interface-menus-item interface-menus-item-selected'
+			interfaceMenuItems[this.current.interface.index].setAttribute('data-selected', true);
 		},
 		addModel: function(e, id) {
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
@@ -290,6 +298,11 @@ const VUE = new Vue({
 			}).then(res => {
 				if (res.data.code && res.data.ok) {
 					this.messageAlert('模块添加成功', 'success');
+					this.rapDialogAddModel = false;
+					this.modelForm.item_id = '';
+					this.modelForm.id = '';
+					this.modelForm.name = '';
+					this.modelForm.remark = '';
 					this.getRepository();
 				}
 			}).catch(err => {
@@ -298,12 +311,9 @@ const VUE = new Vue({
 		},
 		addModelFormCancle: function() {
 			this.rapDialogAddModel = false;
-			this.modelForm = {
-				item_id: '',
-				id: '',
-				name: '',
-				remark: ''
-			};
+			this.modelForm.id = '';
+			this.modelForm.name = '';
+			this.modelForm.remark = '';
 		},
 		addInterface: function(e, item_id, model_id) {
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
