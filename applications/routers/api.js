@@ -408,10 +408,37 @@ router.post('/item/add', (req, res, next) => {
 	})
 });
 
+router.get('/item/delete', (req, res, next) => {
+	let id = req.query.id;
+	let uid = req.session.uid;
+	Item.findOneAndUpdate({
+		_id: id,
+		uid: uid
+	}, {
+		delete: true
+	}, {
+		new: true,
+		upsert: false,
+		runValidators: true
+	}).then(item => {
+		output = {
+			code: 1,
+			msg: 'success',
+			ok: true,
+			data: item
+		};
+		res.json(output);
+		return false;
+	}).catch(err => {
+		console.log(err)
+	})
+});
+
 router.get('/item/lists', (req, res, next) => {
 	let uid = req.query.uid || req.session.uid;
 	Item.find({
-		uid: uid
+		uid: uid,
+		delete: false
 	}).populate([{
 		path: 'own',
 		select: 'name'
@@ -668,7 +695,8 @@ router.get('/model/get', (req, res, next) => {
 	let id = req.query.id;
 	let select = req.query.select.join(' ') || '';
 	Model.find({
-		itemid: id
+		itemid: id,
+		delete: false
 	}, select).then(models => {
 		if (models) {
 			output = {

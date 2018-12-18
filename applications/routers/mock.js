@@ -21,17 +21,17 @@ router.use(function(req, res, next) {
 });
 
 router.get('/test/data', (req, res, next) => {
-    let id = req.query.id;
-    output = {
+	let id = req.query.id;
+	output = {
 		code: 1,
 		msg: 'success',
 		ok: true,
 		data: {
-            id: id
-        }
-    };
-    res.json(output);
-    return false;
+			id: id
+		}
+	};
+	res.json(output);
+	return false;
 });
 
 module.exports = router;
