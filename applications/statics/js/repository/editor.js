@@ -205,6 +205,10 @@ const VUE = new Vue({
 				request: {
 					url: ''
 				}
+		},
+		jsonFormate: {
+			status: false,
+			label: '<>'
 		}
 	},
 	created() {},
@@ -462,7 +466,6 @@ const VUE = new Vue({
 			this.rapDialogAddInterfaceResponse = !this.rapDialogAddInterfaceResponse;
 		},
 		exportInterfaceResponse: function(e, id) {
-			alert(id)
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
 			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterfaceResponseExport, 'width');
 			this.$refs.rapDialogAddInterfaceResponseExport.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
@@ -670,6 +673,10 @@ const VUE = new Vue({
 			this.current.interface.index = index;
 			this.interface = interface;
 			console.log(interface)
+		},
+		jsonFormateTextToggle(){
+			this.jsonFormate.status = !this.jsonFormate.status;
+			this.jsonFormate.label = this.jsonFormate.status ? '{}' : '<>';
 		},
 		loginout: function() {
 			axios({

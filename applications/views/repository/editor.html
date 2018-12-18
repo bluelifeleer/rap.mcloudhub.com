@@ -345,7 +345,7 @@
             <div class="rap-dialog-marker"></div>
             <div class="rap-dialog-popup" ref='rapDialogAddInterfaceRequestExport'>
                 <div class="rap-dialog-header">
-                    <div class="rap-dialog-title">导入请求属性<a href="javascript:void(0);" class="formate-json-but">{}</a></div>
+                    <div class="rap-dialog-title">导入请求属性<a href="javascript:void(0);" class="formate-json-but" @click="jsonFormateTextToggle" v-html="jsonFormate.label"></a></div>
                     <div class="rap-dialog-close">
                         <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
                     </div>
@@ -370,7 +370,7 @@
             <div class="rap-dialog-marker"></div>
             <div class="rap-dialog-popup" ref='rapDialogAddInterfaceResponseExport'>
                 <div class="rap-dialog-header">
-                    <div class="rap-dialog-title">导入响应属性<a href="javascript:void(0);" class="formate-json-but">{}</a></div>
+                    <div class="rap-dialog-title">导入响应属性<a href="javascript:void(0);" class="formate-json-but" @click="jsonFormateTextToggle" v-html="jsonFormate.label"></a></div>
                     <div class="rap-dialog-close">
                         <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
                     </div>
