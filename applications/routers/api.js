@@ -304,9 +304,7 @@ router.post('/item/add', (req, res, next) => {
 	let repository = req.body.repository || '';
 	let url = req.body.url || '';
 	let permissions = req.body.permissions || 'public';
-	User.findOne({
-		_id: uid
-	}).then(user => {
+	User.findById(uid).then(user => {
 		new Item({
 			uid: user._id,
 			name: name,
