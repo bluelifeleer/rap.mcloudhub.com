@@ -3,6 +3,17 @@ const VUE = new Vue({
 	el: '#app',
 	data: {
 		userInfo: false,
+		current:{
+			item: {
+				id: '',
+			},
+			model: {
+				index: 0
+			},
+			interface: {
+				index: 0
+			}
+		},
 		repository: {
 			own: {
 				_id: '',
@@ -199,21 +210,21 @@ const VUE = new Vue({
 	created() {},
 	methods: {
 		init: function() {
-			let id = utils.getUrlQueryString('id');
-			this.modelForm.item_id = id;
+			this.current.item.id = utils.getUrlQueryString('id');
+			this.modelForm.item_id = this.current.item.id;
 			this.user = {
 				name: utils.getCookie('name'),
 				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10))
 			}
-			this.getRepository(id);
+			this.getRepository();
 		},
-		getRepository: function(id) {
+		getRepository: function() {
 			axios({
 				url: '/item/get',
 				mehtod: 'GET',
 				baseURL: 'https://rap.mcloudhub.com/api',
 				params: {
-					id: id
+					id: this.current.item.id
 				}
 			}).then(res => {
 				if (res.data.code && res.data.ok) {
@@ -228,9 +239,10 @@ const VUE = new Vue({
 						});
 					}
 					this.repository = item;
-					this.models = item.models[0];
+					this.models = item.models[this.current.model.index];
+					console.log(this.models);
 					this.interfaces = this.models.interfaces;
-					this.interface = this.interfaces[0];
+					this.interface = this.interfaces[this.current.interface.index];
 				}
 			}).catch(err => {
 				console.log(err)
@@ -247,6 +259,7 @@ const VUE = new Vue({
 			}
 			modelTabs[index].className = 'rap-tabs-items rap-tabs-items-selected';
 			modelTabs[index].setAttribute('data-selected', true);
+			this.current.model.index = id;
 			this.models = item;
 			this.interfaces = item.interfaces;
 			console.log(this.interfaces)
@@ -333,6 +346,15 @@ const VUE = new Vue({
 					this.messageAlert('创建接口成功', 'success');
 					this.getRepository();
 					this.rapDialogAddInterface = !this.rapDialogAddInterface;
+					this.interfaceForm.item_id = '';
+					this.interfaceForm.model_id = '';
+					this.interfaceForm.name = '';
+					this.interfaceForm.remark = '';
+					this.interfaceForm.request = {
+						type: 'get',
+						url: '',
+						code: '200'
+					};
 				}
 			}).catch(err => {
 				console.log(err)
@@ -346,45 +368,30 @@ const VUE = new Vue({
 			this.rapDialogAddInterfaceResponse = false;
 			this.rapDialogAddInterfaceResponseExport = false;
 			this.rapDialogInterfaceMove = false;
-
-			this.modelForm = {
-				item_id: '',
-				id: '',
-				name: '',
-				remark: ''
-			};
-			this.interfaceForm = {
-				item_id: '',
-				model_id: '',
-				id: '',
-				name: '',
-				remark: '',
-				request: {
-					methods: 'get',
-					url: '',
-					status_code: '200'
-				}
-			}
-
-			this.interfaceRequestForm = {
-				id: '',
-				name: '',
-				type: 'string',
-				remark: '',
-				default: '',
-				indispensable: false,
-				requestJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\ndefault: \'\',\r\nindispensable: false\r\n}'
-			}
-
-			this.interfaceResponseForm = {
-				id: '',
-				name: '',
-				type: 'string',
-				remark: '',
-				default: '',
-				indispensable: false,
-				responseJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\ndefault: \'\',\r\nindispensable: false\r\n}'
-			}
+			this.modelForm.item_id = '';
+			this.modelForm.id = '';
+			this.modelForm.name = '';
+			this.modelForm.remark = '';
+			this.interfaceForm.item_id = '';
+			this.interfaceForm.model_id = '';
+			this.interfaceForm.id = '';
+			this.interfaceForm.name = '';
+			this.interfaceForm.remark = '';
+			this.interfaceForm.request.methods = 'get';
+			this.interfaceForm.request.url = '';
+			this.interfaceForm.request.status_code = '200';
+			this.interfaceRequestForm.id = '';
+			this.interfaceRequestForm.name = '';
+			this.interfaceRequestForm.remark = '';
+			this.interfaceRequestForm.type = 'string';
+			this.interfaceRequestForm.default = '';
+			this.interfaceRequestForm.indispensable = false;
+			this.interfaceResponseForm.id = '';
+			this.interfaceResponseForm.name = '';
+			this.interfaceResponseForm.remark = '';
+			this.interfaceResponseForm.type = 'string';
+			this.interfaceResponseForm.default = '';
+			this.interfaceResponseForm.indispensable = false;
 		},
 		rapDialogClose: function() {
 			this.rapDialogAddModel = false;
@@ -394,44 +401,30 @@ const VUE = new Vue({
 			this.rapDialogAddInterfaceResponse = false;
 			this.rapDialogAddInterfaceResponseExport = false;
 			this.rapDialogInterfaceMove = false;
-
-			this.modelForm = {
-				item_id: '',
-				id: '',
-				name: '',
-				remark: ''
-			};
-			this.interfaceForm = {
-				item_id: '',
-				model_id: '',
-				id: '',
-				name: '',
-				remark: '',
-				request: {
-					methods: 'get',
-					url: '',
-					status_code: '200'
-				}
-			}
-			this.interfaceRequestForm = {
-				id: '',
-				name: '',
-				type: 'string',
-				remark: '',
-				default: '',
-				indispensable: false,
-				requestJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\ndefault: \'\',\r\nindispensable: false\r\n}'
-			}
-
-			this.interfaceResponseForm = {
-				id: '',
-				name: '',
-				type: 'string',
-				remark: '',
-				default: '',
-				indispensable: false,
-				responseJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\ndefault: \'\',\r\nindispensable: false\r\n}'
-			}
+			this.modelForm.item_id = '';
+			this.modelForm.id = '';
+			this.modelForm.name = '';
+			this.modelForm.remark = '';
+			this.interfaceForm.item_id = '';
+			this.interfaceForm.model_id = '';
+			this.interfaceForm.id = '';
+			this.interfaceForm.name = '';
+			this.interfaceForm.remark = '';
+			this.interfaceForm.request.methods = 'get';
+			this.interfaceForm.request.url = '';
+			this.interfaceForm.request.status_code = '200';
+			this.interfaceRequestForm.id = '';
+			this.interfaceRequestForm.name = '';
+			this.interfaceRequestForm.remark = '';
+			this.interfaceRequestForm.type = 'string';
+			this.interfaceRequestForm.default = '';
+			this.interfaceRequestForm.indispensable = false;
+			this.interfaceResponseForm.id = '';
+			this.interfaceResponseForm.name = '';
+			this.interfaceResponseForm.remark = '';
+			this.interfaceResponseForm.type = 'string';
+			this.interfaceResponseForm.default = '';
+			this.interfaceResponseForm.indispensable = false;
 		},
 		addInterfaceRequest: function(e, id) {
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
@@ -459,6 +452,7 @@ const VUE = new Vue({
 			this.rapDialogAddInterfaceResponse = !this.rapDialogAddInterfaceResponse;
 		},
 		exportInterfaceResponse: function(e, id) {
+			alert(id)
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
 			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterfaceResponseExport, 'width');
 			this.$refs.rapDialogAddInterfaceResponseExport.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
@@ -499,6 +493,12 @@ const VUE = new Vue({
 					this.messageAlert('添加请求参数成功', 'success');
 					this.getRepository();
 					this.rapDialogAddInterfaceRequest = false;
+					this.interfaceRequestForm.id = '';
+					this.interfaceRequestForm.name = '';
+					this.interfaceRequestForm.remark = '';
+					this.interfaceRequestForm.type = 'string';
+					this.interfaceRequestForm.default = '';
+					this.interfaceRequestForm.indispensable = false;
 				}
 			}).catch(err => {
 				console.log(err)
@@ -506,14 +506,12 @@ const VUE = new Vue({
 		},
 		addInterfaceRequestFormCancle: function() {
 			this.rapDialogAddInterfaceRequest = false;
-			this.interfaceRequestForm = {
-				id: '',
-				name: '',
-				type: 'string',
-				remark: '',
-				default: '',
-				indispensable: false
-			}
+			this.interfaceRequestForm.id = '';
+			this.interfaceRequestForm.name = '';
+			this.interfaceRequestForm.remark = '';
+			this.interfaceRequestForm.type = 'string';
+			this.interfaceRequestForm.default = '';
+			this.interfaceRequestForm.indispensable = false;
 		},
 		addInterfaceResponseFormSubmit: function() {
 			if (!this.interfaceResponseForm.name) {
@@ -549,6 +547,12 @@ const VUE = new Vue({
 					this.messageAlert('添加响应参数成功', 'success');
 					this.getRepository();
 					this.rapDialogAddInterfaceResponse = false;
+					this.interfaceResponseForm.id = '';
+					this.interfaceResponseForm.name = '';
+					this.interfaceResponseForm.remark = '';
+					this.interfaceResponseForm.type = 'string';
+					this.interfaceResponseForm.default = '';
+					this.interfaceResponseForm.indispensable = false;
 				}
 			}).catch(err => {
 				console.log(err)
@@ -556,14 +560,12 @@ const VUE = new Vue({
 		},
 		addInterfaceResponseFormCancle: function() {
 			this.rapDialogAddInterfaceResponse = false;
-			this.interfaceResponseForm = {
-				id: '',
-				name: '',
-				type: 'string',
-				remark: '',
-				default: '',
-				indispensable: false
-			}
+			this.interfaceResponseForm.id = '';
+			this.interfaceResponseForm.name = '';
+			this.interfaceResponseForm.remark = '';
+			this.interfaceResponseForm.type = 'string';
+			this.interfaceResponseForm.default = '';
+			this.interfaceResponseForm.indispensable = false;
 		},
 		ExportInterfaceRequestFormSubmit: function() {
 			if (this.interfaceRequestForm.requestJson == '{}') {
@@ -577,8 +579,23 @@ const VUE = new Vue({
 				return false;
 			}
 		},
-		interfaceDelete: function(e, id) {
-
+		interfaceDelete: function(e, model_id, id) {
+			axios({
+				url: '/interface/delete',
+				method: 'GET',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				params: {
+					id: id,
+					model_id: model_id
+				}
+			}).then(res=>{
+				if(res.data.code && res.data.ok){
+					this.messageAlert('接口删除成功', 'success');
+					this.getRepository()
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
 		},
 		interfaceMove: function(e, id, model_id, item_id) {
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
@@ -640,6 +657,7 @@ const VUE = new Vue({
 			}
 			interfaceMenuItems[index].className = 'interface-menus-item interface-menus-item-selected'
 			interfaceMenuItems[index].setAttribute('data-selected', true);
+			this.current.interface.index = index;
 			this.interface = interface;
 			console.log(interface)
 		},

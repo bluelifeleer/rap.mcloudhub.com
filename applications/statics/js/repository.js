@@ -91,11 +91,11 @@ const VUE = new Vue({
 				alert('仓库接口URL不能为空')
 			}
 
-			axios({
-				url: '/item/add',
-				method: 'POST',
-				baseURL: 'https://rap.mcloudhub.com/api',
-				data: {
+			let url = '',data = {};
+
+			if(this.type){
+				url = '/item/add';
+				data = {
 					uid: this.form.uid,
 					name: this.form.name,
 					remark: this.form.remark,
@@ -104,6 +104,25 @@ const VUE = new Vue({
 					repository: this.form.repository,
 					permissions: this.form.permissions
 				}
+			}else{
+				url = '/item/editor';
+				data = {
+					uid: this.form.uid,
+					id: this.form.id,
+					name: this.form.name,
+					remark: this.form.remark,
+					icon: this.form.icon,
+					url: this.form.url,
+					repository: this.form.repository,
+					permissions: this.form.permissions
+				}
+			}
+
+			axios({
+				url: url,
+				method: 'POST',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				data: data
 			}).then(res => {
 				console.log(res)
 				if (res.data.code && res.data.ok) {
@@ -135,8 +154,8 @@ const VUE = new Vue({
 			let clientWidth = document.body.clientWidth || document.documentElement.clientWidth;
 			this.$refs.rapDialog.style.left = parseInt((clientWidth - 550) / 2) + 'px';
 			this.type = false;
-			this.butText = '修改',
-				this.form.uid = item.uid;
+			this.butText = '修改';
+			this.form.uid = item.uid;
 			this.form.id = item._id;
 			this.form.name = item.name;
 			this.form.remark = item.remark;

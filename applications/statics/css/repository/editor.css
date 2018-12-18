@@ -254,7 +254,8 @@
 .rap-tabs-interface-menus{
     float:left;
     width:10%;
-    height:auto;
+    height:580px;
+    overflow: auto;
 }
 
 .interface-menus-item{
@@ -407,19 +408,25 @@
 
 .interface-data-table-header{
     width:100%;
-    height:40px;
+    height:30px;
     border:1px solid #eceeef;
     border-right: none;
+    overflow: hidden;
 }
 
 .interface-data-table-cole{
     float:left;
     width:20%;
-    height:40px;
-    line-height: 40px;
+    height:30px;
+    line-height: 30px;
     text-align: center;
     border-right: 1px solid #eceeef;
     box-sizing: border-box;
+    overflow: hidden;
+}
+
+.interface-data-table-cole a{
+    color:#606266;
 }
 
 .interface-data-table-body{
@@ -429,10 +436,11 @@
 
 .interface-data-table-rows{
     width:100%;
-    height:40px;
+    height:30px;
     border:1px solid #eceeef;
     border-right: none;
     border-top: none;
+    overflow: hidden;
 }
 
 .requesr-json-editor,.response-json-editor{

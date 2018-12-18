@@ -44,7 +44,10 @@
             <div class="rap-dialog-popup" ref="rapDialog">
                 <div class="rap-dialog-header">
                     <div class="rap-dialog-head-content">
-                        <div class="rap-dialog-head-title">创建仓库：</div>
+                        <div class="rap-dialog-head-title">
+                            <span v-if="type">创建仓库：</span>
+                            <span v-else>修改仓库：</span>
+                        </div>
                         <div class="rap-dialog-head-close">
                             <a href="javascript:void(0);" class="rap-dialog-close" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
                         </div>

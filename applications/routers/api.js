@@ -363,7 +363,6 @@ router.post('/item/add', (req, res, next) => {
 							sync: false,
 							create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
 						}).save().then(s => {
-							console.log(s)
 							if (s) {
 								model.interfaces.push(s);
 								model.save()
@@ -389,7 +388,6 @@ router.post('/item/add', (req, res, next) => {
 				}).catch(err => {
 					console.log(err)
 				})
-
 			} else {
 				output = {
 					code: 0,
@@ -404,6 +402,46 @@ router.post('/item/add', (req, res, next) => {
 			console.log(err)
 		})
 	}).catch(err => {
+		console.log(err)
+	})
+});
+
+router.post('/item/editor', (req, res, next) => {
+	let uid = req.body.uid || req.session.uid;
+	let id = req.body.id;
+	let name = req.body.name;
+	let remark = req.body.remark;
+	let icon = req.body.icon;
+	let url = req.body.url;
+	let repository = req.body.repository;
+	let permissions = req.body.permissions;
+
+	Item.findOneAndUpdate({
+		_id: id,
+		uid: uid
+	}, {
+		name: name,
+		remark: remark,
+		icon: icon,
+		url: url,
+		repository: repository,
+		permissions: permissions
+	}, {
+		new: true,
+		upsert: false,
+		runValidators: true
+	}).then(item=>{
+		if(item){
+			output = {
+				code: 1,
+				msg: 'success',
+				ok: true,
+				data: null
+			};
+			res.json(output);
+			return false;
+		}
+	}).catch(err=>{
 		console.log(err)
 	})
 });
@@ -633,7 +671,7 @@ router.post('/interface/editor', (req, res, next) => {
 	let data = req.body.data;
 	Interface.findById(data.id).then(result => {
 		if (result) {
-			if (type == "request") {
+			if(type == 'request'){
 				result.fields.push({
 					name: data.name,
 					remark: data.remark,
@@ -641,7 +679,7 @@ router.post('/interface/editor', (req, res, next) => {
 					default: data.default,
 					indispensable: data.indispensable
 				})
-			} else {
+			}else if(type == 'response'){
 				result.response.push({
 					name: data.name,
 					remark: data.remark,
@@ -649,6 +687,8 @@ router.post('/interface/editor', (req, res, next) => {
 					default: data.default,
 					indispensable: data.indispensable
 				})
+			}else{
+
 			}
 			result.save().then(s => {
 				output = {
@@ -667,6 +707,37 @@ router.post('/interface/editor', (req, res, next) => {
 		console.log(err)
 	});
 })
+
+router.get('/interface/delete', (req, res, next) => {
+	let id = req.query.id;
+	let model_id = req.query.model_id;
+	Model.findOne({_id: model_id}).then(model=>{
+		let tmp = [];
+		model.interfaces.forEach(s=>{
+			if(s != id){
+				tmp.push(s)
+			}
+		})
+		model.interfaces = tmp;
+		model.save();
+		Interface.findOneAndDelete({_id: id}).then(del=>{
+			if(del){
+				output = {
+					code: 1,
+					msg: 'success',
+					ok: true,
+					data: null
+				};
+				res.json(output);
+				return false;
+			}
+		}).catch(err=>{
+			console.log(err)
+		})
+	}).catch(err=>{
+		console.log(err)
+	})
+});
 
 router.post('/interface/move', (req, res, next) => {
 	let id = req.body.id;
