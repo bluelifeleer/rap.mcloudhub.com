@@ -191,7 +191,7 @@ router.post('/user/register', (req, res, next) => {
 									model: model,
 									request: {
 										type: 'get',
-										url: '',
+										url: '/test/test',
 										code: 200
 									},
 									fields: [{
@@ -341,7 +341,7 @@ router.post('/item/add', (req, res, next) => {
 							item: item,
 							model: model,
 							request: {
-								url: '',
+								url: '/test/test',
 								type: 'get',
 								code: 200
 							},
@@ -496,7 +496,7 @@ router.post('/model/add', (req, res, next) => {
 				model: model,
 				request: {
 					type: 'get',
-					url: '',
+					url: '/test/test',
 					code: 200
 				},
 				fields: [{
