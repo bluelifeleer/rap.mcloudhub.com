@@ -218,10 +218,15 @@ const VUE = new Vue({
 			}).then(res => {
 				if (res.data.code && res.data.ok) {
 					let item = res.data.data.item;
-					let interfaces = item.models[0].interfaces;
-					interfaces.forEach((interface, index) => {
-						interface['mock_url'] = '/mock/test/data?id=' + interface._id
-					});
+					if (item.models.length) {
+						item.models.forEach(model => {
+							if (model.interfaces.length) {
+								model.interfaces.forEach(interface => {
+									interface['mock_url'] = '/mock/test/data?id=' + interface._id
+								});
+							}
+						});
+					}
 					this.repository = item;
 					this.models = item.models[0];
 					this.interfaces = this.models.interfaces;
