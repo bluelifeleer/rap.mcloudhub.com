@@ -472,7 +472,7 @@ router.post('/model/add', (req, res, next) => {
 	let name = req.body.name;
 	let remark = req.body.remark;
 	Item.findById(item_id).then(item => {
-		user = User.findById(uid)
+		let user = User.findById(uid)
 		return Promise.all([item, user]);
 	}).spread((item, user) => {
 		new Model({
