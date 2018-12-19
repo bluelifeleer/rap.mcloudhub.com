@@ -170,10 +170,6 @@ mongoose.connect('mongodb://localhost:27017/rap', {
 		const IO = sockerIO(server)
 		IO.on('connection', (socket) => {
 			console.log('socket client connected ....')
-			socket.on('bluetooths', (data) => {
-				console.log(data)
-			})
-
 			socket.on('minix', (data) => {
 				console.log(data)
 			})
