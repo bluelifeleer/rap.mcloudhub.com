@@ -6,11 +6,10 @@
 <div class="repository-container">
     <div class="repository-container-content" v-if="repositorys.length">
         <div class="repository-container-header">
-            <select name="repository" id="repositorys-types">
-                <option value="1">我创建的仓库</option>
-                <option value="2">我加入的仓库</option>
+            <select name="repository" id="repositorys-types" @change="selectorRepository">
+                <option :value="option.value" v-for="(option, $index) in selector.options" :key="$index">${option.label}</option>
             </select>
-            <input type="texIDt" placeholder="搜索仓库：仓库名或仓库ID" name="search-repository" id="search-repository" />
+            <input type="texIDt" placeholder="搜索仓库：仓库名或仓库ID" name="search-repository" id="search-repository" v-model="search.value" />
             <a href="javascript:void(0);" class="repository-header-create" @click="createRepository">创建仓库</a>
         </div>
         <div class="repository-container-body">

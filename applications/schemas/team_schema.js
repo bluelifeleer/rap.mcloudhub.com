@@ -1,17 +1,21 @@
 const mongoose = require('mongoose')
 module.exports = new mongoose.Schema({
     uid: String,
-    itemid: String,
     name: String,
     remark: String,
-    item: {
+    own:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    item: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Item',
-    },
-    interfaces: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Interface'
     }],
+    members: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
+    permissions: String,
     delete: Boolean,
     sync: Boolean,
     create: String

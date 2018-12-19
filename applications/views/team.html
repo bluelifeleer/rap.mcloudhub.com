@@ -3,6 +3,92 @@
 <link rel="stylesheet" type="text/css" href="/static/css/team.css" />
 {% endblock%}
 {% block section %}
+<div class="team-container">
+    <div class="team-container-header">
+        <div class="team-header-left">
+            <span>
+                <select name="select" id="" v-model="selector.value" @change="selectorTeamType">
+                    <option :value="option.value" v-for="(option, $index) in selector.options">${option.label}</option>
+                </select>
+            </span>
+            <span>
+                <input type="text" name="search" id="" value="" placeholder="搜索：输入团队名称或ID" v-model="search.value" />
+            </span>
+        </div>
+        <div class="team-header-right"><a href="javascript:void(0);" class="header-team-add-but" @click="addTeamToggle"><i class="icon iconfont">&#xe68a;</i>新建团队</a></div>
+    </div>
+    <div class="team-container-body">
+        <div class="team-list-box" v-if="teams.length">
+            <div class="team-item-group">
+                <div class="team-items" v-for="(team, $index) in teams" :key="$index">
+                    <div class="team-items-name"><a href="javascript:void(0);" class="name"><i class="icon iconfont">&#xe68a;</i><span>${team.name}</span></a></div>
+                    <div class="team-items-remark">${team.remark}</div>
+                    <div class="team-items-own"><a href="javascript:void(0)" class="own"><i class="icon iconfont">&#xe63f;</i><span>${team.own.name}</span></a></div>
+                </div>
+            </div>
+        </div>
+        <div class="team-list-box" v-else>
+            <a href="javascript:void(0);" class="team-add-but" @click="addTeamToggle">新建团队</a>
+        </div>
+    </div>
+    
+
+    <!-- 新建团队 dialog -->
+    <transition name="rap-dialog-popup">
+        <div class="rap-dialog-box" v-show="newTeamToggle">
+            <div class="rap-dialog-marker"></div>
+            <div class="rap-dialog-popup" ref="rapDialog">
+                <div class="rap-dialog-header">
+                    <div class="rap-dialog-head-content">
+                        <div class="rap-dialog-head-title">
+                            <span v-if="type">新建团队：</span>
+                            <span v-else>修改团队：</span>
+                        </div>
+                        <div class="rap-dialog-head-close">
+                            <a href="javascript:void(0);" class="rap-dialog-close" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-body">
+                    <div class="rap-form-box">
+                        <div class="rap-form-item" style="display:none;">
+                            <label for="uid">UID：</label>
+                            <input type="hidden" name="uid" id="uid" placeholder="uid" v-model="form.uid" />
+                        </div>
+                        <div class="rap-form-item" style="display:none;">
+                            <label for="id">ID：</label>
+                            <input type="hidden" name="id" id="id" placeholder="id" v-model="form.id" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="name" class="indispensable">团队名称：</label>
+                            <input type="text" name="name" id="name" placeholder="团队名称" v-model="form.name" />
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="remark">描述：</label>
+                            <textarea name="remark" id="remark" cols="30" rows="5" v-model="form.remark"></textarea>
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="remark" class="indispensable">权限：</label>
+                            <span class="JS-widget-radio">
+                                <a href="javascript:void(0);" class="radio-options" v-for="(option, $index) in form.permissions.options" :key="$index" :data-index="$index" :data-value="option.value" :data-selected="option.selected" @click="radioSelector($event, $index, option)"><i class="icon iconfont" :class="{'radio-selected': option.selected}" v-html="option.iconfont"></i>${option.label}</a>
+                            </span>
+                        </div>
+                        <div class="rap-form-item">
+                            <label for="name">成员：</label>
+                            <input type="text" name="name" id="name" placeholder="团队名称" v-model="form.members" />
+                        </div>
+                    </div>
+                </div>
+                <div class="rap-dialog-footer">
+                    <div class="rap-form-but-box">
+                        <a href="javascript:void(0);" class="form-submit" @click="formSubmit($event)">创建</a>
+                        <a href="javascript:void(0);" class="form-cancle" @click="formCancle($event)">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
+</div>
 {% endblock %}
 {% block script %}
 <script type="text/javascript" src="/static/js/team.js"></script>

@@ -4,6 +4,19 @@ const VUE = new Vue({
 	data: {
 		userInfo: false,
 		repositorys: [],
+		selector:{
+			value: 'create',
+			options: [{
+				label: '我创建的仓库',
+				value: 'create'
+			}, {
+				label: '我加入的仓库',
+				value: 'join'
+			}]
+		},
+		search:{
+			value: ''
+		},
 		createRepositoryDialog: false,
 		type: true,
 		butText: '创建',
@@ -53,6 +66,8 @@ const VUE = new Vue({
 			}).catch(err => {
 				console.log(err)
 			})
+		},
+		selectorRepository: function(e){
 		},
 		userInfoToggle: function() {
 			this.userInfo = !this.userInfo

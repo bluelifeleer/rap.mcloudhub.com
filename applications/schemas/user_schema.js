@@ -9,5 +9,5 @@ module.exports = new mongoose.Schema({
 	salt: String,
 	delete: Boolean,
 	sync: Boolean,
-	create: Date
+	create: String
 })

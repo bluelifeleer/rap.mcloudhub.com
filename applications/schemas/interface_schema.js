@@ -18,5 +18,5 @@ module.exports = new mongoose.Schema({
     response: Array,
     delete: Boolean,
     sync: Boolean,
-    create: Date
+    create: String
 })
