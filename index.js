@@ -174,6 +174,10 @@ mongoose.connect('mongodb://localhost:27017/rap', {
 				console.log(data)
 			})
 
+			socket.on('minix', (data) => {
+				console.log(data)
+			})
+
 			socket.on('disconnect', () => {
 				console.log('socket client disconneted .....')
 			})
