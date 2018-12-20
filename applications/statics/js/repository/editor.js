@@ -107,7 +107,8 @@ const VUE = new Vue({
 			remark: '',
 			default: '',
 			indispensable: false,
-			requestJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\ndefault: \'\',\r\nindispensable: false\r\n}',
+			roles: '',
+			requestJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\nroles:\'{"name\|0-20":""}\',\r\ndefault: \'\',\r\nindispensable: false\r\n}',
 			types: [{
 				label: 'String',
 				value: 'string'
@@ -145,7 +146,8 @@ const VUE = new Vue({
 			remark: '',
 			default: '',
 			indispensable: false,
-			responseJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\ndefault: \'\',\r\nindispensable: false\r\n}',
+			roles: '',
+			responseJson: '{\r\nname:\'\',\r\ntype:\'string\',\r\nremark: \'\',\r\nroles:\'{"name\|0-20":""}\',\r\ndefault: \'\',\r\nindispensable: false\r\n}',
 			types: [{
 				label: 'String',
 				value: 'string'
@@ -398,12 +400,14 @@ const VUE = new Vue({
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
 			this.interfaceRequestForm.type = 'string';
+			this.interfaceRequestForm.roles = '';
 			this.interfaceRequestForm.default = '';
 			this.interfaceRequestForm.indispensable = false;
 			this.interfaceResponseForm.id = '';
 			this.interfaceResponseForm.name = '';
 			this.interfaceResponseForm.remark = '';
 			this.interfaceResponseForm.type = 'string';
+			this.interfaceResponseForm.roles = '';
 			this.interfaceResponseForm.default = '';
 			this.interfaceResponseForm.indispensable = false;
 		},
@@ -431,12 +435,14 @@ const VUE = new Vue({
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
 			this.interfaceRequestForm.type = 'string';
+			this.interfaceRequestForm.roles = '';
 			this.interfaceRequestForm.default = '';
 			this.interfaceRequestForm.indispensable = false;
 			this.interfaceResponseForm.id = '';
 			this.interfaceResponseForm.name = '';
 			this.interfaceResponseForm.remark = '';
 			this.interfaceResponseForm.type = 'string';
+			this.interfaceResponseForm.roles = '';
 			this.interfaceResponseForm.default = '';
 			this.interfaceResponseForm.indispensable = false;
 		},
@@ -496,6 +502,7 @@ const VUE = new Vue({
 						name: this.interfaceRequestForm.name,
 						remark: this.interfaceRequestForm.remark,
 						type: this.interfaceRequestForm.type,
+						roles: this.interfaceRequestForm.roles,
 						default: this.interfaceRequestForm.default,
 						indispensable: this.interfaceRequestForm.indispensable
 					}
@@ -510,6 +517,7 @@ const VUE = new Vue({
 					this.interfaceRequestForm.name = '';
 					this.interfaceRequestForm.remark = '';
 					this.interfaceRequestForm.type = 'string';
+					this.interfaceRequestForm.roles = '';
 					this.interfaceRequestForm.default = '';
 					this.interfaceRequestForm.indispensable = false;
 				}
@@ -523,6 +531,7 @@ const VUE = new Vue({
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
 			this.interfaceRequestForm.type = 'string';
+			this.interfaceRequestForm.roles = '';
 			this.interfaceRequestForm.default = '';
 			this.interfaceRequestForm.indispensable = false;
 		},
@@ -550,6 +559,7 @@ const VUE = new Vue({
 						name: this.interfaceResponseForm.name,
 						remark: this.interfaceResponseForm.remark,
 						type: this.interfaceResponseForm.type,
+						roles: this.interfaceResponseForm.roles,
 						default: this.interfaceResponseForm.default,
 						indispensable: this.interfaceResponseForm.indispensable
 					}
@@ -564,6 +574,7 @@ const VUE = new Vue({
 					this.interfaceResponseForm.name = '';
 					this.interfaceResponseForm.remark = '';
 					this.interfaceResponseForm.type = 'string';
+					this.interfaceResponseForm.roles = '';
 					this.interfaceResponseForm.default = '';
 					this.interfaceResponseForm.indispensable = false;
 				}
@@ -577,6 +588,7 @@ const VUE = new Vue({
 			this.interfaceResponseForm.name = '';
 			this.interfaceResponseForm.remark = '';
 			this.interfaceResponseForm.type = 'string';
+			this.interfaceResponseForm.roles = '';
 			this.interfaceResponseForm.default = '';
 			this.interfaceResponseForm.indispensable = false;
 		},

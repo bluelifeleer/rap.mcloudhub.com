@@ -101,7 +101,7 @@
 .add-model-form-items label{
     display:block;
     float:left;
-    width:80px;
+    width:120px;
     height:40px;
     line-height: 40px;
     text-align: right;
@@ -116,6 +116,15 @@
     padding:0 0 0 2%;
     border:1px solid #c1c1c1;
     border-radius:4px;
+}
+
+.add-model-form-items a{
+    display:block;
+    float:left;
+    width:29px;
+    height:40px;
+    line-height: 40px;
+    text-align: center;
 }
 
 .add-model-form-items select{
@@ -355,13 +364,17 @@
 
 .interface-data-table-cole{
     float:left;
-    width:20%;
+    width:16%;
     height:30px;
     line-height: 30px;
     text-align: center;
     border-right: 1px solid #eceeef;
     box-sizing: border-box;
     overflow: hidden;
+}
+
+.interface-data-table-cole:last-child{
+    width: 20% !important;
 }
 
 .interface-data-table-cole a{

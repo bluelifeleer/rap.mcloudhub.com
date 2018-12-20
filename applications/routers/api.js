@@ -616,6 +616,7 @@ router.post('/interface/add', (req, res, next) => {
 		name: "test",
 		remark: "test",
 		type: "string",
+		roles: "",
 		default: "",
 		indispensable: false
 	}];
@@ -623,6 +624,7 @@ router.post('/interface/add', (req, res, next) => {
 		name: "test",
 		remark: "test",
 		type: "string",
+		roles: "",
 		default: "",
 		indispensable: false
 	}];
@@ -676,6 +678,7 @@ router.post('/interface/editor', (req, res, next) => {
 					name: data.name,
 					remark: data.remark,
 					type: data.type,
+					roles: data.roles,
 					default: data.default,
 					indispensable: data.indispensable
 				})
@@ -684,6 +687,7 @@ router.post('/interface/editor', (req, res, next) => {
 					name: data.name,
 					remark: data.remark,
 					type: data.type,
+					roles: data.roles,
 					default: data.default,
 					indispensable: data.indispensable
 				})
