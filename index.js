@@ -11,6 +11,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const csurf = require('csurf')
+const helmet = require('helmet')
 const session = require('express-session')
 const favicon = require('serve-favicon')
 const morgan = require('morgan')
@@ -46,6 +47,7 @@ app.set('view engine', 'html');
 swig.setDefaults({
 	cache: false
 });
+app.use(helmet());
 // 设置跨域
 app.use(cors());
 // 设置request id
@@ -88,7 +90,7 @@ app.use(session({
 	secret: 'session_id', // 与cookieParser中的一致
 	resave: true,
 	store: store, // 将session保存到mongodb中
-	saveUninitialized: true,
+	saveUninitialized: false,	// 是否保存未初始化的会话，如果是true则会保存许多session会导致保存有效session失败,一般设置为false.
 	cookie: {
 		secure: true,
 		maxAge: 1800000,

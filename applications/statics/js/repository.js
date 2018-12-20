@@ -79,6 +79,16 @@ const VUE = new Vue({
 		},
 		rapDialogClose: function() {
 			this.createRepositoryDialog = !this.createRepositoryDialog;
+			this.form = {
+				uid: '',
+				id: '',
+				name: '',
+				remark: '',
+				icon: '',
+				repository: '',
+				permissions: 'publick',
+				url: ''
+			};
 		},
 		createRepositoryFormSubmit: function() {
 			console.log(axios)

@@ -17,6 +17,7 @@
         "express-request-id": "^1.4.1",
         "express-session": "^1.15.6",
         "express-simple-cdn": "^1.0.1",
+        "helmet": "^3.15.0",
         "http-concat": "^0.1.1",
         "image-size": "^0.6.3",
         "jsoneditor": "^5.26.3",

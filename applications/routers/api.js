@@ -40,16 +40,16 @@ router.post('/user/login', (req, res, next) => {
 	let password = req.body.password;
 	let verify = req.body.verify;
 
-	// if(verify != req.session.verify.toLowerCase()){
-	//     output = {
-	//         code: 0,
-	//         msg: '验证码输入错误',
-	//         ok: false,
-	//         data: null
-	//     };
-	//     res.json(output);
-	//     return false;
-	// }
+	if(verify.toLowerCase() != req.session.verify.toLowerCase()){
+	    output = {
+	        code: 0,
+	        msg: '验证码输入错误',
+	        ok: false,
+	        data: null
+	    };
+	    res.json(output);
+	    return false;
+	}
 
 	User.findOne({
 		name: name
@@ -58,6 +58,7 @@ router.post('/user/login', (req, res, next) => {
 			if (md5(password + user.salt) == user.password) {
 				if (checked) {
 					req.session.uid = user._id;
+					req.session.name = user.name;
 					res.cookie('uid', user._id, {
 						maxAge: 1000 * 3600 * 10,
 						expires: 1000 * 3600 * 10
@@ -124,7 +125,6 @@ router.post('/user/loginout', (req, res, next) => {
 })
 
 router.post('/user/register', (req, res, next) => {
-	// console.log(req.body)
 	let name = req.body.name;
 	let password = req.body.password;
 	let email = req.body.email;
@@ -132,7 +132,6 @@ router.post('/user/register', (req, res, next) => {
 	User.findOne({
 		name: name
 	}).then(user => {
-		console.log(user)
 		if (user) {
 			output = {
 				code: 0,
@@ -860,7 +859,6 @@ router.get('/team/lists', (req, res, next) => {
 				select: 'name avarat email'
 			}
 		]).then(teams=>{
-			console.log(teams);
 			if(teams){
 				output = {
 					code: 1,
