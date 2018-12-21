@@ -29,6 +29,10 @@ const VUE = new Vue({
 		rapDialogAddInterfaceResponse: false,
 		rapDialogAddInterfaceResponseExport: false,
 		rapDialogInterfaceMove: false,
+		interfaceFieldsPreview: false,
+		fieldPreviewActive: false,
+		interfaceResponsesPreview: false,
+		responsePreviewActive: false,
 		uid: '',
 		user: {
 			id: '',
@@ -239,14 +243,17 @@ const VUE = new Vue({
 						item.models.forEach(model => {
 							if (model.interfaces.length) {
 								model.interfaces.forEach(interface => {
-									interface['mock_url'] = '/mock/test/data?id=' + interface._id
+									interface['mock_url'] = '/mock/test/data?id=' + interface._id,
+									interface['fieldsFormateMockTemplate'] = this.interfaceFormateFields(interface.fields, false)
+									interface['fieldsFormateMockData'] = this.interfaceFormateFields(interface.fields, true)
+									interface['responseFormateMockTemplate'] = this.interfaceFormateFields(interface.response, false)
+									interface['responseFormateMockData'] = this.interfaceFormateFields(interface.response, true)
 								});
 							}
 						});
 					}
 					this.repository = item;
 					this.models = item.models[this.current.model.index];
-					console.log(this.models);
 					this.interfaces = this.models.interfaces;
 					this.interface = this.interfaces[this.current.interface.index];
 				}
@@ -277,6 +284,10 @@ const VUE = new Vue({
 			}
 			interfaceMenuItems[this.current.interface.index].className = 'interface-menus-item interface-menus-item-selected'
 			interfaceMenuItems[this.current.interface.index].setAttribute('data-selected', true);
+			this.fieldPreviewActive = false;
+			this.responsePreviewActive = false;
+			this.interfaceFieldsPreview = false;
+			this.interfaceResponsesPreview = false;
 		},
 		addModel: function(e, id) {
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
@@ -329,7 +340,6 @@ const VUE = new Vue({
 			this.interfaceForm.uid = this.user.id;
 			this.interfaceForm.item_id = item_id;
 			this.interfaceForm.model_id = model_id;
-			console.log(this.interfaceForm)
 		},
 		addInterfaceFormSubmit: function() {
 			if (!this.interfaceForm.name) {
@@ -684,11 +694,31 @@ const VUE = new Vue({
 			interfaceMenuItems[index].setAttribute('data-selected', true);
 			this.current.interface.index = index;
 			this.interface = interface;
+			this.fieldPreviewActive = false;
+			this.responsePreviewActive = false;
+			this.interfaceFieldsPreview = false;
+			this.interfaceResponsesPreview = false;
 			console.log(interface)
+		},
+		requestPreview: function(){
+			this.interfaceFieldsPreview = !this.interfaceFieldsPreview;
+			this.fieldPreviewActive = !this.fieldPreviewActive;
+		},
+		responsePreview: function(){
+			this.interfaceResponsesPreview = !this.interfaceResponsesPreview;
+			this.responsePreviewActive = !this.responsePreviewActive;
 		},
 		jsonFormateTextToggle(){
 			this.jsonFormate.status = !this.jsonFormate.status;
 			this.jsonFormate.label = this.jsonFormate.status ? '{}' : '<>';
+		},
+		requestMOckRefresh: function(e, item){
+			item['fieldsFormateMockTemplate'] = this.interfaceFormateFields(item.fields, false)
+			item['fieldsFormateMockData'] = this.interfaceFormateFields(item.fields, true)
+		},
+		responseMOckRefresh: function(e, item){
+			item['responseFormateMockTemplate'] = this.interfaceFormateFields(item.response, false)
+			item['responseFormateMockData'] = this.interfaceFormateFields(item.response, true)
 		},
 		loginout: function() {
 			axios({
@@ -721,6 +751,125 @@ const VUE = new Vue({
 			} else {
 				return style;
 			}
+		},
+		interfaceFormateFields: function(fileds, mock){
+			let data = {};
+			fileds.forEach(field=>{
+				switch(field.type){
+					case 'array':
+						if(!(field.default)){
+							if(field.roles){
+								let roles = JSON.parse(field.roles), key = '';
+								for(key in roles){
+									data[key] = roles[key];
+								}
+							}else{
+								data[field.name+"|1-10"] = [
+									{
+									  "name|+1": [
+										"Hello",
+										"Mock.js",
+										"!"
+									  ]
+									}
+								  ];
+								}
+						}else{
+							data[field.name] = field.default;
+						}
+					break;
+					case 'boolean':
+					if(!(field.default)){
+						if(field.roles){
+							let roles = JSON.parse(field.roles), key = '';
+							for(key in roles){
+								data[key] = roles[key];
+							}
+						}else{
+							data[field.name+"|1-2"] = true;
+						}
+					}else{
+						data[field.name] = field.default;
+					}
+					break;
+					case 'number':
+					if(!(field.default)){
+						if(field.roles){
+							let roles = JSON.parse(field.roles), key = '';
+							for(key in roles){
+								data[key] = roles[key];
+							}
+						}else{
+							data[field.name+"|1-10"] = 0;
+						}
+					}else{
+						data[field.name] = field.default;
+					}
+					break;
+					case 'object':
+					if(!(field.default)){
+						if(field.roles){
+							let roles = JSON.parse(field.roles), key = '';
+							for(key in roles){
+								data[key] = roles[key];
+							}
+						}else{
+							data[field.name+"|1-10"] = {
+								"110000": "北京市",
+								"120000": "天津市",
+								"130000": "河北省",
+								"140000": "山西省"
+							  };
+						}
+					}else{
+						data[field.name] = field.default;
+					}
+					break;
+					case 'function':
+					if(!(field.default)){
+						if(field.roles){
+							let roles = JSON.parse(field.roles), key = '';
+							for(key in roles){
+								data[key] = roles[key];
+							}
+						}else{
+							data[field.name] = function(){};
+						}
+					}else{
+						data[field.name] = field.default;
+					}
+					break;
+					case 'regexp':
+					if(!(field.default)){
+						if(field.roles){
+							let roles = JSON.parse(field.roles), key = '';
+							for(key in roles){
+								data[key] = roles[key];
+							}
+						}else{
+							data[field.name] = /[a-z][A-Z][0-9]/;
+						}
+					}else{
+						data[field.name] = field.default;
+					}
+					break;
+					default: 
+						if(!(field.default)){
+							if(field.roles){
+								let roles = JSON.parse(field.roles), key = '';
+								for(key in roles){
+									data[key] = roles[key]
+								}
+							}else{
+								data[field.name+"|1-12"] = '';
+							}
+						}else{
+							data[field.name] = field.default;
+						}
+					break;
+				}
+			});
+			return mock ? Mock.mock(data) : data;
 		},
 		/**
 		 * 显示警告信息

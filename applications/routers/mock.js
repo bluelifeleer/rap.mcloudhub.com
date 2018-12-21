@@ -1,6 +1,8 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const url = require('url')
 const fs = require('fs');
 const requestPromise = require('request-promise');
 const md5 = require('md5');

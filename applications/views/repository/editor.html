@@ -63,9 +63,9 @@
                             <div class="interface-request-title">
                                 <div class="interface-respones-title-text">请求参数</div>
                                 <div class="interface-respones-title-buts">
-                                    <a href="javascript:void(0);" class="preview" :data-id="interface._id">预览</a>
-                                    <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceRequest($event, interface._id)">导入</a>
-                                    <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceRequest($event, interface._id)">添加</a>
+                                    <a href="javascript:void(0);" class="preview" :data-id="interface._id" @click="requestPreview" :class="{'preview-active': fieldPreviewActive}"><i class="icon iconfont">&#xe722;</i>预览</a>
+                                    <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceRequest($event, interface._id)"><i class="icon iconfont">&#xe604;</i>导入</a>
+                                    <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceRequest($event, interface._id)"><element class="add-icon">@</element>&nbsp;&nbsp;添加</a>
                                 </div>
                             </div>
                             <div class="interface-data-table">
@@ -95,14 +95,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <transition name="interface-requset-preview">
+                                <div class="interface-requset-preview" v-show="interfaceFieldsPreview">
+                                    <div class="interface-requset-preview-header">
+                                        <span class="preview-header-title">请求参数模板</span>
+                                        <span class="preview-header-title">请求参数数据 <a href="javascript:void(0);" class="request-mock-refresh" @click="requestMOckRefresh($event, interface)"><i class="icon iconfont">&#xe80e;</i></a></span>
+                                    </div>
+                                    <div class="interface-requset-preview-body">
+                                        <div class="preview-body-data">
+                                            <pre>${interface.fieldsFormateMockTemplate}</pre>
+                                        </div>
+                                        <div class="preview-body-data">
+                                            <pre>${interface.fieldsFormateMockData}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </transition>
                         </div>
                         <div class="interface-respones">
                             <div class="interface-respones-title">
                                 <div class="interface-respones-title-text">响应内容</div>
                                 <div class="interface-respones-title-buts">
-                                    <a href="javascript:void(0);" class="preview" :data-id="interface._id">预览</a>
-                                    <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceResponse($event, interface._id)">导入</a>
-                                    <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceResponse($event, interface._id)">添加</a>
+                                    <a href="javascript:void(0);" class="preview" :data-id="interface._id" @click="responsePreview" :class="{'preview-active': responsePreviewActive}"><i class="icon iconfont">&#xe722;</i>预览</a>
+                                    <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceResponse($event, interface._id)"><i class="icon iconfont">&#xe604;</i>导入</a>
+                                    <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceResponse($event, interface._id)"><element class="add-icon">@</element>&nbsp;&nbsp;添加</a>
                                 </div>
                             </div>
                             <div class="interface-data-table">
@@ -131,6 +147,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                <transition name="interface-response-preview">
+                                    <div class="interface-response-preview" v-show="interfaceResponsesPreview">
+                                        <div class="interface-response-preview-header">
+                                            <span class="preview-header-title">请求参数模板</span>
+                                            <span class="preview-header-title">请求参数数据<a href="javascript:void(0);" class="request-mock-refresh" @click="responseMOckRefresh($event, interface)"><i class="icon iconfont">&#xe80e;</i></a></span>
+                                        </div>
+                                        <div class="interface-response-preview-body">
+                                            <div class="preview-body-data">
+                                                <pre>${interface.responseFormateMockTemplate}</pre>
+                                            </div>
+                                            <div class="preview-body-data">
+                                                <pre>${interface.responseFormateMockData}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </transition>
                         </div>
                     </div>
                 </div>

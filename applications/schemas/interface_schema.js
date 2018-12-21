@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 module.exports = new mongoose.Schema({
     uid: String,
+    serial_number: String,  // 序列号
     itemid: String,
     modelid:String,
     name: String,
