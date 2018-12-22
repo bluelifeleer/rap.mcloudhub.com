@@ -24,6 +24,8 @@ const VUE = new Vue({
 		},
 		rapDialogAddModel: false,
 		rapDialogAddInterface: false,
+		rapDialogAddInterfaceText: '添加接口',
+		rapDialogADDInterfaceType: true,
 		rapDialogAddInterfaceRequest: false,
 		rapDialogAddInterfaceRequestExport: false,
 		rapDialogAddInterfaceResponse: false,
@@ -243,6 +245,9 @@ const VUE = new Vue({
 						item.models.forEach(model => {
 							if (model.interfaces.length) {
 								model.interfaces.forEach(interface => {
+									interface.name = interface.name.length > 7 ? interface.name.substr(0,6)+'...': interface.name
+									interface['item_title'] = interface.name
+									interface['overed'] = false
 									interface['mock_url'] = '/mock/test/data?id=' + interface._id,
 									interface['fieldsFormateMockTemplate'] = this.interfaceFormateFields(interface.fields, false)
 									interface['fieldsFormateMockData'] = this.interfaceFormateFields(interface.fields, true)
@@ -336,6 +341,8 @@ const VUE = new Vue({
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
 			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterface, 'width');
 			this.$refs.rapDialogAddInterface.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
+			this.rapDialogAddInterfaceText = '添加接口';
+			this.rapDialogADDInterfaceType = true;
 			this.rapDialogAddInterface = !this.rapDialogAddInterface;
 			this.interfaceForm.uid = this.user.id;
 			this.interfaceForm.item_id = item_id;
@@ -370,6 +377,52 @@ const VUE = new Vue({
 			}).then(res => {
 				if (res.data.code && res.data.ok) {
 					this.messageAlert('创建接口成功', 'success');
+					this.getRepository();
+					this.rapDialogAddInterface = !this.rapDialogAddInterface;
+					this.interfaceForm.item_id = '';
+					this.interfaceForm.model_id = '';
+					this.interfaceForm.name = '';
+					this.interfaceForm.remark = '';
+					this.interfaceForm.request = {
+						type: 'get',
+						url: '',
+						code: '200'
+					};
+				}
+			}).catch(err => {
+				console.log(err)
+			})
+		},
+		editorInterfaceFormSubmit: function(){
+			if (!this.interfaceForm.name) {
+				this.messageAlert('接口名称不能为空', 'error');
+				return false;
+			}
+			if (!this.interfaceForm.request.url) {
+				this.messageAlert('接口请求地址不能为空', 'error');
+				return false;
+			}
+
+			if ((/[\u2E80-\u9FFF]+/ig.test(this.interfaceForm.request.url))) {
+				this.messageAlert('接口请求地址不能有中文字符', 'error');
+				return false;
+			}
+			axios({
+				url: '/interface/params/editor',
+				method: 'POST',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				data: {
+					uid: this.user.id,
+					item_id: this.interfaceForm.item_id,
+					model_id: this.interfaceForm.model_id,
+					id: this.interfaceForm.id,
+					name: this.interfaceForm.name,
+					remark: this.interfaceForm.remark,
+					request: this.interfaceForm.request
+				}
+			}).then(res => {
+				if (res.data.code && res.data.ok) {
+					this.messageAlert('接口修改成功', 'success');
 					this.getRepository();
 					this.rapDialogAddInterface = !this.rapDialogAddInterface;
 					this.interfaceForm.item_id = '';
@@ -632,6 +685,25 @@ const VUE = new Vue({
 				console.log(err)
 			})
 		},
+		interfaceEditor: function(e, item_id, model_id, item){
+			console.log(model_id)
+			this.interfaceForm.uid = utils.getCookie('uid');
+			this.interfaceForm.item_id = item_id;
+			this.interfaceForm.model_id = model_id;
+			this.interfaceForm.id = item._id;
+			this.interfaceForm.url = item.url;
+			this.interfaceForm.name = item.name;
+			this.interfaceForm.remark = item.remark;
+			this.interfaceForm.request.methods = item.request.methods;
+			this.interfaceForm.request.url = item.request.url;
+			this.interfaceForm.request.status_code = item.request.code;
+			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
+			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterface, 'width');
+			this.$refs.rapDialogAddInterface.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
+			this.rapDialogAddInterfaceText = '修改接口';
+			this.rapDialogADDInterfaceType = false;
+			this.rapDialogAddInterface = !this.rapDialogAddInterface;
+		},
 		interfaceMove: function(e, id, model_id, item_id) {
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
 			const dialogWidth = this.getStyle(this.$refs.rapDialogInterfaceMove, 'width');
@@ -682,6 +754,17 @@ const VUE = new Vue({
 				console.log(res)
 			}).catch(err => {
 				console.log(err)
+			})
+		},
+		showItemOperation: function(e, index, item){
+			this.interfaces.forEach(interface=>{
+				interface.overed = false
+			})
+			this.interfaces[index].overed = true
+		},
+		hiddenAllItemOperation: function(e){
+			this.interfaces.forEach(interface=>{
+				interface.overed = false
 			})
 		},
 		selectInterface: function(e, index, interface) {

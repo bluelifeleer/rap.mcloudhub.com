@@ -28,9 +28,14 @@
             <div class="rap-tabs-body">
                 <div class="rap-tabs-body-item">
                     <div class="rap-tabs-interface-menus" ref="interfaceMenus">
-                        <div class="interface-menu-group" v-if="interfaces.length">
-                            <div class="interface-menus-item" v-for="(interface, $index) in interfaces" :key="$index" :data-id="interface._id" :class="{'interface-menus-item-selected': !($index) }" :data-selected="!($index)">
-                                <a href="javascript:void(0);" class="interface-item" @click="selectInterface($event, $index, interface)">${interface.name}</a>
+                        <div class="interface-menu-group" v-if="interfaces.length" @mouseout="hiddenAllItemOperation($event)">
+                            <!-- ${models} -->
+                            <div class="interface-menus-item" v-for="(interface, $index) in interfaces" :key="$index" :data-id="$index" :data-id="interface._id" :class="{'interface-menus-item-selected': !($index) }" :data-selected="!($index)">
+                                <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover="showItemOperation($event, $index, interface)">${interface.name}</a>
+                                <span class="interface-item-operations" :class="{'interface-item-operations-overed':interface.overed}">
+                                    <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
+                                    <a href="javascript:void(0);" class="interface-editor" :data-id="interface._id"  :data-models-id="models._id"><i class="icon iconfont" @click="interfaceEditor($event, repository._id, models._id, interface)">&#xe635;</i></a>
+                                </span>
                             </div>
                         </div>
                         <div class="add-interface">
@@ -215,7 +220,7 @@
                 <div class="rap-dialog-marker"></div>
                 <div class="rap-dialog-popup" ref='rapDialogAddInterface'>
                     <div class="rap-dialog-header">
-                        <div class="rap-dialog-title">添加接口</div>
+                        <div class="rap-dialog-title">${rapDialogAddInterfaceText}</div>
                         <div class="rap-dialog-close">
                             <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
                         </div>
@@ -266,7 +271,8 @@
                         </div>
                     </div>
                     <div class="rap-dialog-footer">
-                        <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceFormSubmit">提交</a>
+                        <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceFormSubmit" v-if="rapDialogADDInterfaceType">提交</a>
+                        <a href="javascript:void(0);" class="add-model-form-submit" @click="editorInterfaceFormSubmit" v-else>提交</a>
                         <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceFormCancle">取消</a>
                     </div>
                 </div>

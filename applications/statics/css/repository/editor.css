@@ -217,6 +217,7 @@
     margin:0 0 10px 0;
     box-sizing: border-box;
     padding:0 0 0 2%;
+    position:relative;
 }
 
 .interface-menus-item:hover{
@@ -236,6 +237,28 @@
     text-align: left;
     padding:0 0 0 2%;
     color:#2e2e2e;
+}
+
+.interface-item-operations{
+    display:none;
+    width:auto;
+    height:40px;
+    position: absolute;
+    right:0;
+    top:0;
+}
+
+.interface-item-operations-overed{
+    display:block;
+}
+
+.interface-item-operations a{
+    display:block;
+    float:left;
+    width:20px;
+    height:40px;
+    line-height: 40px;
+    text-align: center;
 }
 
 .rap-tabs-interface-contents{

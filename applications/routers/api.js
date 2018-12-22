@@ -668,6 +668,34 @@ router.post('/interface/add', (req, res, next) => {
 	})
 });
 
+router.post('/interface/params/editor', (req, res, next) => {
+	let uid = req.body.uid || req.session.uid;
+	let item_id = req.body.item_id;
+	let model_id = req.body.model_id;
+	let id = req.body.id;
+	let name = req.body.name;
+	let remark = req.body.remark;
+	let request = req.body.request;
+	Interface.findByIdAndUpdate(id, {
+		name: name,
+		remark: remark,
+		request: request
+	}).then(s=>{
+		if(s){
+			output = {
+				code: 1,
+				msg: 'success',
+				ok: true,
+				data: null
+			};
+			res.json(output);
+			return false;
+		}
+	}).catch(err=>{
+		console.log(err)
+	})
+});
+
 router.post('/interface/editor', (req, res, next) => {
 	let type = req.body.type;
 	let data = req.body.data;
