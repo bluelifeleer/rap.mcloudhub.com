@@ -763,9 +763,12 @@ const VUE = new Vue({
 			this.interfaces[index].overed = true
 		},
 		hiddenAllItemOperation: function(e){
-			this.interfaces.forEach(interface=>{
-				interface.overed = false
-			})
+			let _this = this;
+			// setTimeout(function(){
+				// _this.interfaces.forEach(interface=>{
+				// 	interface.overed = false
+				// })
+			// },3000);
 		},
 		selectInterface: function(e, index, interface) {
 			let interfaceMenuItems = this.$refs.interfaceMenus.getElementsByClassName('interface-menus-item');
