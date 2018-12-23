@@ -28,10 +28,12 @@
             <div class="rap-tabs-body">
                 <div class="rap-tabs-body-item">
                     <div class="rap-tabs-interface-menus" ref="interfaceMenus">
-                        <div class="interface-menu-group" v-if="interfaces.length" @mouseout="hiddenAllItemOperation($event)">
                             <!-- ${models} -->
+                            <!-- ${interfaces} -->
+                        <div class="interface-menu-group" v-if="interfaces.length" @mouseout="hiddenAllItemOperation($event)">
+                            
                             <div class="interface-menus-item" v-for="(interface, $index) in interfaces" :key="$index" :data-id="$index" :data-id="interface._id" :class="{'interface-menus-item-selected': !($index) }" :data-selected="!($index)">
-                                <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover="showItemOperation($event, $index, interface)">${interface.name}</a>
+                                <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover.stop="showItemOperation($event, $index, interface)">${interface.name}</a>
                                 <span class="interface-item-operations" :class="{'interface-item-operations-overed':interface.overed}">
                                     <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
                                     <a href="javascript:void(0);" class="interface-editor" :data-id="interface._id"  :data-models-id="models._id"><i class="icon iconfont" @click="interfaceEditor($event, repository._id, models._id, interface)">&#xe635;</i></a>
@@ -43,7 +45,7 @@
                         </div>
                     </div>
                     <div class="rap-tabs-interface-contents">
-                        <div class="interface-info">
+                        <div class="interface-info" v-if="interface._id">
                             <div class="interface-info-item">
                                 <span class="interface-info-name">${interface.name}</span>
                                 <span class="interface-info-buts">

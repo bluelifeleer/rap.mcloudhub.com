@@ -30,7 +30,7 @@
                 <input type="password" id="confirm-password" name="confirm_password" v-model="form.confirm_password" placeholder="确认密码" />
             </div>
             <div class="register-fotm-item">
-                <a href="javascript:void(0);" class="register-form-submit" @click="registerFormSubmit">注册</a>
+                <a href="javascript:void(0);" class="register-form-submit" @click="registerFormSubmit" @keyup.enter="registerFormSubmit">注册</a>
             </div>
             <div class="register-fotm-item">
                 <a href="/login" class="register-login-link">已有帐号，登录</a>

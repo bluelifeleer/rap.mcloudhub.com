@@ -26,7 +26,7 @@
                 <a href="/register" class="register-link">还没有帐号？<span style="color:#409eff;margin:0 5px;">注册一个。</span></a>
            </div>
            <div class="login-form-item">
-               <a href="javascript:void(0);" class="login-form-submit" @click="loginFormSubmit">登录</a>
+               <a href="javascript:void(0);" class="login-form-submit" @click="loginFormSubmit" @keyup.enter="loginFormSubmit">登录</a>
            </div>
            <div class="other-login">
                <a href="javascript:void(0)" class="github-login" title="github" @click="githubLogin"><i class="icon iconfont iconfont-github">&#xea0a;</i></a>

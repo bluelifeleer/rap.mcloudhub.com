@@ -28,7 +28,13 @@ router.use(function(req, res, next) {
 });
 
 router.get('/verify', (req, res, next) => {
-	let captcha = svgCaptcha.create();
+	let captcha = svgCaptcha.create({
+		size: 4 ,
+		ignoreChars: '0o1i',
+		noise:1,
+		color: true,
+		background: '#fff' 
+	});
 	req.session.verify = captcha.text;
 	res.type('svg');
 	res.status(200).send(captcha.data);
@@ -39,16 +45,19 @@ router.post('/user/login', (req, res, next) => {
 	let name = req.body.name;
 	let password = req.body.password;
 	let verify = req.body.verify;
-
-	if(verify.toLowerCase() != req.session.verify.toLowerCase()){
-	    output = {
-	        code: 0,
-	        msg: '验证码输入错误',
-	        ok: false,
-	        data: null
-	    };
-	    res.json(output);
-	    return false;
+	let cookieChecked = req.body.cookieChecked
+	console.log(req.session.verify)
+	if(!cookieChecked){
+		if(verify.toLowerCase() != req.session.verify.toLowerCase()){
+			output = {
+				code: 0,
+				msg: '验证码输入错误',
+				ok: false,
+				data: null
+			};
+			res.json(output);
+			return false;
+		}
 	}
 
 	User.findOne({
@@ -57,12 +66,6 @@ router.post('/user/login', (req, res, next) => {
 		if (user) {
 			if (md5(password + user.salt) == user.password) {
 				if (checked) {
-					req.session.uid = user._id;
-					req.session.name = user.name;
-					res.cookie('uid', user._id, {
-						maxAge: 1000 * 3600 * 10,
-						expires: 1000 * 3600 * 10
-					});
 					res.cookie('checked', checked, {
 						maxAge: 1000 * 3600 * 10,
 						expires: 1000 * 3600 * 10
@@ -71,19 +74,34 @@ router.post('/user/login', (req, res, next) => {
 						maxAge: 1000 * 3600 * 10,
 						expires: 1000 * 3600 * 10
 					});
-					res.cookie('password', user.password, {
+					res.cookie('password', password, {
 						maxAge: 1000 * 3600 * 10,
 						expires: 1000 * 3600 * 10
 					});
-					output = {
-						code: 1,
-						msg: 'success',
-						ok: true,
-						data: null
-					};
-					res.json(output);
-					return false;
 				}
+				res.cookie('uid', user._id, {
+					maxAge: 1000 * 3600 * 10,
+					expires: 1000 * 3600 * 10
+				});
+				req.session.uid = user._id;
+				req.session.name = user.name;
+				output = {
+					code: 1,
+					msg: 'success',
+					ok: true,
+					data: null
+				};
+				res.json(output);
+				return false;
+			}else{
+				output = {
+					code: 0,
+					msg: '登录失败，密码错误',
+					ok: false,
+					data: null
+				};
+				res.json(output);
+				return false;
 			}
 		} else {
 			output = {

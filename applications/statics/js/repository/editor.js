@@ -281,14 +281,16 @@ const VUE = new Vue({
 			this.current.interface.index = 0;
 			this.models = item;
 			this.interfaces = item.interfaces;
-			this.interface = item.interfaces[this.current.interface.index];
+			this.interface = this.interfaces.length ? item.interfaces[this.current.interface.index] : {};
 			let interfaceMenuItems = this.$refs.interfaceMenus.getElementsByClassName('interface-menus-item');
-			for (let j = 0; j < interfaceMenuItems.length; j++) {
-				interfaceMenuItems[j].className = 'interface-menus-item';
-				interfaceMenuItems[j].setAttribute('data-selected', false);
+			if(interfaceMenuItems.length){
+				for (let j = 0; j < interfaceMenuItems.length; j++) {
+					interfaceMenuItems[j].className = 'interface-menus-item';
+					interfaceMenuItems[j].setAttribute('data-selected', false);
+				}
+				interfaceMenuItems[this.current.interface.index].className = 'interface-menus-item interface-menus-item-selected'
+				interfaceMenuItems[this.current.interface.index].setAttribute('data-selected', true);
 			}
-			interfaceMenuItems[this.current.interface.index].className = 'interface-menus-item interface-menus-item-selected'
-			interfaceMenuItems[this.current.interface.index].setAttribute('data-selected', true);
 			this.fieldPreviewActive = false;
 			this.responsePreviewActive = false;
 			this.interfaceFieldsPreview = false;
@@ -763,11 +765,11 @@ const VUE = new Vue({
 			this.interfaces[index].overed = true
 		},
 		hiddenAllItemOperation: function(e){
-			let _this = this;
+			// let _this = this;
 			// setTimeout(function(){
-				// _this.interfaces.forEach(interface=>{
-				// 	interface.overed = false
-				// })
+			// 	_this.interfaces.forEach(interface=>{
+			// 		interface.overed = false
+			// 	})
 			// },3000);
 		},
 		selectInterface: function(e, index, interface) {
