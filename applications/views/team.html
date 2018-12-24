@@ -75,7 +75,24 @@
                         </div>
                         <div class="rap-form-item">
                             <label for="name">成员：</label>
-                            <input type="text" name="name" id="name" placeholder="团队名称" v-model="form.members" />
+                            <div class="rap-selector">
+                                <div class="rap-selector-value" @click="rapSelectorToggle">
+                                    <div class="rap-selector-selected-values-space" v-if="form.membersSelected.length">
+                                        <span class="rap-selector-selected-values" v-for="(value, $index) in form.membersSelected" :key="$index" :data-id="value._id" v-if="value.selected"><element>${value.name}</element><i class="icon iconfont selecrot-delete-iconfont" :data-index="$index" @click="rapSelectorSelectedDelete($event, $index, value)">&#xe64b;</i></span>
+                                    </div>
+                                    <div class="rap-selector-selected-values-space" v-else>
+                                        <span class="rap-selector-selected-default-values">afbafdbadfadfbafd</span>
+                                    </div>
+                                    <i class="icon iconfont rap-selector-icondown">&#xe637;</i>
+                                </div>
+                                <transition name="rap-selector-list">
+                                    <div class="rap-selector-list" v-show="showRapSelectorOptions">
+                                        <div class="rap-selector-options" v-for="(member, $index) in form.membersList" :key="$index">
+                                            <a href="javascript:void(0);" class="rap-selector-option" :data-id="$index" :data-value="member._id" @click="rapMemberSelector($event, $index, member)" :data-selected="member.selected">${member.name}</a>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
                         </div>
                     </div>
                 </div>

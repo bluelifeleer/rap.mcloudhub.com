@@ -27,151 +27,151 @@
             </div>
             <div class="rap-tabs-body">
                 <div class="rap-tabs-body-item">
-                    <div class="rap-tabs-interface-menus" ref="interfaceMenus">
-                            <!-- ${models} -->
-                            <!-- ${interfaces} -->
-                        <div class="interface-menu-group" v-if="interfaces.length" @mouseout="hiddenAllItemOperation($event)">
-                            
-                            <div class="interface-menus-item" v-for="(interface, $index) in interfaces" :key="$index" :data-id="$index" :data-id="interface._id" :class="{'interface-menus-item-selected': !($index) }" :data-selected="!($index)">
-                                <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover.stop="showItemOperation($event, $index, interface)">${interface.name}</a>
-                                <span class="interface-item-operations" :class="{'interface-item-operations-overed':interface.overed}">
-                                    <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
-                                    <a href="javascript:void(0);" class="interface-editor" :data-id="interface._id"  :data-models-id="models._id"><i class="icon iconfont" @click="interfaceEditor($event, repository._id, models._id, interface)">&#xe635;</i></a>
-                                </span>
+                        <div class="rap-tabs-interface-menus" ref="interfaceMenus">
+                                <!-- ${models} -->
+                                <!-- ${interfaces} -->
+                            <div class="interface-menu-group" v-if="interfaces.length" @mouseout="hiddenAllItemOperation($event)">
+                                
+                                <div class="interface-menus-item" v-for="(interface, $index) in interfaces" :key="$index" :data-id="$index" :data-id="interface._id" :class="{'interface-menus-item-selected': !($index) }" :data-selected="!($index)">
+                                    <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover.stop="showItemOperation($event, $index, interface)">${interface.name}</a>
+                                    <span class="interface-item-operations" :class="{'interface-item-operations-overed':interface.overed}">
+                                        <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
+                                        <a href="javascript:void(0);" class="interface-editor" :data-id="interface._id"  :data-models-id="models._id"><i class="icon iconfont" @click="interfaceEditor($event, repository._id, models._id, interface)">&#xe635;</i></a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="add-interface">
+                                <a href="javascript:void(0);" class="add-interface-but" @click="addInterface($event, repository._id, models._id)" :data-model-id="models._id"><i class="icon iconfont">&#xea21;</i>添加接口</a>
                             </div>
                         </div>
-                        <div class="add-interface">
-                            <a href="javascript:void(0);" class="add-interface-but" @click="addInterface($event, repository._id, models._id)" :data-model-id="models._id"><i class="icon iconfont">&#xea21;</i>添加接口</a>
-                        </div>
-                    </div>
-                    <div class="rap-tabs-interface-contents">
-                        <div class="interface-info" v-if="interface._id">
-                            <div class="interface-info-item">
-                                <span class="interface-info-name">${interface.name}</span>
-                                <span class="interface-info-buts">
-                                    <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i>删除</a>
-                                    <a href="javascript:void(0);" class="interface-move" :data-id="interface._id" :data-model-id="models._id" @click="interfaceMove($event, interface._id, models._id, repository._id)"><i class="icon iconfont">&#xe750;</i>移动</a>
-                                </span>
-                            </div>
-                            <div class="interface-info-item">
-                                <span class="interface-info-url-title">地址：</span>
-                                <span class="interface-info-url-value"><a :href="interface.mock_url" target="_blank" class="interface-mock">${interface.request.url}</a></span>
-                            </div>
-                            <div class="interface-info-item">
-                                <span class="interface-info-url-title">类型：</span>
-                                <span class="interface-info-url-value">${interface.request.type}</span>
-                            </div>
-                            <div class="interface-info-item">
-                                <span class="interface-info-url-title">状态码：</span>
-                                <span class="interface-info-url-value">${interface.request.code}</span>
-                            </div>
-                        </div>
-                        <div class="interface-request">
-                            <div class="interface-request-title">
-                                <div class="interface-respones-title-text">请求参数</div>
-                                <div class="interface-respones-title-buts">
-                                    <a href="javascript:void(0);" class="preview" :data-id="interface._id" @click="requestPreview" :class="{'preview-active': fieldPreviewActive}"><i class="icon iconfont">&#xe722;</i>预览</a>
-                                    <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceRequest($event, interface._id)"><i class="icon iconfont">&#xe604;</i>导入</a>
-                                    <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceRequest($event, interface._id)"><element class="add-icon">@</element>&nbsp;&nbsp;添加</a>
-                                </div>
-                            </div>
-                            <div class="interface-data-table">
-                                <div class="interface-data-table-header">
-                                    <div class="interface-data-table-cole">名称</div>
-                                    <div class="interface-data-table-cole">必选</div>
-                                    <div class="interface-data-table-cole">类型</div>
-                                    <div class="interface-data-table-cole">规则</div>
-                                    <div class="interface-data-table-cole">默认值</div>
-                                    <div class="interface-data-table-cole">备注</div>
-                                </div>
-                                <div class="interface-data-table-body">
-                                    <div class="interface-data-table-rows" v-if="interface.fields.length" v-for="(field,$index) in interface.fields" :key="$index">
-                                        <div class="interface-data-table-cole">
-                                            <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-delete"><i class="icon iconfont">&#xe61c;</i></a>
-                                            <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-editor"><i class="icon iconfont">&#xe635;</i></a>
-                                            <span>${field.name}</span>
-                                        </div>
-                                        <div class="interface-data-table-cole">
-                                            <span v-if="field.indispensable">是</span>
-                                            <span v-else>否</span>
-                                        </div>
-                                        <div class="interface-data-table-cole">${field.type}</div>
-                                        <div class="interface-data-table-cole" :title="field.roles">${field.roles}</div>
-                                        <div class="interface-data-table-cole" :title="field.default">${field.default}</div>
-                                        <div class="interface-data-table-cole" :title="field.remark">${field.remark}</div>
+                        <div class="rap-tabs-interface-contents">
+                                <div class="interface-info" v-if="interface._id">
+                                    <div class="interface-info-item">
+                                        <span class="interface-info-name">${interface.name}</span>
+                                        <span class="interface-info-buts">
+                                            <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i>删除</a>
+                                            <a href="javascript:void(0);" class="interface-move" :data-id="interface._id" :data-model-id="models._id" @click="interfaceMove($event, interface._id, models._id, repository._id)"><i class="icon iconfont">&#xe750;</i>移动</a>
+                                        </span>
+                                    </div>
+                                    <div class="interface-info-item">
+                                        <span class="interface-info-url-title">地址：</span>
+                                        <span class="interface-info-url-value"><a :href="interface.mock_url" target="_blank" class="interface-mock">${interface.request.url}</a></span>
+                                    </div>
+                                    <div class="interface-info-item">
+                                        <span class="interface-info-url-title">类型：</span>
+                                        <span class="interface-info-url-value">${interface.request.type}</span>
+                                    </div>
+                                    <div class="interface-info-item">
+                                        <span class="interface-info-url-title">状态码：</span>
+                                        <span class="interface-info-url-value">${interface.request.code}</span>
                                     </div>
                                 </div>
-                            </div>
-                            <transition name="interface-requset-preview">
-                                <div class="interface-requset-preview" v-show="interfaceFieldsPreview">
-                                    <div class="interface-requset-preview-header">
-                                        <span class="preview-header-title">请求参数模板</span>
-                                        <span class="preview-header-title">请求参数数据 <a href="javascript:void(0);" class="request-mock-refresh" @click="requestMOckRefresh($event, interface)"><i class="icon iconfont">&#xe80e;</i></a></span>
-                                    </div>
-                                    <div class="interface-requset-preview-body">
-                                        <div class="preview-body-data">
-                                            <pre>${interface.fieldsFormateMockTemplate}</pre>
-                                        </div>
-                                        <div class="preview-body-data">
-                                            <pre>${interface.fieldsFormateMockData}</pre>
+                                <div class="interface-request">
+                                    <div class="interface-request-title">
+                                        <div class="interface-respones-title-text">请求参数</div>
+                                        <div class="interface-respones-title-buts">
+                                            <a href="javascript:void(0);" class="preview" :data-id="interface._id" @click="requestPreview" :class="{'preview-active': fieldPreviewActive}"><i class="icon iconfont">&#xe722;</i>预览</a>
+                                            <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceRequest($event, interface._id)"><i class="icon iconfont">&#xe604;</i>导入</a>
+                                            <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceRequest($event, interface._id)"><element class="add-icon">@</element>&nbsp;&nbsp;添加</a>
                                         </div>
                                     </div>
-                                </div>
-                            </transition>
-                        </div>
-                        <div class="interface-respones">
-                            <div class="interface-respones-title">
-                                <div class="interface-respones-title-text">响应内容</div>
-                                <div class="interface-respones-title-buts">
-                                    <a href="javascript:void(0);" class="preview" :data-id="interface._id" @click="responsePreview" :class="{'preview-active': responsePreviewActive}"><i class="icon iconfont">&#xe722;</i>预览</a>
-                                    <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceResponse($event, interface._id)"><i class="icon iconfont">&#xe604;</i>导入</a>
-                                    <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceResponse($event, interface._id)"><element class="add-icon">@</element>&nbsp;&nbsp;添加</a>
-                                </div>
-                            </div>
-                            <div class="interface-data-table">
-                                    <div class="interface-data-table-header">
-                                        <div class="interface-data-table-cole">名称</div>
-                                        <div class="interface-data-table-cole">必选</div>
-                                        <div class="interface-data-table-cole">类型</div>
-                                        <div class="interface-data-table-cole">规则</div>
-                                        <div class="interface-data-table-cole">默认值</div>
-                                        <div class="interface-data-table-cole">备注</div>
-                                    </div>
-                                    <div class="interface-data-table-body">
-                                        <div class="interface-data-table-rows" v-if="interface.response.length" v-for="(response, $index) in interface.response" :key="$index">
-                                            <div class="interface-data-table-cole">
-                                                <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-delete"><i class="icon iconfont">&#xe61c;</i></a>
-                                                <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-editor"><i class="icon iconfont">&#xe635;</i></a>
-                                                <span>${response.name}</span></div>
-                                            <div class="interface-data-table-cole">
-                                                <span v-if="response.indispensable">是</span>
-                                                <span v-else>否</span>
-                                            </div>
-                                            <div class="interface-data-table-cole">${response.type}</div>
-                                            <div class="interface-data-table-cole" :title="response.roles">${response.roles}</div>
-                                            <div class="interface-data-table-cole" :title="response.default">${response.default}</div>
-                                            <div class="interface-data-table-cole" :title="response.remark">${response.remark}</div>
+                                    <div class="interface-data-table">
+                                        <div class="interface-data-table-header">
+                                            <div class="interface-data-table-cole">名称</div>
+                                            <div class="interface-data-table-cole">必选</div>
+                                            <div class="interface-data-table-cole">类型</div>
+                                            <div class="interface-data-table-cole">规则</div>
+                                            <div class="interface-data-table-cole">默认值</div>
+                                            <div class="interface-data-table-cole">备注</div>
                                         </div>
-                                    </div>
-                                </div>
-                                <transition name="interface-response-preview">
-                                    <div class="interface-response-preview" v-show="interfaceResponsesPreview">
-                                        <div class="interface-response-preview-header">
-                                            <span class="preview-header-title">请求参数模板</span>
-                                            <span class="preview-header-title">请求参数数据<a href="javascript:void(0);" class="request-mock-refresh" @click="responseMOckRefresh($event, interface)"><i class="icon iconfont">&#xe80e;</i></a></span>
-                                        </div>
-                                        <div class="interface-response-preview-body">
-                                            <div class="preview-body-data">
-                                                <pre>${interface.responseFormateMockTemplate}</pre>
-                                            </div>
-                                            <div class="preview-body-data">
-                                                <pre>${interface.responseFormateMockData}</pre>
+                                        <div class="interface-data-table-body">
+                                            <div class="interface-data-table-rows" v-if="interface.fields.length" v-for="(field,$index) in interface.fields" :key="$index">
+                                                <div class="interface-data-table-cole">
+                                                    <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-delete"><i class="icon iconfont">&#xe61c;</i></a>
+                                                    <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-editor"><i class="icon iconfont">&#xe635;</i></a>
+                                                    <span>${field.name}</span>
+                                                </div>
+                                                <div class="interface-data-table-cole">
+                                                    <span v-if="field.indispensable">是</span>
+                                                    <span v-else>否</span>
+                                                </div>
+                                                <div class="interface-data-table-cole">${field.type}</div>
+                                                <div class="interface-data-table-cole" :title="field.roles">${field.roles}</div>
+                                                <div class="interface-data-table-cole" :title="field.default">${field.default}</div>
+                                                <div class="interface-data-table-cole" :title="field.remark">${field.remark}</div>
                                             </div>
                                         </div>
                                     </div>
-                                </transition>
-                        </div>
-                    </div>
+                                    <transition name="interface-requset-preview">
+                                        <div class="interface-requset-preview" v-show="interfaceFieldsPreview">
+                                            <div class="interface-requset-preview-header">
+                                                <span class="preview-header-title">请求参数模板</span>
+                                                <span class="preview-header-title">请求参数数据 <a href="javascript:void(0);" class="request-mock-refresh" @click="requestMOckRefresh($event, interface)"><i class="icon iconfont">&#xe80e;</i></a></span>
+                                            </div>
+                                            <div class="interface-requset-preview-body">
+                                                <div class="preview-body-data">
+                                                    <pre>${interface.fieldsFormateMockTemplate}</pre>
+                                                </div>
+                                                <div class="preview-body-data">
+                                                    <pre>${interface.fieldsFormateMockData}</pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </transition>
+                                </div>
+                                <div class="interface-respones">
+                                    <div class="interface-respones-title">
+                                        <div class="interface-respones-title-text">响应内容</div>
+                                        <div class="interface-respones-title-buts">
+                                            <a href="javascript:void(0);" class="preview" :data-id="interface._id" @click="responsePreview" :class="{'preview-active': responsePreviewActive}"><i class="icon iconfont">&#xe722;</i>预览</a>
+                                            <a href="javascript:void(0);" class="export" :data-id="interface._id" @click="exportInterfaceResponse($event, interface._id)"><i class="icon iconfont">&#xe604;</i>导入</a>
+                                            <a href="javascript:void(0);" class="add" :data-id="interface._id" @click="addInterfaceResponse($event, interface._id)"><element class="add-icon">@</element>&nbsp;&nbsp;添加</a>
+                                        </div>
+                                    </div>
+                                    <div class="interface-data-table">
+                                            <div class="interface-data-table-header">
+                                                <div class="interface-data-table-cole">名称</div>
+                                                <div class="interface-data-table-cole">必选</div>
+                                                <div class="interface-data-table-cole">类型</div>
+                                                <div class="interface-data-table-cole">规则</div>
+                                                <div class="interface-data-table-cole">默认值</div>
+                                                <div class="interface-data-table-cole">备注</div>
+                                            </div>
+                                            <div class="interface-data-table-body">
+                                                <div class="interface-data-table-rows" v-if="interface.response.length" v-for="(response, $index) in interface.response" :key="$index">
+                                                    <div class="interface-data-table-cole">
+                                                        <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-delete"><i class="icon iconfont">&#xe61c;</i></a>
+                                                        <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-editor"><i class="icon iconfont">&#xe635;</i></a>
+                                                        <span>${response.name}</span></div>
+                                                    <div class="interface-data-table-cole">
+                                                        <span v-if="response.indispensable">是</span>
+                                                        <span v-else>否</span>
+                                                    </div>
+                                                    <div class="interface-data-table-cole">${response.type}</div>
+                                                    <div class="interface-data-table-cole" :title="response.roles">${response.roles}</div>
+                                                    <div class="interface-data-table-cole" :title="response.default">${response.default}</div>
+                                                    <div class="interface-data-table-cole" :title="response.remark">${response.remark}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <transition name="interface-response-preview">
+                                            <div class="interface-response-preview" v-show="interfaceResponsesPreview">
+                                                <div class="interface-response-preview-header">
+                                                    <span class="preview-header-title">请求参数模板</span>
+                                                    <span class="preview-header-title">请求参数数据<a href="javascript:void(0);" class="request-mock-refresh" @click="responseMOckRefresh($event, interface)"><i class="icon iconfont">&#xe80e;</i></a></span>
+                                                </div>
+                                                <div class="interface-response-preview-body">
+                                                    <div class="preview-body-data">
+                                                        <pre>${interface.responseFormateMockTemplate}</pre>
+                                                    </div>
+                                                    <div class="preview-body-data">
+                                                        <pre>${interface.responseFormateMockData}</pre>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </transition>
+                                </div>
+                            </div>
                 </div>
             </div>
         </div>

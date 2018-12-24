@@ -203,16 +203,24 @@ const VUE = new Vue({
 		},
 		models: {},
 		interfaces: [{
+			_id:'',
+			name: '',
 			mock_url: '',
 			request: {
-				url: ''
+				url: '',
+				type: '',
+				code: 200
 			}
 		}],
 		interface: {
+			_id:'',
+			name: '',
 			mock_url: '',
-				request: {
-					url: ''
-				}
+			request: {
+				url: '',
+				type: '',
+				code: 200
+			}
 		},
 		jsonFormate: {
 			status: false,
@@ -257,10 +265,14 @@ const VUE = new Vue({
 							}
 						});
 					}
+					console.log(item)
 					this.repository = item;
 					this.models = item.models[this.current.model.index];
+					console.log('aaaa')
 					this.interfaces = this.models.interfaces;
+					console.log('bbbb')
 					this.interface = this.interfaces[this.current.interface.index];
+					console.log('cccc')
 				}
 			}).catch(err => {
 				console.log(err)
@@ -670,22 +682,27 @@ const VUE = new Vue({
 			}
 		},
 		interfaceDelete: function(e, model_id, id) {
-			axios({
-				url: '/interface/delete',
-				method: 'GET',
-				baseURL: 'https://rap.mcloudhub.com/api',
-				params: {
-					id: id,
-					model_id: model_id
-				}
-			}).then(res=>{
-				if(res.data.code && res.data.ok){
-					this.messageAlert('接口删除成功', 'success');
-					this.getRepository()
-				}
-			}).catch(err=>{
-				console.log(err)
-			})
+			if(this.interfaces.length <= 1){
+				this.messageAlert('当前只有一个实例接口不能删除，如果要删除请先创建一个接口再执行此操作。', 'warning');
+				return false;
+			}else{
+				axios({
+					url: '/interface/delete',
+					method: 'GET',
+					baseURL: 'https://rap.mcloudhub.com/api',
+					params: {
+						id: id,
+						model_id: model_id
+					}
+				}).then(res=>{
+					if(res.data.code && res.data.ok){
+						this.messageAlert('接口删除成功', 'success');
+						this.getRepository()
+					}
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
 		},
 		interfaceEditor: function(e, item_id, model_id, item){
 			console.log(model_id)

@@ -932,4 +932,23 @@ router.get('/team/lists', (req, res, next) => {
 	});
 });
 
+router.get('/member/lists', (req, res, next)=>{
+	User.find({}).then(users=>{
+		if(users){
+			output = {
+				code: 1,
+				msg: 'success',
+				ok: true,
+				data: {
+					users:users
+				}
+			};
+			res.json(output);
+			return false;
+		}
+	}).catch(err=>{
+		console.log(err)
+	})
+})
+
 module.exports = router;

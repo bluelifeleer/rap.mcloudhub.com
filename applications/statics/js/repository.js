@@ -86,7 +86,7 @@ const VUE = new Vue({
 				remark: '',
 				icon: '',
 				repository: '',
-				permissions: 'publick',
+				permissions: 'public',
 				url: ''
 			};
 		},
@@ -151,8 +151,19 @@ const VUE = new Vue({
 			}).then(res => {
 				console.log(res)
 				if (res.data.code && res.data.ok) {
-					this.messageAlert('创建仓库成功', 'success');
+					this.type = true;
+					this.messageAlert(this.butText+'仓库成功', 'success');
 					this.createRepositoryDialog = !this.createRepositoryDialog;
+					this.form = {
+						uid: '',
+						id: '',
+						name: '',
+						remark: '',
+						icon: '',
+						repository: '',
+						permissions: 'publick',
+						url: ''
+					};
 					this.getRepositorys();
 
 				}
@@ -170,7 +181,7 @@ const VUE = new Vue({
 				remark: '',
 				icon: '',
 				repository: '',
-				permissions: '',
+				permissions: 'public',
 				url: ''
 			};
 		},

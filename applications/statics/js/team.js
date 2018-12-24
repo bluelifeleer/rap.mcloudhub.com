@@ -34,6 +34,8 @@ const VUE = new Vue({
             name: '',
             remark: '',
             members: [],
+            membersSelected: [],
+            membersList: [],
             permissions: {
                 value: 'public',
                 options: [{
@@ -48,7 +50,8 @@ const VUE = new Vue({
                     iconfont: '&#xe6f0;'
                 }]
             }
-        }
+        },
+        showRapSelectorOptions: false
     },
     created(){},
     methods: {
@@ -89,6 +92,53 @@ const VUE = new Vue({
             this.newTeamToggle = !this.newTeamToggle;
             this.type = !this.type;
             this.form.uid = this.user.id;
+            this.getMembers();
+        },
+        getMembers: function(){
+            axios({
+                url:'/member/lists',
+                method:'GET',
+                baseURL: 'https://rap.mcloudhub.com/api'
+            }).then(res=>{
+                console.log(res)
+                if(res.data.code && res.data.ok){
+                    let members = res.data.data.users;
+                    members.forEach((member, index)=>{
+                        console.log(index)
+                        if(index == 0){
+                            member['selected'] = true;
+                        }else{
+                            member['selected'] = false;
+                        }
+                    })
+                    this.form.membersList = members;
+                    this.form.membersList.forEach(m=>{
+                        if(m.selected){
+                            this.form.membersSelected.push(m)
+                        }
+                    })
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        rapSelectorToggle: function(){
+            this.showRapSelectorOptions = !this.showRapSelectorOptions;
+        },
+        rapMemberSelector: function(e, index, item){
+            this.form.membersList[index].selected = !this.form.membersList[index].selected;
+            this.form.membersList.forEach(member=>{
+                if(member.selected){
+                    this.form.membersSelected.push(member)
+                }
+            })
+        },
+        rapSelectorSelectedDelete: function(e, index, value){
+            this.form.membersSelected.forEach((item, i)=>{
+                if(i == index){
+                    item.selected = false;
+                }
+            })
         },
         rapDialogClose: function(){
             this.newTeamToggle = !this.newTeamToggle;
