@@ -952,6 +952,161 @@ router.get('/member/lists', (req, res, next) => {
 	}).catch(err => {
 		console.log(err)
 	})
+});
+
+router.post('/interface/request/editor', (req, res, next) => {
+	let id = req.body.id;
+	let index = req.body.index;
+	let name = req.body.name;
+	let remark = req.body.remark;
+	let type = req.body.type;
+	let roles = req.body.roles;
+	let defaultValue = req.body.default;
+	let indispensable = req.body.indispensable;
+	Interface.findById(id).then(s=>{
+		if(s){
+			let fields = s.fields, tmp = [];
+			fields.forEach((field, i)=>{
+				if(i == index){
+					tmp.push({
+						name: name,
+						remark: remark,
+						type: type,
+						roles: roles,
+						default: defaultValue,
+						indispensable: indispensable
+					})
+				}else{
+					tmp.push(field)
+				}
+			})
+			s.fields = tmp;
+			s.save().then(status=>{
+				if(status){
+					output = {
+						code: 1,
+						msg: 'success',
+						ok: true,
+						data: null
+					};
+					res.json(output);
+					return false;
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		}
+	}).catch(err=>{
+		console.log(err)
+	})
+});
+
+router.get('/interface/request/delete', (req, res, next) => {
+	let index = req.query.index;
+	let id = req.query.id;
+	Interface.findById(id).then(s=>{
+		if(s){
+			let fields = s.fields, tmp = [];
+			fields.forEach((field, i)=>{
+				if(index != i){
+					tmp.push(field);
+				}
+			});
+			s.fields = tmp;
+			s.save().then(status=>{
+				if(status){
+					output = {
+						code: 1,
+						msg: 'success',
+						ok: true,
+						data: null
+					};
+					res.json(output);
+					return false;
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		}
+	}).catch(err=>{
+		console.log(err)
+	})
+});
+
+router.post('/interface/response/editor', (req, res, next) => {
+	let id = req.body.id;
+	let index = req.body.index;
+	let name = req.body.name;
+	let remark = req.body.remark;
+	let type = req.body.type;
+	let roles = req.body.roles;
+	let defaultValue = req.body.default;
+	let indispensable = req.body.indispensable;
+	Interface.findById(id).then(s=>{
+		if(s){
+			let responses = s.response, tmp = [];
+			responses.forEach((response, i)=>{
+				if(i == index){
+					tmp.push({
+						name: name,
+						remark: remark,
+						type: type,
+						roles: roles,
+						default: defaultValue,
+						indispensable: indispensable
+					})
+				}else{
+					tmp.push(response)
+				}
+			})
+			s.response = tmp;
+			s.save().then(status=>{
+				if(status){
+					output = {
+						code: 1,
+						msg: 'success',
+						ok: true,
+						data: null
+					};
+					res.json(output);
+					return false;
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		}
+	}).catch(err=>{
+		console.log(err)
+	})
 })
 
+router.get('/interface/response/delete', (req, res, next) => {
+	let index = req.query.index;
+	let id = req.query.id;
+	Interface.findById(id).then(s=>{
+		let responses = s.response, tmp = [];
+		responses.forEach((response, i)=>{
+			if(index != i){
+				tmp.push(response)
+			}
+		});
+		s.response = tmp;
+		s.save().then(status=>{
+			if(status){
+				output = {
+					code: 1,
+					msg: 'success',
+					ok: true,
+					data: null
+				};
+				res.json(output);
+				return false;
+			}
+		}).catch(err=>{
+			console.log(err)
+		})
+	}).catch(err=>{
+		console.log(err)
+	})
+});
 module.exports = router;

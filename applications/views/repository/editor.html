@@ -93,8 +93,8 @@
                                         <div class="interface-data-table-body">
                                             <div class="interface-data-table-rows" v-if="interface.fields.length" v-for="(field,$index) in interface.fields" :key="$index">
                                                 <div class="interface-data-table-cole">
-                                                    <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-delete"><i class="icon iconfont">&#xe61c;</i></a>
-                                                    <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-editor"><i class="icon iconfont">&#xe635;</i></a>
+                                                    <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-delete" @click="interfaceRequestDelete($event, $index, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
+                                                    <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="request-editor" @click="interfaceRequestEditor($event, $index, interface._id, field)"><i class="icon iconfont">&#xe635;</i></a>
                                                     <span>${field.name}</span>
                                                 </div>
                                                 <div class="interface-data-table-cole">
@@ -146,8 +146,8 @@
                                             <div class="interface-data-table-body">
                                                 <div class="interface-data-table-rows" v-if="interface.response.length" v-for="(response, $index) in interface.response" :key="$index">
                                                     <div class="interface-data-table-cole">
-                                                        <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-delete"><i class="icon iconfont">&#xe61c;</i></a>
-                                                        <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-editor"><i class="icon iconfont">&#xe635;</i></a>
+                                                        <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-delete" @click="interfaceResponseDelete($event, $index, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
+                                                        <a href="javascript:void(0);" :data-id="interface._id" :data-fields-index="$index" class="response-editor" @click="interfaceResponseEditor($event, $index, interface._id, response)"><i class="icon iconfont">&#xe635;</i></a>
                                                         <span>${response.name}</span></div>
                                                     <div class="interface-data-table-cole">
                                                         <span v-if="response.indispensable">是</span>
@@ -293,13 +293,17 @@
             <div class="rap-dialog-marker"></div>
             <div class="rap-dialog-popup" ref='rapDialogAddInterfaceRequest'>
                 <div class="rap-dialog-header">
-                    <div class="rap-dialog-title">添加请求属性</div>
+                    <div class="rap-dialog-title">${interfaceRequestPopupTitle}请求属性</div>
                     <div class="rap-dialog-close">
                         <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
                     </div>
                 </div>
                 <div class="rap-dialog-body">
                     <div class="add-model-form">
+                        <div class="add-model-form-items" style="display:none;">
+                            <label for="index" class="indispensable">Index：</label>
+                            <input type="hidden" name="index" placeholder="index" v-model="interfaceRequestForm.index" />
+                        </div>
                         <div class="add-model-form-items" style="display:none;">
                             <label for="id" class="indispensable">ID：</label>
                             <input type="hidden" name="id" placeholder="属性ID" v-model="interfaceRequestForm.id" />
@@ -336,7 +340,8 @@
                     </div>
                 </div>
                 <div class="rap-dialog-footer">
-                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceRequestFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceRequestFormSubmit" v-if="interfaceRequestPopupStatus">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="editorInterfaceRequestFormSubmit" v-else>提交</a>
                     <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceRequestFormCancle">取消</a>
                 </div>
             </div>
@@ -349,13 +354,17 @@
             <div class="rap-dialog-marker"></div>
             <div class="rap-dialog-popup" ref='rapDialogAddInterfaceResponse'>
                 <div class="rap-dialog-header">
-                    <div class="rap-dialog-title">添加响应属性</div>
+                    <div class="rap-dialog-title">${interfaceResponsePopupTitle}响应属性</div>
                     <div class="rap-dialog-close">
                         <a href="javascript:void(0);" class="rap-dialog-close-but" @click="rapDialogClose"><i class="icon iconfont">&#xe6b7;</i></a>
                     </div>
                 </div>
                 <div class="rap-dialog-body">
                     <div class="add-model-form">
+                        <div class="add-model-form-items" style="display:none;">
+                            <label for="index" class="indispensable">Index：</label>
+                            <input type="hidden" name="index" placeholder="index" v-model="interfaceResponseForm.index" />
+                        </div>
                         <div class="add-model-form-items" style="display:none;">
                             <label for="id" class="indispensable">ID：</label>
                             <input type="hidden" name="id" placeholder="属性ID" v-model="interfaceResponseForm.id" />
@@ -392,7 +401,8 @@
                     </div>
                 </div>
                 <div class="rap-dialog-footer">
-                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceResponseFormSubmit">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="addInterfaceResponseFormSubmit" v-if="interfaceResponsePopupStatus">提交</a>
+                    <a href="javascript:void(0);" class="add-model-form-submit" @click="editorInterfaceResponseFormSubmit" v-else>提交</a>
                     <a href="javascript:void(0);" class="add-model-form-cancle" @click="addInterfaceResponseFormCancle">取消</a>
                 </div>
             </div>

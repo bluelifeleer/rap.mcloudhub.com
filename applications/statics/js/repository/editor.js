@@ -106,6 +106,8 @@ const VUE = new Vue({
 				value: 504
 			}]
 		},
+		interfaceRequestPopupTitle: '添加',
+		interfaceRequestPopupStatus: true,
 		interfaceRequestForm: {
 			id: '',
 			name: '',
@@ -145,7 +147,10 @@ const VUE = new Vue({
 				value: true
 			}]
 		},
+		interfaceResponsePopupTitle: '添加',
+		interfaceResponsePopupStatus: true,
 		interfaceResponseForm: {
+			index: 0,
 			id: '',
 			name: '',
 			type: 'string',
@@ -234,7 +239,7 @@ const VUE = new Vue({
 			this.modelForm.item_id = this.current.item.id;
 			this.user = {
 				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
-				name: decodeURI(utils.getCookie('name'))
+				name: decodeURIComponent(utils.getCookie('name'))
 			}
 			this.getRepository();
 		},
@@ -471,6 +476,7 @@ const VUE = new Vue({
 			this.interfaceForm.request.code = '200';
 			this.interfaceForm.request.type = 'get';
 			this.interfaceForm.request.url = '';
+			this.interfaceRequestForm.index = 0;
 			this.interfaceRequestForm.id = '';
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
@@ -478,6 +484,7 @@ const VUE = new Vue({
 			this.interfaceRequestForm.roles = '';
 			this.interfaceRequestForm.default = '';
 			this.interfaceRequestForm.indispensable = false;
+			this.interfaceResponseForm.index = 0;
 			this.interfaceResponseForm.id = '';
 			this.interfaceResponseForm.name = '';
 			this.interfaceResponseForm.remark = '';
@@ -506,6 +513,7 @@ const VUE = new Vue({
 			this.interfaceForm.request.code = '200';
 			this.interfaceForm.request.type = 'get';
 			this.interfaceForm.request.url = '';
+			this.interfaceRequestForm.index = 0;
 			this.interfaceRequestForm.id = '';
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
@@ -513,6 +521,7 @@ const VUE = new Vue({
 			this.interfaceRequestForm.roles = '';
 			this.interfaceRequestForm.default = '';
 			this.interfaceRequestForm.indispensable = false;
+			this.interfaceResponseForm.index = 0;
 			this.interfaceResponseForm.id = '';
 			this.interfaceResponseForm.name = '';
 			this.interfaceResponseForm.remark = '';
@@ -526,6 +535,8 @@ const VUE = new Vue({
 			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterfaceRequest, 'width');
 			this.$refs.rapDialogAddInterfaceRequest.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
 			this.interfaceRequestForm.id = id;
+			this.interfaceRequestPopupTitle = '添加';
+			this.interfaceRequestPopupStatus =  true;
 			this.rapDialogAddInterfaceRequest = !this.rapDialogAddInterfaceRequest;
 		},
 		exportInterfaceRequest: function(e, id) {
@@ -544,6 +555,8 @@ const VUE = new Vue({
 			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterfaceResponse, 'width');
 			this.$refs.rapDialogAddInterfaceResponse.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
 			this.interfaceResponseForm.id = id;
+			this.interfaceResponsePopupTitle = '添加';
+			this.interfaceResponsePopupStatus = true;
 			this.rapDialogAddInterfaceResponse = !this.rapDialogAddInterfaceResponse;
 		},
 		exportInterfaceResponse: function(e, id) {
@@ -851,6 +864,150 @@ const VUE = new Vue({
 				return style;
 			}
 		},
+		interfaceRequestDelete: function(e, index, id){
+			if(this.interface.fields.length <= 1){
+				this.messageAlert('当前请求参数是实例参数，不能删除，您可以选择修改或者添加一个再删除', 'warning');
+				return false;
+			}
+			axios({
+				url: '/interface/request/delete',
+				method: 'GET',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				params: {
+					index: index,
+					id: id
+				}
+			}).then(res=>{
+				console.log(res)
+				if(res.data.code && res.data.ok){
+					this.messageAlert('删除成功', 'success');
+					this.getRepository();
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		},
+		interfaceRequestEditor: function(e, index, id, item){
+			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
+			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterfaceRequest, 'width');
+			this.$refs.rapDialogAddInterfaceRequest.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
+			this.interfaceRequestForm.id = id;
+			this.interfaceRequestForm.index = index;
+			this.interfaceRequestForm.name = item.name;
+			this.interfaceRequestForm.remark = item.remark;
+			this.interfaceRequestForm.type = item.type;
+			this.interfaceRequestForm.roles = item.roles;
+			this.interfaceRequestForm.default = item.default;
+			this.interfaceRequestForm.indispensable = item.indispensable;
+			this.interfaceRequestPopupTitle = '修改';
+			this.interfaceRequestPopupStatus =  false;
+			this.rapDialogAddInterfaceRequest = !this.rapDialogAddInterfaceRequest;
+		},
+		editorInterfaceRequestFormSubmit: function(){
+			axios({
+				url: '/interface/request/editor',
+				method: 'POST',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				data: {
+					id: this.interfaceRequestForm.id,
+					index: this.interfaceRequestForm.index,
+					name: this.interfaceRequestForm.name,
+					remark: this.interfaceRequestForm.remark,
+					type: this.interfaceRequestForm.type,
+					roles: this.interfaceRequestForm.roles,
+					default: this.interfaceRequestForm.default,
+					indispensable: this.interfaceRequestForm.indispensable
+				}
+			}).then(res=>{
+				if(res.data.code && res.data.ok){
+					this.messageAlert('修改成功', 'success');
+					this.interfaceRequestForm.id = '';
+					this.interfaceRequestForm.index = 0;
+					this.interfaceRequestForm.name = '';
+					this.interfaceRequestForm.remark = '';
+					this.interfaceRequestForm.type = 'string';
+					this.interfaceRequestForm.roles = '';
+					this.interfaceRequestForm.default = '';
+					this.interfaceRequestForm.indispensable = false;
+					this.rapDialogAddInterfaceRequest = !this.rapDialogAddInterfaceRequest;
+					this.getRepository();
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		},
+		interfaceResponseDelete: function(e, index, id){
+			if(this.interface.response.length <= 1){
+				this.messageAlert('当前响应参数是实例参数，不能删除，您可以选择修改或者添加一个再删除', 'warning');
+				return false;
+			}
+			axios({
+				url: '/interface/response/delete',
+				method: 'GET',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				params: {
+					index: index,
+					id: id
+				}
+			}).then(res=>{
+				console.log(res)
+				if(res.data.code && res.data.ok){
+					this.messageAlert('删除成功', 'success');
+					this.getRepository();
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		},
+		interfaceResponseEditor: function(e, index, id, item){
+			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
+			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterfaceResponse, 'width');
+			this.$refs.rapDialogAddInterfaceResponse.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
+			this.interfaceResponseForm.index = index;
+			this.interfaceResponseForm.id = id;
+			this.interfaceResponseForm.name = item.name;
+			this.interfaceResponseForm.remark = item.remark;
+			this.interfaceResponseForm.type = item.type;
+			this.interfaceResponseForm.roles = item.roles;
+			this.interfaceResponseForm.default = item.default;
+			this.interfaceResponseForm.indispensable = item.indispensable;
+			this.interfaceResponsePopupTitle = '修改';
+			this.interfaceResponsePopupStatus = false;
+			this.rapDialogAddInterfaceResponse = !this.rapDialogAddInterfaceResponse;
+		},
+		editorInterfaceResponseFormSubmit: function(){
+			axios({
+				url: '/interface/response/editor',
+				method: 'POST',
+				baseURL: 'https://rap.mcloudhub.com/api',
+				data: {
+					id: this.interfaceResponseForm.id,
+					index: this.interfaceResponseForm.index,
+					name: this.interfaceResponseForm.name,
+					remark: this.interfaceResponseForm.remark,
+					type: this.interfaceResponseForm.type,
+					roles: this.interfaceResponseForm.roles,
+					default: this.interfaceResponseForm.default,
+					indispensable: this.interfaceResponseForm.indispensable
+				}
+			}).then(res=>{
+				if(res.data.code && res.data.ok){
+					this.messageAlert('修改成功', 'success');
+					this.interfaceResponseForm.id = '';
+					this.interfaceResponseForm.index = 0;
+					this.interfaceResponseForm.name = '';
+					this.interfaceResponseForm.remark = '';
+					this.interfaceResponseForm.type = 'string';
+					this.interfaceResponseForm.roles = '';
+					this.interfaceResponseForm.default = '';
+					this.interfaceResponseForm.indispensable = false;
+					this.rapDialogAddInterfaceResponse = !this.rapDialogAddInterfaceResponse;
+					this.getRepository();
+				}
+			}).catch(err=>{
+				console.log(err)
+			})
+		},
 		interfaceFormateFields: function(fileds, mock) {
 			let data = {};
 			fileds.forEach(field => {
@@ -900,7 +1057,11 @@ const VUE = new Vue({
 									data[key] = roles[key];
 								}
 							} else {
-								data[field.name + "|1-10"] = 0;
+								if(field.name == 'code'){
+									data[field.name + "|0-1"] = 0;
+								}else{
+									data[field.name + "|1-10"] = 0;
+								}
 							}
 						} else {
 							data[field.name] = field.default;
@@ -962,10 +1123,28 @@ const VUE = new Vue({
 								let roles = JSON.parse(field.roles),
 									key = '';
 								for (key in roles) {
-									data[key] = roles[key]
+									if(key == 'email' || key == 'url'){
+										data[key] = Mock.mock(roles[key])
+									}else{
+										data[key] = roles[key]
+									}
 								}
 							} else {
-								data[field.name + "|1-12"] = '';
+								if(field.name == 'email'){
+									if(!(field.default)){
+										data[field.name] = Mock.mock('@email');
+									}else{
+										data[field.name] = field.default;
+									}
+								}else if(field.name == 'url'){
+									if(!(field.default)){
+										data[field.name] = Mock.mock('@url');
+									}else{
+										data[field.name] = field.default;
+									}
+								}else{
+									data[field.name + "|1-12"] = '';
+								}
 							}
 						} else {
 							data[field.name] = field.default;

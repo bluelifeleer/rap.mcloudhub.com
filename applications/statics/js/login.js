@@ -15,7 +15,7 @@ const VUE = new Vue({
 	created() {
 		this.$http = axios
 		this.redirect = utils.getUrlQueryString('redirect_uri')
-		this.form.name = utils.getCookie('name') ? decodeURI(utils.getCookie('name')) : '';
+		this.form.name = utils.getCookie('name') ? decodeURIComponent(utils.getCookie('name')) : '';
 		this.form.password = utils.getCookie('password') ? utils.getCookie('password') : '';
 		this.checked = utils.getCookie('checked')
 		if (this.checked) {

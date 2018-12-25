@@ -40,8 +40,9 @@ const VUE = new Vue({
 		init: function() {
 			this.user = {
 				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
-				name: decodeURI(utils.getCookie('name'))
+				name: decodeURIComponent(utils.getCookie('name'))
 			}
+			console.log(this.user)
 			this.form.uid = this.user.id;
 			this.getRepositorys();
 		},

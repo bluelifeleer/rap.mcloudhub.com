@@ -75,7 +75,7 @@ router.get('/status', (req, res, next) => {
 	let redirect_uri = req.protocol + '://' + req.get('host') + req.originalUrl;
 	if (req.session.uid && req.cookies.uid) {
 		res.render('../views/status', {
-			title: '状态',
+			title: '数据概览',
 			page: 'status'
 		})
 	} else {

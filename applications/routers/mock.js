@@ -76,7 +76,11 @@ router.get('/test/data', (req, res, next) => {
 								data[key] = roles[key];
 							}
 						}else{
-							data[response.name+"|1-10"] = 0;
+							if(field.name == 'code'){
+								data[field.name + "|0-1"] = 0;
+							}else{
+								data[field.name + "|1-10"] = 0;
+							}
 						}
 					}else{
 						data[response.name] = response.default;
@@ -134,10 +138,28 @@ router.get('/test/data', (req, res, next) => {
 							if(response.roles){
 								let roles = JSON.parse(response.roles), key = '';
 								for(key in roles){
-									data[key] = roles[key];
+									if(key == 'email' || key == 'url'){
+										data[key] = Mock.mock(roles[key])
+									}else{
+										data[key] = roles[key]
+									}
 								}
 							}else{
-								data[response.name+"|1-12"] = "";
+								if(field.name == 'email'){
+									if(!(field.default)){
+										data[field.name] = Mock.mock('@email');
+									}else{
+										data[field.name] = field.default;
+									}
+								}else if(field.name == 'url'){
+									if(!(field.default)){
+										data[field.name] = Mock.mock('@url');
+									}else{
+										data[field.name] = field.default;
+									}
+								}else{
+									data[field.name + "|1-12"] = '';
+								}
 							}
 						}else{
 							data[response.name] = response.default;
