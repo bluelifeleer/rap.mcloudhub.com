@@ -3,7 +3,7 @@ const VUE = new Vue({
 	el: '#app',
 	data: {
 		userInfo: false,
-		current:{
+		current: {
 			item: {
 				id: '',
 			},
@@ -203,7 +203,7 @@ const VUE = new Vue({
 		},
 		models: {},
 		interfaces: [{
-			_id:'',
+			_id: '',
 			name: '',
 			mock_url: '',
 			request: {
@@ -213,14 +213,14 @@ const VUE = new Vue({
 			}
 		}],
 		interface: {
-			_id:'',
-			name: '',
-			mock_url: '',
-			request: {
-				url: '',
-				type: '',
-				code: 200
-			}
+			_id: '',
+				name: '',
+				mock_url: '',
+				request: {
+					url: '',
+					type: '',
+					code: 200
+				}
 		},
 		jsonFormate: {
 			status: false,
@@ -233,8 +233,8 @@ const VUE = new Vue({
 			this.current.item.id = utils.getUrlQueryString('id');
 			this.modelForm.item_id = this.current.item.id;
 			this.user = {
-				name: utils.getCookie('name'),
-				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10))
+				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
+				name: decodeURI(utils.getCookie('name'))
 			}
 			this.getRepository();
 		},
@@ -253,11 +253,11 @@ const VUE = new Vue({
 						item.models.forEach(model => {
 							if (model.interfaces.length) {
 								model.interfaces.forEach(interface => {
-									interface.name = interface.name.length > 7 ? interface.name.substr(0,6)+'...': interface.name
+									interface.name = interface.name.length > 7 ? interface.name.substr(0, 6) + '...' : interface.name
 									interface['item_title'] = interface.name
 									interface['overed'] = false
 									interface['mock_url'] = '/mock/test/data?id=' + interface._id,
-									interface['fieldsFormateMockTemplate'] = this.interfaceFormateFields(interface.fields, false)
+										interface['fieldsFormateMockTemplate'] = this.interfaceFormateFields(interface.fields, false)
 									interface['fieldsFormateMockData'] = this.interfaceFormateFields(interface.fields, true)
 									interface['responseFormateMockTemplate'] = this.interfaceFormateFields(interface.response, false)
 									interface['responseFormateMockData'] = this.interfaceFormateFields(interface.response, true)
@@ -265,14 +265,10 @@ const VUE = new Vue({
 							}
 						});
 					}
-					console.log(item)
 					this.repository = item;
 					this.models = item.models[this.current.model.index];
-					console.log('aaaa')
 					this.interfaces = this.models.interfaces;
-					console.log('bbbb')
 					this.interface = this.interfaces[this.current.interface.index];
-					console.log('cccc')
 				}
 			}).catch(err => {
 				console.log(err)
@@ -295,7 +291,7 @@ const VUE = new Vue({
 			this.interfaces = item.interfaces;
 			this.interface = this.interfaces.length ? item.interfaces[this.current.interface.index] : {};
 			let interfaceMenuItems = this.$refs.interfaceMenus.getElementsByClassName('interface-menus-item');
-			if(interfaceMenuItems.length){
+			if (interfaceMenuItems.length) {
 				for (let j = 0; j < interfaceMenuItems.length; j++) {
 					interfaceMenuItems[j].className = 'interface-menus-item';
 					interfaceMenuItems[j].setAttribute('data-selected', false);
@@ -376,6 +372,7 @@ const VUE = new Vue({
 				this.messageAlert('接口请求地址不能有中文字符', 'error');
 				return false;
 			}
+
 			axios({
 				url: '/interface/add',
 				method: 'POST',
@@ -407,7 +404,7 @@ const VUE = new Vue({
 				console.log(err)
 			})
 		},
-		editorInterfaceFormSubmit: function(){
+		editorInterfaceFormSubmit: function() {
 			if (!this.interfaceForm.name) {
 				this.messageAlert('接口名称不能为空', 'error');
 				return false;
@@ -421,6 +418,7 @@ const VUE = new Vue({
 				this.messageAlert('接口请求地址不能有中文字符', 'error');
 				return false;
 			}
+
 			axios({
 				url: '/interface/params/editor',
 				method: 'POST',
@@ -470,9 +468,9 @@ const VUE = new Vue({
 			this.interfaceForm.id = '';
 			this.interfaceForm.name = '';
 			this.interfaceForm.remark = '';
-			this.interfaceForm.request.methods = 'get';
+			this.interfaceForm.request.code = '200';
+			this.interfaceForm.request.type = 'get';
 			this.interfaceForm.request.url = '';
-			this.interfaceForm.request.status_code = '200';
 			this.interfaceRequestForm.id = '';
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
@@ -505,9 +503,9 @@ const VUE = new Vue({
 			this.interfaceForm.id = '';
 			this.interfaceForm.name = '';
 			this.interfaceForm.remark = '';
-			this.interfaceForm.request.methods = 'get';
+			this.interfaceForm.request.code = '200';
+			this.interfaceForm.request.type = 'get';
 			this.interfaceForm.request.url = '';
-			this.interfaceForm.request.status_code = '200';
 			this.interfaceRequestForm.id = '';
 			this.interfaceRequestForm.name = '';
 			this.interfaceRequestForm.remark = '';
@@ -585,7 +583,6 @@ const VUE = new Vue({
 					}
 				}
 			}).then(res => {
-				console.log(res)
 				if (res.data.code && res.data.ok) {
 					this.messageAlert('添加请求参数成功', 'success');
 					this.getRepository();
@@ -642,7 +639,6 @@ const VUE = new Vue({
 					}
 				}
 			}).then(res => {
-				console.log(res)
 				if (res.data.code && res.data.ok) {
 					this.messageAlert('添加响应参数成功', 'success');
 					this.getRepository();
@@ -682,10 +678,10 @@ const VUE = new Vue({
 			}
 		},
 		interfaceDelete: function(e, model_id, id) {
-			if(this.interfaces.length <= 1){
+			if (this.interfaces.length <= 1) {
 				this.messageAlert('当前只有一个实例接口不能删除，如果要删除请先创建一个接口再执行此操作。', 'warning');
 				return false;
-			}else{
+			} else {
 				axios({
 					url: '/interface/delete',
 					method: 'GET',
@@ -694,28 +690,26 @@ const VUE = new Vue({
 						id: id,
 						model_id: model_id
 					}
-				}).then(res=>{
-					if(res.data.code && res.data.ok){
+				}).then(res => {
+					if (res.data.code && res.data.ok) {
 						this.messageAlert('接口删除成功', 'success');
 						this.getRepository()
 					}
-				}).catch(err=>{
+				}).catch(err => {
 					console.log(err)
 				})
 			}
 		},
-		interfaceEditor: function(e, item_id, model_id, item){
-			console.log(model_id)
-			this.interfaceForm.uid = utils.getCookie('uid');
+		interfaceEditor: function(e, item_id, model_id, item) {
+			this.interfaceForm.uid = this.user.id;
 			this.interfaceForm.item_id = item_id;
 			this.interfaceForm.model_id = model_id;
 			this.interfaceForm.id = item._id;
-			this.interfaceForm.url = item.url;
 			this.interfaceForm.name = item.name;
 			this.interfaceForm.remark = item.remark;
-			this.interfaceForm.request.methods = item.request.methods;
+			this.interfaceForm.request.type = item.request.type;
 			this.interfaceForm.request.url = item.request.url;
-			this.interfaceForm.request.status_code = item.request.code;
+			this.interfaceForm.request.code = item.request.code;
 			const windowW = document.body.clientWidth || document.documentElement.clientWidth;
 			const dialogWidth = this.getStyle(this.$refs.rapDialogAddInterface, 'width');
 			this.$refs.rapDialogAddInterface.style.left = parseInt((windowW - dialogWidth) / 2) + 'px';
@@ -775,13 +769,13 @@ const VUE = new Vue({
 				console.log(err)
 			})
 		},
-		showItemOperation: function(e, index, item){
-			this.interfaces.forEach(interface=>{
+		showItemOperation: function(e, index, item) {
+			this.interfaces.forEach(interface => {
 				interface.overed = false
 			})
 			this.interfaces[index].overed = true
 		},
-		hiddenAllItemOperation: function(e){
+		hiddenAllItemOperation: function(e) {
 			// let _this = this;
 			// setTimeout(function(){
 			// 	_this.interfaces.forEach(interface=>{
@@ -803,25 +797,25 @@ const VUE = new Vue({
 			this.responsePreviewActive = false;
 			this.interfaceFieldsPreview = false;
 			this.interfaceResponsesPreview = false;
-			console.log(interface)
 		},
-		requestPreview: function(){
+		requestPreview: function() {
 			this.interfaceFieldsPreview = !this.interfaceFieldsPreview;
 			this.fieldPreviewActive = !this.fieldPreviewActive;
 		},
-		responsePreview: function(){
+		responsePreview: function() {
 			this.interfaceResponsesPreview = !this.interfaceResponsesPreview;
 			this.responsePreviewActive = !this.responsePreviewActive;
 		},
-		jsonFormateTextToggle(){
+		jsonFormateTextToggle() {
 			this.jsonFormate.status = !this.jsonFormate.status;
 			this.jsonFormate.label = this.jsonFormate.status ? '{}' : '<>';
+			var editor = new JSONEditor(this.$refs.jsoneditor, this.interfaceRequestForm.requestJson);
 		},
-		requestMOckRefresh: function(e, item){
+		requestMOckRefresh: function(e, item) {
 			item['fieldsFormateMockTemplate'] = this.interfaceFormateFields(item.fields, false)
 			item['fieldsFormateMockData'] = this.interfaceFormateFields(item.fields, true)
 		},
-		responseMOckRefresh: function(e, item){
+		responseMOckRefresh: function(e, item) {
 			item['responseFormateMockTemplate'] = this.interfaceFormateFields(item.response, false)
 			item['responseFormateMockData'] = this.interfaceFormateFields(item.response, true)
 		},
@@ -857,121 +851,126 @@ const VUE = new Vue({
 				return style;
 			}
 		},
-		interfaceFormateFields: function(fileds, mock){
+		interfaceFormateFields: function(fileds, mock) {
 			let data = {};
-			fileds.forEach(field=>{
-				switch(field.type){
+			fileds.forEach(field => {
+				switch (field.type) {
 					case 'array':
-						if(!(field.default)){
-							if(field.roles){
-								let roles = JSON.parse(field.roles), key = '';
-								for(key in roles){
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
 									data[key] = roles[key];
 								}
-							}else{
-								data[field.name+"|1-10"] = [
-									{
-									  "name|+1": [
+							} else {
+								data[field.name + "|1-10"] = [{
+									"name|+1": [
 										"Hello",
 										"Mock.js",
 										"!"
-									  ]
-									}
-								  ];
-								}
-						}else{
+									]
+								}];
+							}
+						} else {
 							data[field.name] = field.default;
 						}
-					break;
+						break;
 					case 'boolean':
-					if(!(field.default)){
-						if(field.roles){
-							let roles = JSON.parse(field.roles), key = '';
-							for(key in roles){
-								data[key] = roles[key];
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
+									data[key] = roles[key];
+								}
+							} else {
+								data[field.name + "|1-2"] = true;
 							}
-						}else{
-							data[field.name+"|1-2"] = true;
+						} else {
+							data[field.name] = field.default;
 						}
-					}else{
-						data[field.name] = field.default;
-					}
-					break;
+						break;
 					case 'number':
-					if(!(field.default)){
-						if(field.roles){
-							let roles = JSON.parse(field.roles), key = '';
-							for(key in roles){
-								data[key] = roles[key];
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
+									data[key] = roles[key];
+								}
+							} else {
+								data[field.name + "|1-10"] = 0;
 							}
-						}else{
-							data[field.name+"|1-10"] = 0;
+						} else {
+							data[field.name] = field.default;
 						}
-					}else{
-						data[field.name] = field.default;
-					}
-					break;
+						break;
 					case 'object':
-					if(!(field.default)){
-						if(field.roles){
-							let roles = JSON.parse(field.roles), key = '';
-							for(key in roles){
-								data[key] = roles[key];
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
+									data[key] = roles[key];
+								}
+							} else {
+								data[field.name + "|1-10"] = {
+									"110000": "北京市",
+									"120000": "天津市",
+									"130000": "河北省",
+									"140000": "山西省"
+								};
 							}
-						}else{
-							data[field.name+"|1-10"] = {
-								"110000": "北京市",
-								"120000": "天津市",
-								"130000": "河北省",
-								"140000": "山西省"
-							  };
+						} else {
+							data[field.name] = field.default;
 						}
-					}else{
-						data[field.name] = field.default;
-					}
-					break;
+						break;
 					case 'function':
-					if(!(field.default)){
-						if(field.roles){
-							let roles = JSON.parse(field.roles), key = '';
-							for(key in roles){
-								data[key] = roles[key];
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
+									data[key] = roles[key];
+								}
+							} else {
+								data[field.name] = function() {};
 							}
-						}else{
-							data[field.name] = function(){};
+						} else {
+							data[field.name] = field.default;
 						}
-					}else{
-						data[field.name] = field.default;
-					}
-					break;
+						break;
 					case 'regexp':
-					if(!(field.default)){
-						if(field.roles){
-							let roles = JSON.parse(field.roles), key = '';
-							for(key in roles){
-								data[key] = roles[key];
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
+									data[key] = roles[key];
+								}
+							} else {
+								data[field.name] = /[a-z][A-Z][0-9]/;
 							}
-						}else{
-							data[field.name] = /[a-z][A-Z][0-9]/;
+						} else {
+							data[field.name] = field.default;
 						}
-					}else{
-						data[field.name] = field.default;
-					}
-					break;
-					default: 
-						if(!(field.default)){
-							if(field.roles){
-								let roles = JSON.parse(field.roles), key = '';
-								for(key in roles){
+						break;
+					default:
+						if (!(field.default)) {
+							if (field.roles) {
+								let roles = JSON.parse(field.roles),
+									key = '';
+								for (key in roles) {
 									data[key] = roles[key]
 								}
-							}else{
-								data[field.name+"|1-12"] = '';
+							} else {
+								data[field.name + "|1-12"] = '';
 							}
-						}else{
+						} else {
 							data[field.name] = field.default;
 						}
-					break;
+						break;
 				}
 			});
 			return mock ? Mock.mock(data) : data;

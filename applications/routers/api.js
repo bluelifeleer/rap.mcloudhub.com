@@ -29,11 +29,11 @@ router.use(function(req, res, next) {
 
 router.get('/verify', (req, res, next) => {
 	let captcha = svgCaptcha.create({
-		size: 4 ,
+		size: 4,
 		ignoreChars: '0o1i',
-		noise:1,
+		noise: 1,
 		color: true,
-		background: '#fff' 
+		background: '#fff'
 	});
 	req.session.verify = captcha.text;
 	res.type('svg');
@@ -47,8 +47,8 @@ router.post('/user/login', (req, res, next) => {
 	let verify = req.body.verify;
 	let cookieChecked = req.body.cookieChecked
 	console.log(req.session.verify)
-	if(!cookieChecked){
-		if(verify.toLowerCase() != req.session.verify.toLowerCase()){
+	if (!cookieChecked) {
+		if (verify.toLowerCase() != req.session.verify.toLowerCase()) {
 			output = {
 				code: 0,
 				msg: '验证码输入错误',
@@ -70,15 +70,15 @@ router.post('/user/login', (req, res, next) => {
 						maxAge: 1000 * 3600 * 10,
 						expires: 1000 * 3600 * 10
 					});
-					res.cookie('name', user.name, {
-						maxAge: 1000 * 3600 * 10,
-						expires: 1000 * 3600 * 10
-					});
 					res.cookie('password', password, {
 						maxAge: 1000 * 3600 * 10,
 						expires: 1000 * 3600 * 10
 					});
 				}
+				res.cookie('name', user.name, {
+					maxAge: 1000 * 3600 * 10,
+					expires: 1000 * 3600 * 10
+				});
 				res.cookie('uid', user._id, {
 					maxAge: 1000 * 3600 * 10,
 					expires: 1000 * 3600 * 10
@@ -93,7 +93,7 @@ router.post('/user/login', (req, res, next) => {
 				};
 				res.json(output);
 				return false;
-			}else{
+			} else {
 				output = {
 					code: 0,
 					msg: '登录失败，密码错误',
@@ -448,8 +448,8 @@ router.post('/item/editor', (req, res, next) => {
 		new: true,
 		upsert: false,
 		runValidators: true
-	}).then(item=>{
-		if(item){
+	}).then(item => {
+		if (item) {
 			output = {
 				code: 1,
 				msg: 'success',
@@ -459,7 +459,7 @@ router.post('/item/editor', (req, res, next) => {
 			res.json(output);
 			return false;
 		}
-	}).catch(err=>{
+	}).catch(err => {
 		console.log(err)
 	})
 });
@@ -646,6 +646,7 @@ router.post('/interface/add', (req, res, next) => {
 		default: "",
 		indispensable: false
 	}];
+
 	Item.findById(item_id).then(item => {
 		let user = User.findById(uid);
 		let model = Model.findById(model_id);
@@ -698,8 +699,8 @@ router.post('/interface/params/editor', (req, res, next) => {
 		name: name,
 		remark: remark,
 		request: request
-	}).then(s=>{
-		if(s){
+	}).then(s => {
+		if (s) {
 			output = {
 				code: 1,
 				msg: 'success',
@@ -709,7 +710,7 @@ router.post('/interface/params/editor', (req, res, next) => {
 			res.json(output);
 			return false;
 		}
-	}).catch(err=>{
+	}).catch(err => {
 		console.log(err)
 	})
 });
@@ -719,7 +720,7 @@ router.post('/interface/editor', (req, res, next) => {
 	let data = req.body.data;
 	Interface.findById(data.id).then(result => {
 		if (result) {
-			if(type == 'request'){
+			if (type == 'request') {
 				result.fields.push({
 					name: data.name,
 					remark: data.remark,
@@ -728,7 +729,7 @@ router.post('/interface/editor', (req, res, next) => {
 					default: data.default,
 					indispensable: data.indispensable
 				})
-			}else if(type == 'response'){
+			} else if (type == 'response') {
 				result.response.push({
 					name: data.name,
 					remark: data.remark,
@@ -737,7 +738,7 @@ router.post('/interface/editor', (req, res, next) => {
 					default: data.default,
 					indispensable: data.indispensable
 				})
-			}else{
+			} else {
 
 			}
 			result.save().then(s => {
@@ -761,17 +762,21 @@ router.post('/interface/editor', (req, res, next) => {
 router.get('/interface/delete', (req, res, next) => {
 	let id = req.query.id;
 	let model_id = req.query.model_id;
-	Model.findOne({_id: model_id}).then(model=>{
+	Model.findOne({
+		_id: model_id
+	}).then(model => {
 		let tmp = [];
-		model.interfaces.forEach(s=>{
-			if(s != id){
+		model.interfaces.forEach(s => {
+			if (s != id) {
 				tmp.push(s)
 			}
 		})
 		model.interfaces = tmp;
 		model.save();
-		Interface.findOneAndDelete({_id: id}).then(del=>{
-			if(del){
+		Interface.findOneAndDelete({
+			_id: id
+		}).then(del => {
+			if (del) {
 				output = {
 					code: 1,
 					msg: 'success',
@@ -781,10 +786,10 @@ router.get('/interface/delete', (req, res, next) => {
 				res.json(output);
 				return false;
 			}
-		}).catch(err=>{
+		}).catch(err => {
 			console.log(err)
 		})
-	}).catch(err=>{
+	}).catch(err => {
 		console.log(err)
 	})
 });
@@ -840,9 +845,9 @@ router.post('/team/add', (req, res, next) => {
 	let remark = req.body.remark;
 	let permissions = req.body.permissions;
 	let members = req.body.members;
-	if(!(members.length)){
-		User.findById(uid).then(user=>{
-			if(user){
+	if (!(members.length)) {
+		User.findById(uid).then(user => {
+			if (user) {
 				members.push(user)
 				Team({
 					uid: user._id,
@@ -855,8 +860,8 @@ router.post('/team/add', (req, res, next) => {
 					delete: false,
 					sync: false,
 					create: sillyDateTime.format(MyDate, 'YYYY-MM-DD HH:mm:ss')
-				}).save().then(team=>{
-					if(team){
+				}).save().then(team => {
+					if (team) {
 						output = {
 							code: 1,
 							msg: 'success',
@@ -866,50 +871,48 @@ router.post('/team/add', (req, res, next) => {
 						res.json(output);
 						return false;
 					}
-				}).catch(err=>{
+				}).catch(err => {
 					console.log(err)
 				})
 			}
-		}).catch(err=>{
+		}).catch(err => {
 			console.log(err)
 		})
 	}
 });
 
 router.post('/team/editor', (req, res, next) => {
-	
+
 });
 
 router.get('/team/delete', (req, res, next) => {
-	
+
 });
 
 router.get('/team/get', (req, res, next) => {
-	
+
 });
 
 router.get('/team/lists', (req, res, next) => {
 	let uid = req.query.uid || req.session.uid;
 	let num = parseInt(req.query.num) || 10;
 	let size = parseInt(req.query.size) || 1;
-	Team.countDocuments({uid: uid}).then(count=>{
+	Team.countDocuments({
+		uid: uid
+	}).then(count => {
 		Team.find({
 			uid: uid
-		}).skip(parseInt((size-1)*num)).limit(num).populate([
-			{
-				path: 'own',
-				select: 'name avarat email'
-			},
-			{
-				path: 'item',
-				select: 'uid name remark repository icon'
-			},
-			{
-				path: 'members',
-				select: 'name avarat email'
-			}
-		]).then(teams=>{
-			if(teams){
+		}).skip(parseInt((size - 1) * num)).limit(num).populate([{
+			path: 'own',
+			select: 'name avarat email'
+		}, {
+			path: 'item',
+			select: 'uid name remark repository icon'
+		}, {
+			path: 'members',
+			select: 'name avarat email'
+		}]).then(teams => {
+			if (teams) {
 				output = {
 					code: 1,
 					msg: 'success',
@@ -924,29 +927,29 @@ router.get('/team/lists', (req, res, next) => {
 				res.json(output);
 				return false;
 			}
-		}).catch(err=>{
+		}).catch(err => {
 			console.log(err)
 		});
-	}).catch(err=>{
+	}).catch(err => {
 		console.log(err)
 	});
 });
 
-router.get('/member/lists', (req, res, next)=>{
-	User.find({}).then(users=>{
-		if(users){
+router.get('/member/lists', (req, res, next) => {
+	User.find({}).then(users => {
+		if (users) {
 			output = {
 				code: 1,
 				msg: 'success',
 				ok: true,
 				data: {
-					users:users
+					users: users
 				}
 			};
 			res.json(output);
 			return false;
 		}
-	}).catch(err=>{
+	}).catch(err => {
 		console.log(err)
 	})
 })

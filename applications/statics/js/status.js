@@ -1,29 +1,29 @@
 const VUE = new Vue({
-    delimiters: ['${', '}'],
-    el: '#app',
-    data: {
-        userInfo: false,
-        newTeamToggle: false,
-        user: {
-            name: '',
-            id: ''
-        }
-    },
-    created() {
+	delimiters: ['${', '}'],
+	el: '#app',
+	data: {
+		userInfo: false,
+		newTeamToggle: false,
+		user: {
+			name: '',
+			id: ''
+		}
+	},
+	created() {
 
-    },
-    methods: {
-        init: function(){
-            this.user = {
-                name: utils.getCookie('name'),
-				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10))
-            }
-            console.log(this.user)
-        },
-        userInfoToggle: function() {
+	},
+	methods: {
+		init: function() {
+			this.user = {
+				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
+				name: decodeURI(utils.getCookie('name'))
+			}
+			console.log(this.user)
+		},
+		userInfoToggle: function() {
 			this.userInfo = !this.userInfo
-        },
-        loginout: function() {
+		},
+		loginout: function() {
 			axios({
 				url: '/user/loginout',
 				method: 'POST',
@@ -40,20 +40,20 @@ const VUE = new Vue({
 			}).catch(err => {
 				console.log(err)
 			})
-        },
-        /**
-        * 显示警告信息
-        * @param {*} msg // 
-        * @param {*} type // success,info,error,warning
-        */
-       messageAlert(msg, type) {
-           this.$message({
-               message: msg,
-               type: type
-           })
-       }
-    },
-    mounted() {
-        this.init();
-    }
+		},
+		/**
+		 * 显示警告信息
+		 * @param {*} msg // 
+		 * @param {*} type // success,info,error,warning
+		 */
+		messageAlert(msg, type) {
+			this.$message({
+				message: msg,
+				type: type
+			})
+		}
+	},
+	mounted() {
+		this.init();
+	}
 })

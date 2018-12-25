@@ -52,9 +52,21 @@
     height:auto;
 }
 
+.rap-tabs-items-box ul{
+    width:auto;
+    height:auto;
+}
+
+.model-rap-tabs-lists{
+    float:left;
+    width:auto;
+    height:auto;
+    position:relative;
+}
+
+
 .rap-tabs-items{
     display:block;
-    float:left;
     width:160px;
     height:50px;
     line-height: 50px;
@@ -71,6 +83,16 @@
 
 .rap-tabs-items-selected{
     border-top: 4px solid #e36209 !important;
+}
+
+.rap-tabs-item-operations{
+    display:block;
+    width:auto;
+    height:30px;
+    line-height: 30px;
+    position:absolute;
+    right:0;
+    top:13px;
 }
 
 .rap-tabs-add-but-box{
@@ -420,7 +442,7 @@
 
 .requesr-json-editor,.response-json-editor{
     width:100%;
-    height:100%;
+    height:auto;
 }
 
 #request-json,#response-json{
@@ -494,4 +516,12 @@
 
 .preview-active{
     background: #28a745 !important;
+}
+
+.requesr-json-editor,.jsoneditor{
+    display:none;
+}
+
+.json-editor{
+    display:block;
 }

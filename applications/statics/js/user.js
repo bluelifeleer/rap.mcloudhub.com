@@ -14,7 +14,7 @@ const VUE = new Vue({
 		init: function() {
 			this.user = {
 				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
-				name: utils.getCookie('name')
+				name: decodeURI(utils.getCookie('name'))
 			};
 			this.getUsers(this.user.id)
 		},

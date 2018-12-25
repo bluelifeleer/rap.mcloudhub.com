@@ -13,8 +13,8 @@ const VUE = new Vue({
 	methods: {
 		init: function() {
 			this.user = {
-				name: utils.getCookie('name'),
-				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10))
+				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
+				name: decodeURI(utils.getCookie('name'))
 			}
 		},
 		userInfoToggle: function() {

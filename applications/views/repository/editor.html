@@ -17,9 +17,15 @@
         <div class="rap-tabs">
             <div class="rap-tabs-header">
                 <div class="rap-tabs-items-box">
-                    <span v-if="repository.models.length" ref="modelTabs">
-                        <a href="javascript:void(0);" class="rap-tabs-items" v-for="(model, $index) in repository.models" :key="$index" :data-id="model._id" @click="modelToggle($event, $index, model)" :class="{'rap-tabs-items-selected': !($index)}" :data-selected="!($index)"><i class="icon iconfont">&#xe636;</i>${model.name}</a>
-                    </span>
+                    <ul v-if="repository.models.length" ref="modelTabs">
+                        <li class="model-rap-tabs-lists" v-for="(model, $index) in repository.models" :key="$index">
+                            <a href="javascript:void(0);" class="rap-tabs-items" :data-id="model._id" @click="modelToggle($event, $index, model)" :class="{'rap-tabs-items-selected': !($index)}" :data-selected="!($index)"><i class="icon iconfont">&#xe636;</i><element>${model.name}</element></a>
+                            <span class="rap-tabs-item-operations">
+                                <a href="javascript:void(0);" class="model-item-delete"><i class="icon iconfont">&#xe61c;</i></a>
+                                <a href="javascript:void(0);" class="model-item-editor"><i class="icon iconfont">&#xe635;</i></a>
+                            </span>
+                        </li>
+                    </ul>
                 </div>
                 <div class="rap-tabs-add-but-box">
                     <a href="javascript:void(0);" class="add-model-but" @click="addModel($event, repository._id)" :data-item-id="repository._id"><i class="icon iconfont">&#xea21;</i>添加模块</a>
@@ -405,10 +411,10 @@
                     </div>
                 </div>
                 <div class="rap-dialog-body">
-                    <div class="requesr-json-editor">
-                        <textarea name="request-json" id="request-json" cols="30" rows="30" v-model="interfaceRequestForm.requestJson"></textarea>
+                    <div class="requesr-json-editor" :class="{'json-editor':!jsonFormate.status}">
+                        <textarea name="request-json" id="request-json" cols="10" rows="20" v-model="interfaceRequestForm.requestJson"></textarea>
                     </div>
-                    <!-- <div id="jsoneditor" style="width: 400px; height: 400px;" ref="jsoneditor"></div> -->
+                    <div class="jsoneditor" style="width: 400px; height: 400px;" ref="jsoneditor" :class="{'json-editor':jsonFormate.status}"></div>
                 </div>
                 <div class="rap-dialog-footer">
                     <a href="javascript:void(0);" class="add-model-form-submit" @click="ExportInterfaceRequestFormSubmit">提交</a>

@@ -4,7 +4,7 @@ const VUE = new Vue({
 	data: {
 		userInfo: false,
 		repositorys: [],
-		selector:{
+		selector: {
 			value: 'create',
 			options: [{
 				label: '我创建的仓库',
@@ -14,7 +14,7 @@ const VUE = new Vue({
 				value: 'join'
 			}]
 		},
-		search:{
+		search: {
 			value: ''
 		},
 		createRepositoryDialog: false,
@@ -39,8 +39,8 @@ const VUE = new Vue({
 	methods: {
 		init: function() {
 			this.user = {
-				name: utils.getCookie('name'),
-				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10))
+				id: utils.getCookie('uid').substr(7, parseInt(utils.getCookie('uid').length - 10)),
+				name: decodeURI(utils.getCookie('name'))
 			}
 			this.form.uid = this.user.id;
 			this.getRepositorys();
@@ -67,8 +67,7 @@ const VUE = new Vue({
 				console.log(err)
 			})
 		},
-		selectorRepository: function(e){
-		},
+		selectorRepository: function(e) {},
 		userInfoToggle: function() {
 			this.userInfo = !this.userInfo
 		},
@@ -116,9 +115,10 @@ const VUE = new Vue({
 				alert('仓库接口URL不能为空')
 			}
 
-			let url = '',data = {};
+			let url = '',
+				data = {};
 
-			if(this.type){
+			if (this.type) {
 				url = '/item/add';
 				data = {
 					uid: this.form.uid,
@@ -129,7 +129,7 @@ const VUE = new Vue({
 					repository: this.form.repository,
 					permissions: this.form.permissions
 				}
-			}else{
+			} else {
 				url = '/item/editor';
 				data = {
 					uid: this.form.uid,
@@ -152,7 +152,7 @@ const VUE = new Vue({
 				console.log(res)
 				if (res.data.code && res.data.ok) {
 					this.type = true;
-					this.messageAlert(this.butText+'仓库成功', 'success');
+					this.messageAlert(this.butText + '仓库成功', 'success');
 					this.createRepositoryDialog = !this.createRepositoryDialog;
 					this.form = {
 						uid: '',

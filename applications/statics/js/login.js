@@ -15,10 +15,10 @@ const VUE = new Vue({
 	created() {
 		this.$http = axios
 		this.redirect = utils.getUrlQueryString('redirect_uri')
-		this.form.name = utils.getCookie('name')
-		this.form.password = utils.getCookie('password')
+		this.form.name = utils.getCookie('name') ? decodeURI(utils.getCookie('name')) : '';
+		this.form.password = utils.getCookie('password') ? utils.getCookie('password') : '';
 		this.checked = utils.getCookie('checked')
-		if(this.checked){
+		if (this.checked) {
 			this.form.cookieChecked = this.checked
 			this.loginFormSubmit();
 		}
@@ -41,16 +41,16 @@ const VUE = new Vue({
 				this.messageAlert('密码不能为空', 'error')
 				return false;
 			}
-			
-			if(!this.checked){
+
+			if (!this.checked) {
 				if (!this.form.verify) {
 					this.messageAlert('验证码不能为空', 'error')
 					return false;
 				}
 			}
 
-			
-			
+
+
 			axios({
 				url: '/user/login',
 				method: 'POST',
