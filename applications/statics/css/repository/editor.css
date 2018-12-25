@@ -67,10 +67,11 @@
 
 .rap-tabs-items{
     display:block;
-    width:160px;
+    width:auto;
     height:50px;
     line-height: 50px;
     text-align:center;
+    padding:0 50px 0 10px;
     position: relative;
     border-top:4px solid #fafbfc;
     border-right:1px solid #fafbfc;

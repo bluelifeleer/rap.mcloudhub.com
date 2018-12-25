@@ -39,10 +39,10 @@
                             <div class="interface-menu-group" v-if="interfaces.length" @mouseout="hiddenAllItemOperation($event)">
                                 
                                 <div class="interface-menus-item" v-for="(interface, $index) in interfaces" :key="$index" :data-id="$index" :data-id="interface._id" :class="{'interface-menus-item-selected': !($index) }" :data-selected="!($index)">
-                                    <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover.stop="showItemOperation($event, $index, interface)">${interface.name}</a>
+                                    <a href="javascript:void(0);" :title="interface.item_title" class="interface-item" @click="selectInterface($event, $index, interface)" @mouseover.stop.prevent="showItemOperation($event, $index, interface)">${interface.name}</a>
                                     <span class="interface-item-operations" :class="{'interface-item-operations-overed':interface.overed}">
-                                        <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
-                                        <a href="javascript:void(0);" class="interface-editor" :data-id="interface._id"  :data-models-id="models._id"><i class="icon iconfont" @click="interfaceEditor($event, repository._id, models._id, interface)">&#xe635;</i></a>
+                                        <a href="javascript:void(0);" class="interface-delete" :data-id="interface._id" :data-models-id="models._id" @click="interfaceDelete($event, models._id, interface._id)"><i class="icon iconfont">&#xe61c;</i></a>
+                                        <a href="javascript:void(0);" class="interface-editor" :data-id="interface._id" :data-models-id="models._id"><i class="icon iconfont" @click="interfaceEditor($event, repository._id, models._id, interface)">&#xe635;</i></a>
                                     </span>
                                 </div>
                             </div>

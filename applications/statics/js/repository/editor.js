@@ -1,4 +1,4 @@
-const VUE = new Vue({
+var VUE = new Vue({
 	delimiters: ['${', '}'],
 	el: '#app',
 	data: {
