@@ -76,10 +76,10 @@ router.get('/test/data', (req, res, next) => {
 								data[key] = roles[key];
 							}
 						}else{
-							if(field.name == 'code'){
-								data[field.name + "|0-1"] = 0;
+							if(response.name == 'code'){
+								data[response.name + "|0-1"] = 0;
 							}else{
-								data[field.name + "|1-10"] = 0;
+								data[response.name + "|1-10"] = 0;
 							}
 						}
 					}else{
@@ -145,20 +145,20 @@ router.get('/test/data', (req, res, next) => {
 									}
 								}
 							}else{
-								if(field.name == 'email'){
-									if(!(field.default)){
-										data[field.name] = Mock.mock('@email');
+								if(response.name == 'email'){
+									if(!(response.default)){
+										data[response.name] = Mock.mock('@email');
 									}else{
-										data[field.name] = field.default;
+										data[response.name] = response.default;
 									}
-								}else if(field.name == 'url'){
-									if(!(field.default)){
-										data[field.name] = Mock.mock('@url');
+								}else if(response.name == 'url'){
+									if(!(response.default)){
+										data[response.name] = Mock.mock('@url');
 									}else{
-										data[field.name] = field.default;
+										data[response.name] = response.default;
 									}
 								}else{
-									data[field.name + "|1-12"] = '';
+									data[response.name + "|1-12"] = '';
 								}
 							}
 						}else{
