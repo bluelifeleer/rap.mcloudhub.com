@@ -29,6 +29,9 @@ const expressRequestId = require('express-request-id')()
 const expressCurl = require('express-curl')
 const md5 = require('md5')
 const sockerIO = require('socket.io')
+const flash = require('flash');
+const winston = require('winston');
+const expressWinston = require('express-winston');
 const app = express()
 
 //是否启动记录访问日志
@@ -88,15 +91,17 @@ app.use(session({
 		return uuidv4() // use UUIDs for session IDs
 	},
 	secret: 'session_id', // 与cookieParser中的一致
-	resave: true,
+	resave: true, // 设置强制刷新session
 	store: store, // 将session保存到mongodb中
-	saveUninitialized: false,	// 是否保存未初始化的会话，如果是true则会保存许多session会导致保存有效session失败,一般设置为false.
+	saveUninitialized: false, // 是否保存未初始化的会话，如果是true则会保存许多session会导致保存有效session失败,一般设置为false.
 	cookie: {
 		secure: true,
 		maxAge: 1800000,
 	},
 	rolling: true
 }));
+
+app.use(flash());
 
 // 服务器启动时默认配置/动作
 app.use(function(req, res, next) {
@@ -112,8 +117,34 @@ app.use(function(req, res, next) {
 	// os.platform return now node runing systems : darwin=>MAC win32=>windows
 	res.cookie('platform', os.platform);
 	req.platform = os.platform;
+	// flash a message
+	req.flash('info', 'hello!');
+	res.locals.errors = req.flash('error');
+	res.locals.infos = req.flash('info');
 	next();
 });
+
+app.use(expressWinston.logger({
+	transports: [
+		// 将日志信息打印在控制台
+		new winston.transports.Console(),
+		new winston.transports.File({
+			filename: path.join(__dirname, 'logs/error.log'),
+			level: 'error'
+		}),
+		new winston.transports.File({
+			filename: path.join(__dirname, 'logs/combined.log')
+		})
+	],
+	format: winston.format.combine(winston.format.colorize(), winston.format.json()),
+	meta: true, // optional: control whether you want to log the meta data about the request (default to true)
+	msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+	expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
+	colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
+	ignoreRoute: function(req, res) {
+		return false;
+	} // optional: allows to skip some log messages based on request and/or response
+}));
 
 app.use(csurf({
 	cookie: true,
