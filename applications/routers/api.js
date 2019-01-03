@@ -804,17 +804,48 @@ router.post('/interface/move', (req, res, next) => {
 	// 1：判断模块中是否有此接口
 	// 2：有则报错，没有则移动
 	// 3：判断是移动还是复制
-	// Model.findById(model_id).then(model=>{
-	// 	Interface.findById(id).then(int=>{
-	// 		if(type){	// 复制
-
-	// 		}else{	// 移动
-
-	// 		}
-	// 	})
-	// }).catch(err=>{
-	// 	console.log(err)
-	// })
+	Model.findById(model_id).then(model=>{
+		Interface.findById(id).then(s=>{
+			if(s){
+				model.interfaces.push(s);
+				model.save().then(status=>{
+					if(status){
+						if(!type){
+							Model.findById(s.modelid).then(m=>{
+								if(m){
+									let tmp = [];
+									m.interfaces.forEach(interface=>{
+										if(interface._id != id){
+											tmp.push(interface)
+										}
+									});
+									m.interfaces = tmp;
+									m.save().then(a=>{
+										output = {
+											code: 1,
+											msg: 'success',
+											ok: true,
+											data: null
+										};
+										res.json(output);
+										return false;
+									}).catch(err=>{
+										console.log(err)
+									})
+								}
+							}).catch(err=>{
+								console.log(err)
+							})
+						}
+					}
+				}).catch(err=>{
+					console.log(err)
+				});
+			}
+		})
+	}).catch(err=>{
+		console.log(err)
+	})
 });
 
 router.get('/model/get', (req, res, next) => {
