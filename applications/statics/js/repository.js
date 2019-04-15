@@ -202,7 +202,7 @@ const VUE = new Vue({
 			this.form.url = item.url;
 		},
 		repositoryDelete: function(e, id) {
-			console.log(id);
+			// console.log(id);
 			axios({
 				url: '/item/delete',
 				method: 'GET',

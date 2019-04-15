@@ -814,9 +814,9 @@ router.post('/interface/move', (req, res, next) => {
 							Model.findById(s.modelid).then(m=>{
 								if(m){
 									let tmp = [];
-									m.interfaces.forEach(interface=>{
-										if(interface._id != id){
-											tmp.push(interface)
+									m.interfaces.forEach(b=>{
+										if(b._id != id){
+											tmp.push(b)
 										}
 									});
 									m.interfaces = tmp;

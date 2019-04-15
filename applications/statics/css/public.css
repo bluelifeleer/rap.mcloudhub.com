@@ -13,6 +13,14 @@ ul,ol,dl{
     list-style-type:none;
 }
 
+input,textarea,select{
+    outline: none;
+}
+
+textarea{
+    resize: none;
+}
+
 #app{
     width:100%;
     height:100%;
