@@ -7,6 +7,7 @@ const md5 = require('md5');
 const sillyDateTime = require('silly-datetime');
 const svgCaptcha = require('svg-captcha');
 const Mock = require('mockjs')
+const utils = require('../utils')
 const User = require('../models/user_model');
 const Item = require('../models/item_model');
 const Model = require('../models/model_model');
@@ -45,8 +46,7 @@ router.post('/user/login', (req, res, next) => {
 	let name = req.body.name;
 	let password = req.body.password;
 	let verify = req.body.verify;
-	let cookieChecked = req.body.cookieChecked
-	console.log(req.session.verify)
+	let cookieChecked = req.body.cookieChecked;
 	if (!cookieChecked) {
 		if (verify.toLowerCase() != req.session.verify.toLowerCase()) {
 			output = {
@@ -146,7 +146,7 @@ router.post('/user/register', (req, res, next) => {
 	let name = req.body.name;
 	let password = req.body.password;
 	let email = req.body.email;
-	let salt = MyDate.getTime();
+	let salt = utils.uuid(8);
 	User.findOne({
 		name: name
 	}).then(user => {
