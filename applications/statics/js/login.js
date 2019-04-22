@@ -25,7 +25,8 @@ const VUE = new Vue({
 	},
 	methods: {
 		refreshVerify: function(e) {
-			this.$refs.verifyImg.src = '/api/verify'
+			let MyDate = new Date();
+			this.$refs.verifyImg.src = '/api/verify?t='+MyDate.getTime();
 		},
 		checkboxToggle: function() {
 			this.form.checked = !this.form.checked;

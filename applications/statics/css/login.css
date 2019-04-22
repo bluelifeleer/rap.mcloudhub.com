@@ -7,7 +7,7 @@
 }
 
 .login-form{
-    width:340px;
+    width:380px;
     height:auto;
     background:#FFF;
     padding:20px;
@@ -59,7 +59,7 @@
 }
 
 #verify-code-input{
-    width:120px !important;
+    width:80px !important;
 }
 
 .verify-img{

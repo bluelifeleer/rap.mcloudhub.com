@@ -127,7 +127,7 @@ app.use(function(req, res, next) {
 app.use(expressWinston.logger({
 	transports: [
 		// 将日志信息打印在控制台
-		new winston.transports.Console(),
+		// new winston.transports.Console(),
 		new winston.transports.File({
 			filename: path.join(__dirname, 'logs/error.log'),
 			level: 'error'

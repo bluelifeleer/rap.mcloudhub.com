@@ -220,6 +220,9 @@ const VUE = new Vue({
 				this.messageAlert('删除失败', 'success');
 			})
 		},
+		showAddMembersDialog: function(e,id){
+			alert(id)
+		},
 		loginout: function() {
 			axios({
 				url: '/user/loginout',

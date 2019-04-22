@@ -48,7 +48,7 @@ router.post('/user/login', (req, res, next) => {
 	let verify = req.body.verify;
 	let cookieChecked = req.body.cookieChecked;
 	if (!cookieChecked) {
-		if (verify.toLowerCase() != req.session.verify.toLowerCase()) {
+		if (verify.toLowerCase() != (req.session.verify ? req.session.verify.toLowerCase(): null)) {
 			output = {
 				code: 0,
 				msg: '验证码输入错误',
