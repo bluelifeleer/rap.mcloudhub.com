@@ -1,65 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{{ title }}</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="/static/css/public.css" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" type="text/css" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
-        <link rel="stylesheet" type="text/css" href="/static/css//jsoneditor.min.css" />
-        {% block link %}
-        {% endblock%}
-        <script type="text/javascript" src="/static/js/libs/es6-promise.auto.js"></script>
-        <script type="text/javascript" src="/static/js/libs/vue.js"></script>
-        <script type="text/javascript" src="/static/js/libs/vuex.js"></script>
-        <script type="text/javascript" src="https://unpkg.com/element-ui/lib/index.js"></script>
-        <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script type="text/javascript" src="/static/js/libs/utils.js"></script>
-        <script type="text/javascript" src="/static/js/libs/jsoneditor.min.js"></script>
-        <script type="text/javascript" src="/static/js/libs/mock.js" /></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            window.Mock = Mock;
-        </script>
-    </head>
-    <body>
-        <div id="app">
-            {% if page == 'login' %}
-            {% elseif page == 'register' %}
-            {% elseif page == 'reset' %}
-            {% else %}
-            <div class="header">
-                <div class="header-links">
-                    <a href="/" class="nav-link"><i class="icon iconfont">&#xe77e;</i>首页</a>
-                    <a href="/repository" class="nav-link"><i class="icon iconfont">&#xe6ea;</i>仓库</a>
-                    <a href="/team" class="nav-link"><i class="icon iconfont">&#xe68a;</i>团队</a>
-                    <a href="/" class="nav-link"><i class="icon iconfont">&#xe653;</i>接口</a>
-                    <a href="/status" class="nav-link"><i class="icon iconfont">&#xe60d;</i>数据概览</a>
-                </div>
-                <div class="header-user-info">
-                    <a href="javascript:void(0);" class="user-name" @click="userInfoToggle" :data-user-id="user.id">${user.name}<i class="icon iconfont">&#xe627;</i></a>
-                    <transition name="user-info">
-                        <div class="user-info" ref="userInfo" v-show="userInfo">
-                            <div class="user-info-item"><a href="javascript:void(0);" class="loginout" @click="loginout">退出</a></div>
-                        </div>
-                    </transition>
-                </div>
+
+<head>
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/public.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css//jsoneditor.min.css" />
+    {% block link %}
+    {% endblock%}
+    <script type="text/javascript" src="/static/js/libs/es6-promise.auto.js"></script>
+    <script type="text/javascript" src="/static/js/libs/vue.js"></script>
+    <script type="text/javascript" src="/static/js/libs/vuex.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/static/js/libs/utils.js"></script>
+    <script type="text/javascript" src="/static/js/libs/jsoneditor.min.js"></script>
+    <script type="text/javascript" src="/static/js/libs/mock.js" />
+    </script>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script>
+    window.Mock = Mock;
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        {% if page == 'login' %}
+        {% elseif page == 'register' %}
+        {% elseif page == 'reset' %}
+        {% else %}
+        <div class="header">
+            <div class="header-links">
+                <a href="/" class="nav-link"><i class="icon iconfont">&#xe77e;</i>首页</a>
+                <a href="/repository" class="nav-link"><i class="icon iconfont">&#xe6ea;</i>仓库</a>
+                <a href="/team" class="nav-link"><i class="icon iconfont">&#xe68a;</i>团队</a>
+                <a href="/" class="nav-link"><i class="icon iconfont">&#xe653;</i>接口</a>
+                <a href="/status" class="nav-link"><i class="icon iconfont">&#xe60d;</i>数据概览</a>
             </div>
-            {% endif %}
-            <div class="section">
-                {% block section %}
-                {% endblock %}
+            <div class="header-user-info">
+                <a href="javascript:void(0);" class="user-name" @click="userInfoToggle" :data-user-id="user.id">${user.name}<i class="icon iconfont">&#xe627;</i></a>
+                <transition name="user-info">
+                    <div class="user-info" ref="userInfo" v-show="userInfo">
+                        <div class="user-info-item"><a href="javascript:void(0);" class="loginout" @click="loginout">退出</a></div>
+                    </div>
+                </transition>
             </div>
-            {% if page == 'login' %}
-            {% elseif page == 'register' %}
-            {% elseif page == 'reset' %}
-            {% else %}
-            <div class="footer">
-                CopyRight&nbsp;&nbsp;&copy;&nbsp;&nbsp;rap.mcloudhub.com&nbsp;&nbsp;2018-12-15&nbsp;&nbsp;晋ICP备13007655号
-            </div>
-            {% endif %}
         </div>
-        {% block script %}
-        {% endblock %}
-    </body>
+        {% endif %}
+        <div class="section">
+            {% block section %}
+            {% endblock %}
+        </div>
+        {% if page == 'login' %}
+        {% elseif page == 'register' %}
+        {% elseif page == 'reset' %}
+        {% else %}
+        <div class="footer">
+            CopyRight&nbsp;&nbsp;&copy;&nbsp;&nbsp;rap.mcloudhub.com&nbsp;&nbsp;2018-12-15&nbsp;&nbsp;晋ICP备13007655号 <a href="http://mockjs.com/" target="_blank" class="mock-link">Mock.js</a>
+        </div>
+        {% endif %}
+    </div>
+    {% block script %}
+    {% endblock %}
+</body>
+
 </html>
