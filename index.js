@@ -181,7 +181,14 @@ app.use(favicon(path.join(__dirname, './', 'favicon.ico')));
 
 // 定义路由www
 app.use('/', require(path.join(__dirname, '/applications/routers/main')));
-app.use('/api', require(path.join(__dirname, '/applications/routers/api')));
+app.use('/api/user', require(path.join(__dirname, '/applications/routers/api/user')));
+app.use('/api/team', require(path.join(__dirname, '/applications/routers/api/team')));
+app.use('/api/model', require(path.join(__dirname, '/applications/routers/api/model')));
+app.use('/api/member', require(path.join(__dirname, '/applications/routers/api/member')));
+app.use('/api/logs', require(path.join(__dirname, '/applications/routers/api/logs')));
+app.use('/api/item', require(path.join(__dirname, '/applications/routers/api/item')));
+app.use('/api/interface', require(path.join(__dirname, '/applications/routers/api/interface')));
+app.use('/api/verify', require(path.join(__dirname, '/applications/routers/api/verify')));
 app.use('/mock', require(path.join(__dirname, '/applications/routers/mock')));
 
 // 处理404请求

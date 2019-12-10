@@ -14,23 +14,23 @@
             <div class="login-form-item">
                 <label for="password" class="indispensable">密码：</label>
                 <input type="password" type="password" name="password" placeholder="密码" v-model="form.password" />
-           </div>
-           <div class="login-form-item">
+            </div>
+            <div class="login-form-item">
                 <label for="verify">验证码：</label>
                 <input type="text" type="text" name="verify" id="verify-code-input" placeholder="验证码" v-model="form.verify" />
-                <img src="/api/verify" alt="" class="verify-img" @click="refreshVerify" ref="verifyImg" title="点击刷新" />
-           </div>
-           <div class="login-form-item">
+                <img src="/api/verify/captcha" alt="" class="verify-img" @click="refreshVerify" ref="verifyImg" title="点击刷新" />
+            </div>
+            <div class="login-form-item">
                 <label for="autologin"></label>
                 <a href="javascript:void(0);" class="auto-login-checkbox" @click="checkboxToggle" :data-checked="form.checked"><i class="icon iconfont iconfont-checkbox" v-if="form.checked">&#xe63d;</i><i class="icon iconfont iconfont-checkbox" v-else>&#xec58;</i>自动登录</a>
                 <a href="/register" class="register-link">还没有帐号？<span style="color:#409eff;margin:0 5px;">注册一个。</span></a>
-           </div>
-           <div class="login-form-item">
-               <a href="javascript:void(0);" class="login-form-submit" @click="loginFormSubmit" @keyup.enter="loginFormSubmit">登录</a>
-           </div>
-           <div class="other-login">
-               <a href="javascript:void(0)" class="github-login" title="github" @click="githubLogin"><i class="icon iconfont iconfont-github">&#xea0a;</i></a>
-           </div>
+            </div>
+            <div class="login-form-item">
+                <a href="javascript:void(0);" class="login-form-submit" @click="loginFormSubmit" @keyup.enter="loginFormSubmit">登录</a>
+            </div>
+            <div class="other-login">
+                <a href="javascript:void(0)" class="github-login" title="github" @click="githubLogin"><i class="icon iconfont iconfont-github">&#xea0a;</i></a>
+            </div>
         </div>
     </div>
 </div>
