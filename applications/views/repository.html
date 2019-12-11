@@ -20,6 +20,7 @@
                         <span class="repository-operation-buts">
                             <a href="javascript:void(0);" class="repository-editor"><i class="icon iconfont" @click="repositoryEditor($event, repository)">&#xe635;</i></a>
                             <a href="javascript:void(0);" class="repository-delete"><i class="icon iconfont" @click="repositoryDelete($event, repository._id)">&#xe61c;</i></a>
+                            <a href="javascript:void(0);" class="repository-delete"><i class="icon iconfont" @click="showAddMembersDialog($event, repository._id)">&#xe617;</i></a>
                         </span>
                     </div>
                     <div class="repository-list-item-body">${repository.remark}</div>

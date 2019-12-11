@@ -32,6 +32,7 @@ const sockerIO = require('socket.io')
 const flash = require('flash');
 const winston = require('winston');
 const expressWinston = require('express-winston');
+const credentials = require('./credentials.js');
 const app = express()
 
 //是否启动记录访问日志
@@ -67,9 +68,16 @@ app.use(bodyParser.urlencoded({
     limit: '50mb',
     extended: true
 }));
+<<<<<<< HEAD
 app.use(cookieParser('session_id', {
     maxAge: 1800000,
     secure: true
+=======
+app.use(cookieParser(credentials.cookieSecret, {
+    maxAge: 1800000,
+    secure: true, // 设置cookie只通过安全连接(HTTPS)发送
+    httpOnly: true // 设置cookie 只能由服务器修改。也就是说客户端JavaScript不能修改它。这有助于防范XSS 攻击。
+>>>>>>> 7ab27f908c59a3a56f74ebdfcbc30fe391dda409
 }));
 // app.use(expressCurl);
 
@@ -90,7 +98,11 @@ app.use(session({
     genid: function(req) {
         return uuidv4() // use UUIDs for session IDs
     },
+<<<<<<< HEAD
     secret: 'session_id', // 与cookieParser中的一致
+=======
+    secret: credentials.cookieSecret, // 与cookieParser中的一致
+>>>>>>> 7ab27f908c59a3a56f74ebdfcbc30fe391dda409
     resave: true, // 设置强制刷新session
     store: store, // 将session保存到mongodb中
     saveUninitialized: false, // 是否保存未初始化的会话，如果是true则会保存许多session会导致保存有效session失败,一般设置为false.
@@ -127,7 +139,11 @@ app.use(function(req, res, next) {
 app.use(expressWinston.logger({
     transports: [
         // 将日志信息打印在控制台
+<<<<<<< HEAD
         new winston.transports.Console(),
+=======
+        // new winston.transports.Console(),
+>>>>>>> 7ab27f908c59a3a56f74ebdfcbc30fe391dda409
         new winston.transports.File({
             filename: path.join(__dirname, 'logs/error.log'),
             level: 'error'
@@ -179,7 +195,14 @@ app.use(favicon(path.join(__dirname, './', 'favicon.ico')));
 
 // 定义路由www
 app.use('/', require(path.join(__dirname, '/applications/routers/main')));
-app.use('/api', require(path.join(__dirname, '/applications/routers/api')));
+app.use('/api/user', require(path.join(__dirname, '/applications/routers/api/user')));
+app.use('/api/team', require(path.join(__dirname, '/applications/routers/api/team')));
+app.use('/api/model', require(path.join(__dirname, '/applications/routers/api/model')));
+app.use('/api/member', require(path.join(__dirname, '/applications/routers/api/member')));
+app.use('/api/logs', require(path.join(__dirname, '/applications/routers/api/logs')));
+app.use('/api/item', require(path.join(__dirname, '/applications/routers/api/item')));
+app.use('/api/interface', require(path.join(__dirname, '/applications/routers/api/interface')));
+app.use('/api/verify', require(path.join(__dirname, '/applications/routers/api/verify')));
 app.use('/mock', require(path.join(__dirname, '/applications/routers/mock')));
 
 // 处理404请求
@@ -197,9 +220,15 @@ mongoose.connect('mongodb://localhost:27017/rap', {
     } else {
         // 数据库连接成功后监听80/443端口
         // app.listen(80);
+<<<<<<< HEAD
         http.createServer(app).listen(1004);
         // https.createServer(options, app).listen(443);
         // const server = http2.createServer(options, app);
+=======
+        http.createServer(app).listen(80);
+        // https.createServer(options, app).listen(443);
+        const server = http2.createServer(options, app);
+>>>>>>> 7ab27f908c59a3a56f74ebdfcbc30fe391dda409
         // const IO = sockerIO(server)
         // IO.on('connection', (socket) => {
         // 	console.log('socket client connected ....')
@@ -211,7 +240,11 @@ mongoose.connect('mongodb://localhost:27017/rap', {
         // 		console.log('socket client disconneted .....')
         // 	})
         // })
+<<<<<<< HEAD
         // server.listen(443);
+=======
+        server.listen(443);
+>>>>>>> 7ab27f908c59a3a56f74ebdfcbc30fe391dda409
 
     }
 });

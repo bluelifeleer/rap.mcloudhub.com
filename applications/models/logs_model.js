@@ -1,3 +1,3 @@
 const mongoose = require('mongoose');
-const logSchema = require('../schemas/log_schema');
-module.exports = mongoose.model('Log', logSchema);
+const logsSchema = require('../schemas/logs_schema');
+module.exports = mongoose.model('Logs', logsSchema);
