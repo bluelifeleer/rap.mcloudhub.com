@@ -1,8 +1,8 @@
 /*
  * @Author: bluelife
  * @Date:   2019-12-11 00:16:01
- * @Last Modified by:   bluelife
- * @Last Modified time: 2019-12-11 00:57:31
+ * @Last Modified by:   thebu
+ * @Last Modified time: 2019-12-11 10:39:36
  */
 'use strict';
 const express = require('express');
@@ -137,7 +137,7 @@ router.post('/register', (req, res, next) => {
     let name = req.body.name;
     let password = req.body.password;
     let email = req.body.email;
-    let salt = utils.uuid(8);
+    let salt = utils.UUid(8);
     User.findOne({
         name: name
     }).then(user => {
