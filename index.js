@@ -76,7 +76,7 @@ app.use(cookieParser(credentials.cookieSecret, {
 // app.use(expressCurl);
 
 const store = new MongoDBStore({
-    uri: 'mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@localhost:27017/rap',
+    uri: 'mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.48:27017/rap',
     databaseName: 'rap',
     collection: 'sessions'
 }, err => {
@@ -198,8 +198,8 @@ app.use('/mock', require(path.join(__dirname, '/applications/routers/mock')));
 //     });
 // });
 
-mongoose.connect('mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@localhost:27017/rap', {
-    useNewUrlParser: true
+mongoose.connect('mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.48/diandan', {
+    useNewUrlParser: true,
     // useUnifiedTopology: true
 }, (err, res) => {
     if (err) {
