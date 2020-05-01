@@ -70,7 +70,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser(credentials.cookieSecret, {
     maxAge: 1800000,
-    secure: true, // 设置cookie只通过安全连接(HTTPS)发送
+    secure: false, // 设置cookie只通过安全连接(HTTPS)发送
     httpOnly: true // 设置cookie 只能由服务器修改。也就是说客户端JavaScript不能修改它。这有助于防范XSS 攻击。
 }));
 // app.use(expressCurl);
@@ -97,7 +97,7 @@ app.use(session({
     store: store, // 将session保存到mongodb中
     saveUninitialized: false, // 是否保存未初始化的会话，如果是true则会保存许多session会导致保存有效session失败,一般设置为false.
     cookie: {
-        secure: true,
+        secure: false,
         maxAge: 1800000,
     },
     rolling: true
@@ -198,7 +198,7 @@ app.use('/mock', require(path.join(__dirname, '/applications/routers/mock')));
 //     });
 // });
 
-mongoose.connect('mongodb://localhost:27017/rap', {
+mongoose.connect('mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.48/rap', {
     useNewUrlParser: true
 }, (err, res) => {
     if (err) {
@@ -206,21 +206,10 @@ mongoose.connect('mongodb://localhost:27017/rap', {
     } else {
         // 数据库连接成功后监听80/443端口
         // app.listen(80);
-        http.createServer(app).listen(80);
+        http.createServer(app).listen(1004);
         // https.createServer(options, app).listen(443);
-        const server = http2.createServer(options, app);
-        // const IO = sockerIO(server)
-        // IO.on('connection', (socket) => {
-        // 	console.log('socket client connected ....')
-        // 	socket.on('minix', (data) => {
-        // 		console.log(data)
-        // 	})
-
-        // 	socket.on('disconnect', () => {
-        // 		console.log('socket client disconneted .....')
-        // 	})
-        // })
-        server.listen(443);
+        // const server = http2.createServer(options, app);
+        // server.listen(443);
 
     }
 });
