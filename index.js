@@ -76,7 +76,7 @@ app.use(cookieParser(credentials.cookieSecret, {
 // app.use(expressCurl);
 
 const store = new MongoDBStore({
-    uri: 'mongodb://localhost:27017',
+    uri: 'mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.48',
     databaseName: 'rap',
     collection: 'sessions'
 }, err => {
