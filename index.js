@@ -76,7 +76,7 @@ app.use(cookieParser(credentials.cookieSecret, {
 // app.use(expressCurl);
 
 const store = new MongoDBStore({
-    uri: 'mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.48',
+    uri: 'mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@localhost:27017/rap',
     databaseName: 'rap',
     collection: 'sessions'
 }, err => {
@@ -129,7 +129,7 @@ app.use(function(req, res, next) {
 app.use(expressWinston.logger({
     transports: [
         // 将日志信息打印在控制台
-        // new winston.transports.Console(),
+        new winston.transports.Console(),
         new winston.transports.File({
             filename: path.join(__dirname, 'logs/error.log'),
             level: 'error'
@@ -198,8 +198,9 @@ app.use('/mock', require(path.join(__dirname, '/applications/routers/mock')));
 //     });
 // });
 
-mongoose.connect('mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.48/rap', {
+mongoose.connect('mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@localhost:27017/rap', {
     useNewUrlParser: true
+    // useUnifiedTopology: true
 }, (err, res) => {
     if (err) {
         debug(err);
@@ -207,6 +208,7 @@ mongoose.connect('mongodb://bluelife:91732810802745ab0ae1ebef2d4adcab@120.24.20.
         // 数据库连接成功后监听80/443端口
         // app.listen(80);
         http.createServer(app).listen(1004);
+        // http.createServer(app).listen(1004);
         // https.createServer(options, app).listen(443);
         // const server = http2.createServer(options, app);
         // server.listen(443);
